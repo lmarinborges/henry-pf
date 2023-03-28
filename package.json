@@ -8,7 +8,8 @@
     "start": "turbo start",
     "lint": "turbo lint",
     "format:check": "prettier --check .",
-    "format:write": "prettier --write ."
+    "format:write": "prettier --write .",
+    "prepare": "husky install"
   },
   "private": true,
   "dependencies": {},
@@ -16,11 +17,17 @@
     "@typescript-eslint/eslint-plugin": "^5.57.0",
     "@typescript-eslint/parser": "^5.57.0",
     "eslint": "^8.36.0",
+    "husky": ">=7",
+    "lint-staged": ">=10",
     "prettier": "^2.6.2",
     "turbo": "^1.8.6",
     "typescript": "^5.0.2"
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "lint-staged": {
+    "*.{ts,js,tsx,jsx}": "eslint --cache --fix",
+    "*.{ts,js,tsx,jsx,css,md,html,json}": "prettier --write"
+  }
 }
