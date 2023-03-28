@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "license": "MIT",
   "scripts": {
-    "dev": "nx run-many --target=dev",
-    "build": "nx run-many --target=build",
-    "start": "nx run-many --target=start",
-    "lint": "nx run-many --target=lint",
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "start": "turbo start",
+    "lint": "turbo lint",
     "format:check": "prettier --check .",
     "format:write": "prettier --write ."
   },
@@ -16,8 +16,8 @@
     "@typescript-eslint/eslint-plugin": "^5.57.0",
     "@typescript-eslint/parser": "^5.57.0",
     "eslint": "^8.36.0",
-    "nx": "15.8.9",
     "prettier": "^2.6.2",
+    "turbo": "^1.8.6",
     "typescript": "^5.0.2"
   },
   "workspaces": [
