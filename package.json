@@ -6,7 +6,9 @@
     "dev": "nx run-many --target=dev",
     "build": "nx run-many --target=build",
     "start": "nx run-many --target=start",
-    "lint": "nx run-many --target=lint"
+    "lint": "nx run-many --target=lint",
+    "format:check": "prettier --check .",
+    "format:write": "prettier --write ."
   },
   "private": true,
   "dependencies": {},
