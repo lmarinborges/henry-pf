@@ -1,8 +1,12 @@
 {
   "name": "henry-pf",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "dev": "nx run-many --target=dev",
+    "build": "nx run-many --target=build",
+    "start": "nx run-many --target=start"
+  },
   "private": true,
   "dependencies": {},
   "devDependencies": {
