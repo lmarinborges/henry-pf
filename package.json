@@ -23,7 +23,7 @@
     "lint-staged": ">=10",
     "prettier": "^2.6.2",
     "turbo": "^1.8.6",
-    "typescript": "^5.0.2"
+    "typescript": "^4.9.5"
   },
   "workspaces": [
     "packages/*"
