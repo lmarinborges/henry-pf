@@ -19,4 +19,10 @@ model Product {
   id_category Int
   Brand       Brand    @relation(fields: [id_brand], references: [id])
   Category    Category @relation(fields: [id_category], references: [id])
+
+model Brand {
+  id    Int     @id @default(autoincrement())
+  name  String 
+  description  String?
+  product Product[]
 }
