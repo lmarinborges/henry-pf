@@ -7,6 +7,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Product {
+  id          Int      @id @default(autoincrement())
+  slug        String   @unique
+  name        String
+  description String?
+  price       Float
+  stock       Int
+  state       Boolean  @default(true)
+  id_brand    Int
+  id_category Int
+  Brand       Brand    @relation(fields: [id_brand], references: [id])
+  Category    Category @relation(fields: [id_category], references: [id])
+
 model Brand {
   id    Int     @id @default(autoincrement())
   name  String 
