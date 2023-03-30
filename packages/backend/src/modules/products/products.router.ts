@@ -16,6 +16,6 @@ productsRouter
   .get("/products/:productId", getProduct)
   .put("/products/:productId", updateProduct)
   .delete("/products/:productId", deleteProduct)
-  .post("/products/:productId", restoreProduct);
+  .put("/products/restore/:productId", restoreProduct);
 
 export default productsRouter;
