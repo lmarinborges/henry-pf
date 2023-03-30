@@ -71,3 +71,17 @@ export async function queryAllProducts() {
         return { error: error };
     }
 }
+export async function queryupdateProduct(id: string, changes: Partial<structureProduct>) {
+    try {
+        const res = await prisma.product.update({
+            where: {
+                id: parseInt(id),
+            },
+            data: changes,
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+        return { error: error };
+    }
+}

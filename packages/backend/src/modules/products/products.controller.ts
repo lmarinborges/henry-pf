@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import { getProductbyid, insertProduct, queryAllProducts } from "../../utils/productDb";
+import { object } from "zod";
+import { getProductbyid, insertProduct, queryAllProducts, queryupdateProduct } from "../../utils/productDb";
 import unimplemented from "../../utils/unimplemented";
 
 // medita temporal para comprobar si tiene esa estructura
@@ -77,7 +78,17 @@ export async function createProduct(req: Request, res: Response) {
 
 // Actualiza un producto basado en su ID.
 export async function updateProduct(req: Request, res: Response) {
-  unimplemented(req, res);
+  const productId = req.params.productId;
+  const datos: object | undefined = req.body.datos
+
+  if (typeof datos !== 'object') {
+    res.status(500)
+    res.send({ error: 'algún dato no es válido' })
+  } else {
+    const result = await queryupdateProduct(productId, datos)
+    res.send(result)
+  }
+
 }
 
 // Hace borrado lógico de un producto, basado en su ID.
