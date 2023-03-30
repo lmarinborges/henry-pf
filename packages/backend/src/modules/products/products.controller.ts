@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { insertProduct } from "../../utils/dbprod";
+import { getProductbyid, insertProduct } from "../../utils/dbprod";
 import unimplemented from "../../utils/unimplemented";
 
 // medita temporal para comprobar si tiene esa estructura
@@ -34,9 +34,16 @@ export async function getAllProducts(req: Request, res: Response) {
   unimplemented(req, res);
 }
 
-// Devuelve un producto basado en su ID.
+// Devuelve un producto basado en su ID./ resultado {}
 export async function getProduct(req: Request, res: Response) {
-  unimplemented(req, res);
+  const productId = req.params.productId;
+  if (typeof productId !== 'string') {
+    res.status(500)
+    res.send({ error: 'productId no es válido' })
+  } else {
+    const result = await getProductbyid(productId)
+    res.send(result)
+  }
 }
 
 // Crea un nuevo producto.

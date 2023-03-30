@@ -45,3 +45,17 @@ export async function insertProduct(information: structureProduct) {
         return { error: error }
     }
 }
+
+export async function getProductbyid(id: string) {
+    try {
+        const res = await prisma.product.findUnique({
+            where: {
+                id: parseInt(id),
+            },
+        });
+        return res
+    } catch (error) {
+        console.log(error);
+        return { error: error }
+    }
+}
