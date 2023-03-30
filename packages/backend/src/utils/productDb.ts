@@ -1,7 +1,7 @@
 import { PrismaClient, Product } from "@prisma/client"
 const prisma = new PrismaClient()
 interface structureProduct {
-    id: number | undefined,
+    id: number,
     slug: string,
     name: string,
     description: string,
@@ -65,6 +65,8 @@ export async function queryAllProducts() {
         if (res.length === 0) {
             return { error: 'no hay datos' };
         } else {
+            //para devolver el arreglo ordenado según el id
+            res.sort((a, b) => a.id - b.id);
             return res;
         }
     } catch (error) {
@@ -139,3 +141,23 @@ export async function queryRestore(id: string) {
     }
 }
 
+interface options {
+    column: string;
+    order: 'asc' | 'desc';
+}
+
+export async function queryPaginateAndOrder(currentPage: number, itemsPerPage: number, options: options[]) {
+    const skip = (currentPage - 1) * itemsPerPage;
+    const take = itemsPerPage;
+    const sort = options.map((option) => ({
+        [option.column]: option.order,
+    }));
+
+    const productos = await prisma.product.findMany({
+        skip,
+        take,
+        orderBy: sort,
+    });
+
+    return productos;
+}
