@@ -3,22 +3,22 @@ import unimplemented from "../../utils/unimplemented";
 
 // Devuelve todos los productos.
 export async function getAllProducts(req: Request, res: Response) {
-  unimplemented();
+  unimplemented(req, res);
 }
 
 // Devuelve un producto basado en su ID.
 export async function getProduct(req: Request, res: Response) {
-  unimplemented();
+  unimplemented(req, res);
 }
 
 // Crea un nuevo producto.
 export async function createProduct(req: Request, res: Response) {
-  unimplemented();
+  unimplemented(req, res);
 }
 
 // Actualiza un producto basado en su ID.
 export async function updateProduct(req: Request, res: Response) {
-  unimplemented();
+  unimplemented(req, res);
 }
 
 // Hace borrado lógico de un producto, basado en su ID.
@@ -26,24 +26,24 @@ export async function updateProduct(req: Request, res: Response) {
 // Ejemplo: DELETE /products/12?hard=true -> Borrado de la base de datos.
 //          DELETE /products/12 -> Borrado lógico.
 export async function deleteProduct(req: Request, res: Response) {
-  unimplemented();
+  unimplemented(req, res);
 }
 
 // Debería restaurar un producto que se ha borrado de forma lógica.
 export async function restoreProduct(req: Request, res: Response) {
-  unimplemented();
+  unimplemented(req, res);
 }
 
 // Devuelve todas las marcas.
 // Debería hacer un SELECT DISTINCT.
 // https://www.prisma.io/docs/concepts/components/prisma-client/aggregation-grouping-summarizing#select-distinct
 export async function getBrands(req: Request, res: Response) {
-  unimplemented();
+  unimplemented(req, res);
 }
 
 // Devuelve todas las categorías.
 // Debería hacer un SELECT DISTINCT.
 // https://www.prisma.io/docs/concepts/components/prisma-client/aggregation-grouping-summarizing#select-distinct
 export async function getCategories(req: Request, res: Response) {
-  unimplemented();
+  unimplemented(req, res);
 }

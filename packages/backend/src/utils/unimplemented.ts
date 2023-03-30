@@ -1,3 +1,5 @@
-export default function unimplemented() {
-  throw new Error("TODO: this function is not implemented yet");
+import { Request, Response } from "express";
+
+export default function unimplemented(req: Request, res: Response) {
+  res.status(500).send(`UNIMPLEMENTED: ${req.method} ${req.originalUrl}`);
 }
