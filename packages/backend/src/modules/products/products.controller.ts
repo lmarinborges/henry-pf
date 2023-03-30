@@ -1,5 +1,33 @@
 import { Request, Response } from "express";
+import { insertProduct } from "../../utils/dbprod";
 import unimplemented from "../../utils/unimplemented";
+
+// medita temporal para comprobar si tiene esa estructura
+interface structureProduct {
+  id: number | undefined,
+  slug: string,
+  name: string,
+  description: string,
+  imageUrl: string,
+  price: number,/*flotante*/
+  stock: number,
+  id_brand: number,
+  id_category: number
+  isDeleted: boolean,
+}
+function isStructureProduct(obj: any): obj is structureProduct {
+  return (
+    typeof obj.slug === 'string' &&
+    typeof obj.name === 'string' &&
+    typeof obj.description === 'string' &&
+    typeof obj.imageUrl === 'string' &&
+    typeof obj.price === 'number' &&
+    typeof obj.stock === 'number' &&
+    typeof obj.id_brand === 'number' &&
+    typeof obj.id_category === 'number' &&
+    typeof obj.isDeleted === 'boolean'
+  );
+}
 
 // Devuelve todos los productos.
 export async function getAllProducts(req: Request, res: Response) {
@@ -13,7 +41,22 @@ export async function getProduct(req: Request, res: Response) {
 
 // Crea un nuevo producto.
 export async function createProduct(req: Request, res: Response) {
-  unimplemented(req, res);
+  //considerando que se recibe un los datos como body: {slug,name,description,price,stock,state,id_brand,id_Product}
+  const datos: Record<string, never> | structureProduct = req.body
+  console.log(datos);
+  try {
+    if (!isStructureProduct(datos)) {
+      res.status(500)
+      res.send({ error: 'algún dato no es válido, los datos deben ser :: {slug,name,description,price,stock,state,id_brand,id_Product}' })
+    } else {
+      const result = await insertProduct(datos)
+      res.send(result)
+    }
+  } catch (error) {
+    res.status(500)
+    res.send({ error: error })
+  }
+
 }
 
 // Actualiza un producto basado en su ID.
