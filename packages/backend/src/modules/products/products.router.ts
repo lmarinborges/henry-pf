@@ -3,8 +3,6 @@ import {
   createProduct,
   deleteProduct,
   getAllProducts,
-  getBrands,
-  getCategories,
   getProduct,
   updateProduct,
 } from "./products.controller";
@@ -16,8 +14,6 @@ productsRouter
   .post("/products", createProduct)
   .get("/products/:productId", getProduct)
   .put("/products/:productId", updateProduct)
-  .delete("/products/:productId", deleteProduct)
-  .get("/products/brands", getBrands)
-  .get("/products/categories", getCategories);
+  .delete("/products/:productId", deleteProduct);
 
 export default productsRouter;

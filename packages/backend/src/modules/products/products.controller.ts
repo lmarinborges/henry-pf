@@ -33,17 +33,3 @@ export async function deleteProduct(req: Request, res: Response) {
 export async function restoreProduct(req: Request, res: Response) {
   unimplemented(req, res);
 }
-
-// Devuelve todas las marcas.
-// Debería hacer un SELECT DISTINCT.
-// https://www.prisma.io/docs/concepts/components/prisma-client/aggregation-grouping-summarizing#select-distinct
-export async function getBrands(req: Request, res: Response) {
-  unimplemented(req, res);
-}
-
-// Devuelve todas las categorías.
-// Debería hacer un SELECT DISTINCT.
-// https://www.prisma.io/docs/concepts/components/prisma-client/aggregation-grouping-summarizing#select-distinct
-export async function getCategories(req: Request, res: Response) {
-  unimplemented(req, res);
-}
