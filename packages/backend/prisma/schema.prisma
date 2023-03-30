@@ -15,7 +15,7 @@ model Product {
   imageUrl    String
   price       Decimal
   stock       Int
-  brand       String  @unique
-  category    String  @unique
+  brand       String
+  category    String
   isDeleted   Boolean @default(false)
 }
