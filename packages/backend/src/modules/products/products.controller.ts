@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getProductbyid, insertProduct, queryAllProducts } from "../../utils/dbprod";
+import { getProductbyid, insertProduct, queryAllProducts } from "../../utils/productDb";
 import unimplemented from "../../utils/unimplemented";
 
 // medita temporal para comprobar si tiene esa estructura
