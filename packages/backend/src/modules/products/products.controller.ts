@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { object } from "zod";
-import { getProductbyid, insertProduct, queryAllProducts, queryupdateProduct } from "../../utils/productDb";
+import { getProductbyid, insertProduct, queryAllProducts, queryHardDelete, queryLogicDelete, queryupdateProduct } from "../../utils/productDb";
 import unimplemented from "../../utils/unimplemented";
 
 // medita temporal para comprobar si tiene esa estructura
@@ -96,7 +96,21 @@ export async function updateProduct(req: Request, res: Response) {
 // Ejemplo: DELETE /products/12?hard=true -> Borrado de la base de datos.
 //          DELETE /products/12 -> Borrado lógico.
 export async function deleteProduct(req: Request, res: Response) {
-  unimplemented(req, res);
+  const productId = req.params.productId;
+  const isHard = req.query.hard === 'true';
+  try {
+    if (isHard) {
+      const result = await queryHardDelete(productId)
+      res.send(result)
+    } else {
+      const result = await queryLogicDelete(productId)
+      res.send(result)
+    }
+  } catch (error) {
+    console.log(error);
+    res.send({ error: error })
+  }
+
 }
 
 // Debería restaurar un producto que se ha borrado de forma lógica.

@@ -85,3 +85,38 @@ export async function queryupdateProduct(id: string, changes: Partial<structureP
         return { error: error };
     }
 }
+export async function queryHardDelete(id: string) {
+    try {
+        const res = await prisma.product.delete({
+            where: {
+                id: parseInt(id),
+            },
+        });
+        console.log(res);
+        return res
+
+    } catch (error) {
+        console.log(error);
+        return { error: error }
+    }
+}
+
+export async function queryLogicDelete(id: string) {
+    console.log("borrado logico");
+
+    try {
+        const res = await prisma.product.update({
+            where: {
+                id: parseInt(id),
+            },
+            data: {
+                isDeleted: true,
+            },
+        });
+        console.log(res);
+        return res
+    } catch (error) {
+        console.log(error);
+        return { error: error }
+    }
+}
