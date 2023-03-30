@@ -37,6 +37,7 @@ yarn-error.log
 testem.log
 /typings
 .turbo
+package-lock.json
 
 # System Files
 .DS_Store
