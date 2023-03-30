@@ -8,28 +8,14 @@ datasource db {
 }
 
 model Product {
-  id          Int      @id @default(autoincrement())
-  slug        String   @unique
+  id          Int     @id @default(autoincrement())
+  slug        String  @unique
   name        String
   description String?
   imageUrl    String
   price       Decimal
   stock       Int
-  brand       Brand    @relation(fields: [brandId], references: [id])
-  category    Category @relation(fields: [categoryId], references: [id])
-  brandId     Int
-  categoryId  Int
-  isDeleted   Boolean  @default(false)
-}
-
-model Brand {
-  id      Int       @id @default(autoincrement())
-  name    String
-  product Product[]
-}
-
-model Category {
-  id      Int       @id @default(autoincrement())
-  name    String
-  product Product[]
+  brand       String  @unique
+  category    String  @unique
+  isDeleted   Boolean @default(false)
 }
