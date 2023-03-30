@@ -59,3 +59,15 @@ export async function getProductbyid(id: string) {
         return { error: error }
     }
 }
+export async function queryAllProducts() {
+    try {
+        const res: [] | structureProduct[] = await prisma.$queryRaw`SELECT * FROM "Product"`;
+        if (res.length === 0) {
+            return { error: 'no hay datos' };
+        } else {
+            return res;
+        }
+    } catch (error) {
+        return { error: error };
+    }
+}

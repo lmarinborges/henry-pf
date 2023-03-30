@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getProductbyid, insertProduct } from "../../utils/dbprod";
+import { getProductbyid, insertProduct, queryAllProducts } from "../../utils/dbprod";
 import unimplemented from "../../utils/unimplemented";
 
 // medita temporal para comprobar si tiene esa estructura
@@ -31,7 +31,16 @@ function isStructureProduct(obj: any): obj is structureProduct {
 
 // Devuelve todos los productos.
 export async function getAllProducts(req: Request, res: Response) {
-  unimplemented(req, res);
+  const result: { error: any } | structureProduct[] = await queryAllProducts()
+  if ('error' in result) {
+    console.log('Ocurrió un error:', result);
+    res.status(500)
+    res.send(result)
+  } else {
+    console.log('Resultado de la consulta:', result);
+    res.status(200)
+    res.send(result)
+  }
 }
 
 // Devuelve un producto basado en su ID./ resultado {}
