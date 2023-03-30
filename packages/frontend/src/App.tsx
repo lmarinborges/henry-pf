@@ -25,9 +25,9 @@ const routes = createBrowserRouter(
         <Route path="home" element={<HomePage />} />
         <Route path="about" element={<AboutPage />} />
         <Route path="contact" element={<ContactPage />} />
-        <Route path="products" element={<ProductsPage />}>
-          <Route path=":productId" element={<ProductPage />} />
-        </Route>
+        <Route path="products" element={<ProductsPage />}/>
+        <Route path="products/1" element={<ProductPage />} />
+        
       </Route>
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<Navigate to="products" />} />
