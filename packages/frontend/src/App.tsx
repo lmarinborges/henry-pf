@@ -8,20 +8,32 @@ import {
 } from "react-router-dom";
 import AdminLayout from "./components/AdminLayout";
 import PublicLayout from "./components/PublicLayout";
+import AboutPage from "./pages/about";
+import ProductsAdminPage from "./pages/admin/products";
+import ContactPage from "./pages/contact";
+import ErrorPage from "./pages/error";
+import HomePage from "./pages/home";
+import NotFoundPage from "./pages/notfound";
+import ProductsPage from "./pages/products";
+import ProductPage from "./pages/products/product";
 
 const routes = createBrowserRouter(
   createRoutesFromElements([
-    <Route path="/" element={<PublicLayout />}>
-      <Route index element={<Navigate to="/home" />} />
-      <Route path="home" element={<h1>Landing Page</h1>} />
-      <Route path="about" element={<h1>Sobre Nosotros</h1>} />
-      <Route path="contact" element={<h1>Información de Contacto</h1>} />
-      <Route path="products" element={<h1>Listado de Productos</h1>}>
-        <Route path=":productId" element={<h1>Información de Producto</h1>} />
+    <Route errorElement={<ErrorPage />}>
+      <Route path="/" element={<PublicLayout />}>
+        <Route index element={<Navigate to="/home" />} />
+        <Route path="home" element={<HomePage />} />
+        <Route path="about" element={<AboutPage />} />
+        <Route path="contact" element={<ContactPage />} />
+        <Route path="products" element={<ProductsPage />}>
+          <Route path=":productId" element={<ProductPage />} />
+        </Route>
       </Route>
-    </Route>,
-    <Route path="/admin" element={<AdminLayout />}>
-      <Route path="products" element={<h1>Administración de Productos</h1>} />
+      <Route path="/admin" element={<AdminLayout />}>
+        <Route index element={<Navigate to="products" />} />
+        <Route path="products" element={<ProductsAdminPage />} />
+      </Route>
+      <Route path="*" element={<NotFoundPage />} />
     </Route>,
   ])
 );
