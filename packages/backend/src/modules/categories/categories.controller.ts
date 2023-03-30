@@ -16,19 +16,43 @@ export async function getAllCategories(req: Request, res: Response) {
   }
 }
 
+export async function getCategoryByID(req: Request, res: Response) {
+  try{
+    const idCategory= parseInt(req.params.idCategory)
+    const foundCategory = await prisma.category.findUnique({
+      where: {
+        id: idCategory
+      }
+    })
+    return res.status(200).send(foundCategory);
+  }
+  catch(error){
+    return res.status(404).send(error)
+  }
+}
+
 export async function createCategory(req: Request, res: Response) {
   try{
-    const { id , name , description}: {id: number; name: string; description: string} = req.body
-    const createdCategory = await prisma.category.create({
-      data: {
-        id: id,
-        name: name,
-        description: description
-      },
-    })
+    const { name , description}: {name: string; description: string} = req.body
+      await prisma.category.create({
+        data: {
+          name: name,
+          description: description
+        },
+      })
     return res.status(200).json({msg:"Category created"});
   }
   catch(error){
     return res.status(404).send(error)
   }
+}
+
+export async function deleteCategory(req: Request, res: Response) {
+  const idCategory= parseInt(req.params.idCategory)
+    await prisma.category.delete({
+      where: {
+        id: idCategory
+      }
+  })
+  return res.status(200).json({msg:"Category deleted"});
 }
