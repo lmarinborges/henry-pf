@@ -10,12 +10,10 @@ export async function getAllCategories(req: Request, res: Response) {
   try{
     const allCategories = await prisma.category.findMany()
     return res.status(200).send(allCategories);
-
   }
   catch(error){
     return res.status(404).send(error)
   }
-  
 }
 
 export async function createCategory(req: Request, res: Response) {
@@ -28,11 +26,9 @@ export async function createCategory(req: Request, res: Response) {
         description: description
       },
     })
-
-    return res.status(200).send(createdCategory);
+    return res.status(200).json({msg:"Category created"});
   }
   catch(error){
     return res.status(404).send(error)
   }
-  
 }
