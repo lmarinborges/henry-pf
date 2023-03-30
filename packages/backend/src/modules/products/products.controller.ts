@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
 import { object } from "zod";
-import { getProductbyid, insertProduct, queryAllProducts, queryHardDelete, queryLogicDelete, queryRestore, queryupdateProduct } from "../../utils/productDb";
+import { array } from "zod/lib";
+import { getProductbyid, insertProduct, queryAllProducts, queryHardDelete, queryLogicDelete, queryPaginateAndOrder, queryRestore, queryupdateProduct } from "../../utils/productDb";
 import unimplemented from "../../utils/unimplemented";
 
-// medita temporal para comprobar si tiene esa estructura
+// media temporal para comprobar si tiene esa estructura
 interface structureProduct {
-  id: number | undefined,
+  id: number,
   slug: string,
   name: string,
   description: string,
@@ -38,7 +39,6 @@ export async function getAllProducts(req: Request, res: Response) {
     res.status(500)
     res.send(result)
   } else {
-    console.log('Resultado de la consulta:', result);
     res.status(200)
     res.send(result)
   }
@@ -123,5 +123,37 @@ export async function restoreProduct(req: Request, res: Response) {
     console.log(error);
     res.send({ error: error })
   }
-  unimplemented(req, res);
 }
+
+
+
+// deberia mostrar un segmento de todos los productos según las configuraciones del paginado
+export async function paginateProducts(req: Request, res: Response) {
+  // recibiendo y convvirtiendo a Json las opciones de ordenamiento
+  const dataInStr = req.query.options as string
+  const options = JSON.parse(decodeURIComponent(dataInStr))
+  // datos iniciales del paginado
+  let currentPage: number;
+  let itemsPerPage: number;
+
+  //condicional que los datos son correctos , options puede ser un [] vacío o tener [{column: "name-column", order: "asc o desc"}] 
+  if (typeof req.query.current == 'string' && typeof req.query.items == 'string' && Array.isArray(options)) {
+    currentPage = parseInt(req.query.current) || 1;
+    itemsPerPage = parseInt(req.query.items) || 2;
+    const result: { error: any } | structureProduct[] = await queryAllProducts()
+    const result2 = await queryPaginateAndOrder(currentPage, itemsPerPage, options)
+    if ('error' in result) {
+      console.log('Ocurrió un error en la consulta:', result);
+      res.status(500)
+      res.send({ error: result })
+    } else {
+      console.log('cantidad de la consulta:', result.length);
+      res.status(200)
+      res.send({ productos: result2, currentPage: currentPage, totalPages: result.length })
+    }
+  } else {
+    res.status(500)
+    res.send({ error: 'los datos no son válidos, se esperaba en body { current : "" , items : "" , options : [{column: "name-column", order: "asc o desc"}] } ' })
+  }
+}
+
