@@ -12,25 +12,26 @@ model Product {
   slug        String   @unique
   name        String
   description String?
-  price       Float
+  imageUrl    String
+  price       Decimal
   stock       Int
-  state       Boolean  @default(true)
-  id_brand    Int
-  id_category Int
-  Brand       Brand    @relation(fields: [id_brand], references: [id])
-  Category    Category @relation(fields: [id_category], references: [id])
-}
-
-model Brand {
-  id    Int     @id @default(autoincrement())
-  name  String 
-  description  String?
-  product Product[]
+  brand       Brand    @relation(fields: [brandId], references: [id])
+  category    Category @relation(fields: [categoryId], references: [id])
+  brandId     Int
+  categoryId  Int
+  isDeleted   Boolean  @default(false)
 }
 
 model Category {
-  id    Int     @id @default(autoincrement())
-  name  String 
-  description  String?
-  product Product[]
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  product     Product[]
+}
+
+model Brand {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  product     Product[]
 }
