@@ -1,5 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
 import "express-async-errors";
+import { ZodError } from "zod";
 import morgan from "./middleware/morgan";
 import brandsRouter from "./modules/brands";
 import categoriesRouter from "./modules/categories";
@@ -28,16 +29,20 @@ app.use((req, res) => {
 // Error handler
 app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
   if (res.headersSent) return next(err);
-  if (err instanceof Error) {
-    logger.error(err.message);
-    logger.debug(err.stack);
+  if (err instanceof ZodError) {
+    res.status(400).send({ status: 400, errors: err.issues });
   } else {
-    logger.error(err);
+    if (err instanceof Error) {
+      logger.error(err.message);
+      logger.debug(err.stack);
+    } else {
+      logger.error(err);
+    }
+    res.status(500).send({
+      status: 500,
+      message: "Internal server error.",
+    });
   }
-  res.status(500).send({
-    status: 500,
-    message: "Internal server error.",
-  });
 });
 
 export default app;
