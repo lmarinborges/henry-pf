@@ -4,14 +4,16 @@ import {
   deleteCategory,
   getAllCategories,
   getCategory,
+  updateCategory,
 } from "./categories.controller";
 
 const categoriesRouter = Router();
 
 categoriesRouter
   .get("/categories", getAllCategories)
-  .get("/categories/:idCategory", getCategory)
   .post("/categories", createCategory)
-  .delete("/categories/:idCategory", deleteCategory);
+  .get("/categories/:categoryId", getCategory)
+  .put("/categories/:categoryId", updateCategory)
+  .delete("/categories/:categoryId", deleteCategory);
 
 export default categoriesRouter;
