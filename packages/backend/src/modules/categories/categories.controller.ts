@@ -1,58 +1,52 @@
 import { Request, Response } from "express";
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from "@prisma/client";
+import {
+  allCategories,
+  hardDeleteCategories,
+  findIDCategories,
+  findNameCategories,
+} from "../../utils/categories";
 // import unimplemented from "../../utils/unimplemented";
 
-const prisma = new PrismaClient()
-
+const prisma = new PrismaClient();
 
 // Devuelve todos los productos.
 export async function getAllCategories(req: Request, res: Response) {
-  try{
-    const allCategories = await prisma.category.findMany()
-    return res.status(200).send(allCategories);
-  }
-  catch(error){
-    return res.status(404).send(error)
-  }
+  const categories = await allCategories();
+  return res.status(200).send(categories);
 }
 
 export async function getCategoryByID(req: Request, res: Response) {
-  try{
-    const idCategory= parseInt(req.params.idCategory)
-    const foundCategory = await prisma.category.findUnique({
-      where: {
-        id: idCategory
-      }
-    })
-    return res.status(200).send(foundCategory);
-  }
-  catch(error){
-    return res.status(404).send(error)
-  }
+  const idCategory = req.params.idCategory;
+
+  const foundCategory = await findIDCategories(idCategory);
+  if (!foundCategory) return res.status(404).send("Category not found");
+  return res.status(200).send(foundCategory);
 }
 
 export async function createCategory(req: Request, res: Response) {
-  try{
-    const { name , description}: {name: string; description: string} = req.body
-      await prisma.category.create({
-        data: {
-          name: name,
-          description: description
-        },
-      })
-    return res.status(200).json({msg:"Category created"});
-  }
-  catch(error){
-    return res.status(404).send(error)
-  }
+  const { name, description }: { name: string; description: string } = req.body;
+
+  const foundCategory = await findNameCategories(name);
+  if (foundCategory)
+    return res.status(400).json({ msg: "This category allready exists" });
+
+  await prisma.category.create({
+    data: {
+      name: name,
+      description: description,
+    },
+  });
+  return res.status(200).json({ msg: "Category created" });
 }
 
 export async function deleteCategory(req: Request, res: Response) {
-  const idCategory= parseInt(req.params.idCategory)
-    await prisma.category.delete({
-      where: {
-        id: idCategory
-      }
-  })
-  return res.status(200).json({msg:"Category deleted"});
+  const idCategory = req.params.idCategory;
+
+  const foundCategory = await findIDCategories(idCategory);
+  if (!foundCategory)
+    return res.status(404).json({ msg: "This ID don´t exist in the DB " });
+
+  await hardDeleteCategories(idCategory);
+  return res.status(200).json({ msg: "Category deleted" });
 }
