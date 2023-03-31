@@ -30,7 +30,7 @@ export async function getAllCategories(req: Request, res: Response) {
 
 export async function getCategory(req: Request, res: Response) {
   const { categoryId } = await paramsSchema.parseAsync(req.params);
-  const category = await prisma.category.findUnique({
+  const category = await prisma.category.findUniqueOrThrow({
     where: { id: categoryId },
   });
   return res.status(200).send(category);

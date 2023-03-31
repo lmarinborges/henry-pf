@@ -23,7 +23,7 @@ export async function getAllBrands(req: Request, res: Response) {
 
 export async function getBrand(req: Request, res: Response) {
   const { brandId } = await paramsSchema.parseAsync(req.params);
-  const brand = await prisma.brand.findUnique({
+  const brand = await prisma.brand.findUniqueOrThrow({
     where: { id: brandId },
   });
   res.status(200).json(brand);
