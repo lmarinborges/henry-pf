@@ -3,14 +3,14 @@ import {
   createCategory,
   deleteCategory,
   getAllCategories,
-  getCategoryByID,
+  getCategory,
 } from "./categories.controller";
 
 const categoriesRouter = Router();
 
 categoriesRouter
   .get("/categories", getAllCategories)
-  .get("/categories/:idCategory", getCategoryByID)
+  .get("/categories/:idCategory", getCategory)
   .post("/categories", createCategory)
   .delete("/categories/:idCategory", deleteCategory);
 

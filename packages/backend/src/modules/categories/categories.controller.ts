@@ -16,7 +16,7 @@ export async function getAllCategories(req: Request, res: Response) {
   return res.status(200).send(categories);
 }
 
-export async function getCategoryByID(req: Request, res: Response) {
+export async function getCategory(req: Request, res: Response) {
   const idCategory = req.params.idCategory;
 
   const foundCategory = await findIDCategories(idCategory);
