@@ -1,14 +1,14 @@
 import express from "express";
 import "express-async-errors";
-import morgan from "morgan";
+import morgan from "./middleware/morgan";
+import brandsRouter from "./modules/brands";
 import categoriesRouter from "./modules/categories";
 import productsRouter from "./modules/products";
-import brandsRouter from "./modules/brands";
 
 const app = express();
 
 // Middleware
-app.use(morgan("dev"));
+app.use(morgan());
 app.use(express.json());
 
 // Routes
