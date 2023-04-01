@@ -13,7 +13,7 @@ brandsRouter
   .get("/brands", getAllBrands)
   .post("/brands", createBrand)
   .get("/brands/:brandId", getBrand)
-  .put("/brands/:brandId", updateBrand)
+  .patch("/brands/:brandId", updateBrand)
   .delete("/brands/:brandId", deleteBrand);
 
 export default brandsRouter;

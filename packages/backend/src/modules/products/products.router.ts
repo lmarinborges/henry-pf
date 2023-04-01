@@ -13,7 +13,7 @@ productsRouter
   .get("/products", getAllProducts)
   .post("/products", createProduct)
   .get("/products/:productId", getProduct)
-  .put("/products/:productId", updateProduct)
+  .patch("/products/:productId", updateProduct)
   .delete("/products/:productId", deleteProduct);
 
 export default productsRouter;

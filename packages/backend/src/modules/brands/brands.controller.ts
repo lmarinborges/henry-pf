@@ -3,7 +3,7 @@ import { z } from "zod";
 import prisma from "../../db";
 
 const paramsSchema = z.object({
-  brandId: z.coerce.number(),
+  brandId: z.coerce.number().int(),
 });
 
 const createSchema = z.object({

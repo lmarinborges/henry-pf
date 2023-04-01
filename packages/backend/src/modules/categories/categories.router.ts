@@ -13,7 +13,7 @@ categoriesRouter
   .get("/categories", getAllCategories)
   .post("/categories", createCategory)
   .get("/categories/:categoryId", getCategory)
-  .put("/categories/:categoryId", updateCategory)
+  .patch("/categories/:categoryId", updateCategory)
   .delete("/categories/:categoryId", deleteCategory);
 
 export default categoriesRouter;
