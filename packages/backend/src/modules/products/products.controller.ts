@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { Request, Response } from "express";
 import { z } from "zod";
@@ -15,6 +16,19 @@ const bodySchema = z.object({
   stock: z.number().int(),
   brandId: z.number().int(),
   categoryId: z.number().int(),
+});
+
+const getAllSchema = z.object({
+  query: z
+    .object({
+      page: z.coerce.number().int(),
+      search: z.string(),
+      categoryId: z.coerce.number().int(),
+      brandId: z.coerce.number().int(),
+      order: z.enum(["asc", "desc"]),
+      column: z.enum(["name", "price"]),
+    })
+    .partial(),
 });
 
 const getSchema = z.object({
@@ -38,12 +52,25 @@ const createSlug = (value: string) =>
     .replace(/[\s_-]+/g, "-")
     .replace(/^-+|-+$/g, "")}-${slugid()}`;
 
+const PAGE_SIZE = 5;
+
 // Devuelve todos los productos.
 export async function getAllProducts(req: Request, res: Response) {
+  const { query } = await getAllSchema.parseAsync(req);
+  const where: Prisma.ProductWhereInput = {
+    name: { contains: query.search, mode: "insensitive" },
+    categoryId: query.categoryId,
+    brandId: query.brandId,
+  };
+  const totalItems = await prisma.product.count({ where });
   const products = await prisma.product.findMany({
+    take: query.page ? PAGE_SIZE : undefined,
+    skip: query.page ? (query.page - 1) * PAGE_SIZE : undefined,
+    where,
+    orderBy: { ...(query.column ? { [query.column]: query.order } : {}) },
     include: { brand: true, category: true },
   });
-  res.status(200).json(products);
+  res.status(200).json({ totalItems, pageSize: PAGE_SIZE, products });
 }
 
 // Devuelve un producto basado en su ID./ resultado {}
