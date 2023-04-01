@@ -3,15 +3,17 @@ import {
   createCategory,
   deleteCategory,
   getAllCategories,
-  getCategoryByID,
+  getCategory,
+  updateCategory,
 } from "./categories.controller";
 
 const categoriesRouter = Router();
 
 categoriesRouter
   .get("/categories", getAllCategories)
-  .get("/categories/:idCategory", getCategoryByID)
   .post("/categories", createCategory)
-  .delete("/categories/:idCategory", deleteCategory);
+  .get("/categories/:categoryId", getCategory)
+  .patch("/categories/:categoryId", updateCategory)
+  .delete("/categories/:categoryId", deleteCategory);
 
 export default categoriesRouter;

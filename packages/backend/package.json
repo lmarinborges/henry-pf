@@ -3,18 +3,21 @@
   "private": true,
   "version": "0.1.0",
   "scripts": {
-    "dev": "nodemon src/index.ts",
+    "dev": "nodemon -r dotenv/config src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js",
+    "start": "node -r dotenv/config dist/index.js",
     "lint": "eslint"
   },
   "dependencies": {
     "@prisma/client": "^4.12.0",
     "cloudinary": "^1.35.0",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-async-errors": "^3.1.1",
     "express-fileupload": "^1.4.0",
     "morgan": "^1.10.0",
+    "nanoid": "3.3.6",
+    "winston": "^3.8.2",
     "zod": "^3.21.4"
   },
   "devDependencies": {

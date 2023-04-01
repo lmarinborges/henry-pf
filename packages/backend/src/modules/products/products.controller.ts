@@ -1,159 +1,164 @@
+import { Prisma } from "@prisma/client";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { Request, Response } from "express";
-import { object } from "zod";
-import { array } from "zod/lib";
-import { getProductbyid, insertProduct, queryAllProducts, queryHardDelete, queryLogicDelete, queryPaginateAndOrder, queryRestore, queryupdateProduct } from "../../utils/productDb";
-import unimplemented from "../../utils/unimplemented";
+import { z } from "zod";
+import prisma from "../../db";
+import slugid from "../../utils/slugid";
+import transformDecimal from "../../utils/transformDecimal";
 
-// media temporal para comprobar si tiene esa estructura
-interface structureProduct {
-  id: number,
-  slug: string,
-  name: string,
-  description: string,
-  imageUrl: string,
-  price: number,/*flotante*/
-  stock: number,
-  id_brand: number,
-  id_category: number
-  isDeleted: boolean,
-}
-function isStructureProduct(obj: any): obj is structureProduct {
-  return (
-    typeof obj.slug === 'string' &&
-    typeof obj.name === 'string' &&
-    typeof obj.description === 'string' &&
-    typeof obj.imageUrl === 'string' &&
-    typeof obj.price === 'number' &&
-    typeof obj.stock === 'number' &&
-    typeof obj.id_brand === 'number' &&
-    typeof obj.id_category === 'number' &&
-    typeof obj.isDeleted === 'boolean'
-  );
-}
+const paramsSchema = z.object({ productId: z.coerce.number().int() });
+
+const bodySchema = z.object({
+  name: z.string().min(1),
+  description: z.string().min(1).optional(),
+  imageUrl: z.string(),
+  price: z.string().transform(transformDecimal),
+  stock: z.number().int(),
+  brandId: z.number().int(),
+  categoryId: z.number().int(),
+});
+
+const getAllSchema = z.object({
+  query: z
+    .object({
+      page: z.coerce.number().int(),
+      search: z.string(),
+      categoryId: z.coerce.number().int(),
+      brandId: z.coerce.number().int(),
+      order: z.enum(["asc", "desc"]),
+      column: z.enum(["name", "price"]),
+    })
+    .partial(),
+});
+
+const getSchema = z.object({
+  params: paramsSchema,
+});
+
+const createSchema = z.object({
+  body: bodySchema,
+});
+
+const updateSchema = z.object({
+  params: paramsSchema,
+  body: bodySchema
+    .extend({
+      isTrashed: z.boolean(),
+    })
+    .partial(),
+});
+
+const createSlug = (value: string) =>
+  `${value
+    .trim()
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/[\s_-]+/g, "-")
+    .replace(/^-+|-+$/g, "")}-${slugid()}`;
+
+const PAGE_SIZE = 5;
 
 // Devuelve todos los productos.
 export async function getAllProducts(req: Request, res: Response) {
-  const result: { error: any } | structureProduct[] = await queryAllProducts()
-  if ('error' in result) {
-    console.log('Ocurrió un error:', result);
-    res.status(500)
-    res.send(result)
-  } else {
-    res.status(200)
-    res.send(result)
-  }
+  const { query } = await getAllSchema.parseAsync(req);
+  const where: Prisma.ProductWhereInput = {
+    name: { contains: query.search, mode: "insensitive" },
+    categoryId: query.categoryId,
+    brandId: query.brandId,
+  };
+  const totalItems = await prisma.product.count({ where });
+  const products = await prisma.product.findMany({
+    take: query.page ? PAGE_SIZE : undefined,
+    skip: query.page ? (query.page - 1) * PAGE_SIZE : undefined,
+    where,
+    orderBy: { ...(query.column ? { [query.column]: query.order } : {}) },
+    include: { brand: true, category: true },
+  });
+  res.status(200).json({ totalItems, pageSize: PAGE_SIZE, products });
 }
 
 // Devuelve un producto basado en su ID./ resultado {}
 export async function getProduct(req: Request, res: Response) {
-  const productId = req.params.productId;
-  if (typeof productId !== 'string') {
-    res.status(500)
-    res.send({ error: 'productId no es válido' })
-  } else {
-    const result = await getProductbyid(productId)
-    res.send(result)
-  }
+  const { params } = await getSchema.parseAsync(req);
+  const product = await prisma.product.findUniqueOrThrow({
+    where: { id: params.productId },
+    include: { brand: true, category: true },
+  });
+  return res.status(200).json(product);
 }
 
 // Crea un nuevo producto.
 export async function createProduct(req: Request, res: Response) {
-  //considerando que se recibe un los datos como body: {slug,name,description,price,stock,state,id_brand,id_Product}
-  const datos: Record<string, never> | structureProduct = req.body
-  console.log(datos);
-  try {
-    if (!isStructureProduct(datos)) {
-      res.status(500)
-      res.send({ error: 'algún dato no es válido, los datos deben ser :: {slug,name,description,price,stock,state,id_brand,id_Product}' })
-    } else {
-      const result = await insertProduct(datos)
-      res.send(result)
+  const {
+    body: { brandId, categoryId, ...data },
+  } = await createSchema.parseAsync(req);
+  // Calculate the slug by parsing the provided name.
+  // Added loop in case of unique constraint violation.
+  let product = null;
+  while (product === null) {
+    const slug = createSlug(data.name);
+    try {
+      product = await prisma.product.create({
+        data: {
+          ...data,
+          slug,
+          category: { connect: { id: categoryId } },
+          brand: { connect: { id: brandId } },
+        },
+      });
+    } catch (err) {
+      if (
+        err instanceof PrismaClientKnownRequestError &&
+        err.code === "P2002"
+      ) {
+        continue;
+      } else {
+        throw err;
+      }
     }
-  } catch (error) {
-    res.status(500)
-    res.send({ error: error })
   }
-
+  return res.status(201).json(product);
 }
 
 // Actualiza un producto basado en su ID.
 export async function updateProduct(req: Request, res: Response) {
-  const productId = req.params.productId;
-  const datos: object | undefined = req.body.datos
-
-  if (typeof datos !== 'object') {
-    res.status(500)
-    res.send({ error: 'algún dato no es válido' })
-  } else {
-    const result = await queryupdateProduct(productId, datos)
-    res.send(result)
+  const {
+    body: { brandId, categoryId, ...data },
+    params,
+  } = await updateSchema.parseAsync(req);
+  let product = null;
+  while (product === null) {
+    const slug =
+      typeof data.name !== "undefined" ? createSlug(data.name) : undefined;
+    try {
+      product = await prisma.product.update({
+        where: { id: params.productId },
+        data: {
+          ...data,
+          slug,
+          brandId: brandId,
+          categoryId: categoryId,
+        },
+      });
+    } catch (err) {
+      if (
+        err instanceof PrismaClientKnownRequestError &&
+        err.code === "P2002"
+      ) {
+        continue;
+      } else {
+        throw err;
+      }
+    }
   }
-
+  return res.status(200).json(product);
 }
 
-// Hace borrado lógico de un producto, basado en su ID.
-// Si el query param "hard" es "true", entonces debería borrarlo de verdad.
-// Ejemplo: DELETE /products/12?hard=true -> Borrado de la base de datos.
-//          DELETE /products/12 -> Borrado lógico.
+// Borra un producto basado en su ID.
 export async function deleteProduct(req: Request, res: Response) {
-  const productId = req.params.productId;
-  const isHard = req.query.hard === 'true';
-  try {
-    if (isHard) {
-      const result = await queryHardDelete(productId)
-      res.send(result)
-    } else {
-      const result = await queryLogicDelete(productId)
-      res.send(result)
-    }
-  } catch (error) {
-    console.log(error);
-    res.send({ error: error })
-  }
-
+  const { params } = await getSchema.parseAsync(req);
+  const product = await prisma.product.delete({
+    where: { id: params.productId },
+  });
+  return res.status(200).json(product);
 }
-
-// Debería restaurar un producto que se ha borrado de forma lógica.
-export async function restoreProduct(req: Request, res: Response) {
-  const productId = req.params.productId;
-  try {
-    const result = await queryRestore(productId)
-    res.send(result)
-  } catch (error) {
-    console.log(error);
-    res.send({ error: error })
-  }
-}
-
-
-
-// deberia mostrar un segmento de todos los productos según las configuraciones del paginado
-export async function paginateProducts(req: Request, res: Response) {
-  // recibiendo y convvirtiendo a Json las opciones de ordenamiento
-  const dataInStr = req.query.options as string
-  const options = JSON.parse(decodeURIComponent(dataInStr))
-  // datos iniciales del paginado
-  let currentPage: number;
-  let itemsPerPage: number;
-
-  //condicional que los datos son correctos , options puede ser un [] vacío o tener [{column: "name-column", order: "asc o desc"}] 
-  if (typeof req.query.current == 'string' && typeof req.query.items == 'string' && Array.isArray(options)) {
-    currentPage = parseInt(req.query.current) || 1;
-    itemsPerPage = parseInt(req.query.items) || 2;
-    const result: { error: any } | structureProduct[] = await queryAllProducts()
-    const result2 = await queryPaginateAndOrder(currentPage, itemsPerPage, options)
-    if ('error' in result) {
-      console.log('Ocurrió un error en la consulta:', result);
-      res.status(500)
-      res.send({ error: result })
-    } else {
-      console.log('cantidad de la consulta:', result.length);
-      res.status(200)
-      res.send({ productos: result2, currentPage: currentPage, totalPages: result.length })
-    }
-  } else {
-    res.status(500)
-    res.send({ error: 'los datos no son válidos, se esperaba en body { current : "" , items : "" , options : [{column: "name-column", order: "asc o desc"}] } ' })
-  }
-}
-
