@@ -20,6 +20,7 @@ model Product {
   brandId     Int?
   categoryId  Int?
   isTrashed   Boolean   @default(false)
+  createdAt   DateTime  @default(now())
 }
 
 model Category {
