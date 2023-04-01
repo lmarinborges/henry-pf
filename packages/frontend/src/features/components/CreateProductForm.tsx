@@ -19,6 +19,8 @@ import { useForm } from "react-hook-form";
 const validateUrl = (value: any) => {
   try {
     const url = new URL(value);
+    console.log(url.protocol);
+    
     return url.protocol === "https:";
   } catch (e) {
     return false;
@@ -81,7 +83,7 @@ export default function CreateProductForm() {
                 </FormHelperText>
               </FormControl>
 
-              <FormControl id="url" isInvalid={errors.url} isRequired>
+              <FormControl id="url" isRequired>
                 <FormLabel>Enter the url of the article</FormLabel>
                 <Input
                   {...register("url", {
@@ -89,6 +91,7 @@ export default function CreateProductForm() {
                     validate: validateUrl,
                   })}
                   placeholder="https://..."
+                  type="file"
                 />
                 <FormHelperText>
                   You only need a URL. Example: https://www.ahem...
