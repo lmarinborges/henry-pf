@@ -19,7 +19,7 @@ model Product {
   category    Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull, onUpdate: Cascade)
   brandId     Int?
   categoryId  Int?
-  isDeleted   Boolean   @default(false)
+  isTrashed   Boolean   @default(false)
 }
 
 model Category {
