@@ -34,7 +34,9 @@ const createSlug = (value: string) =>
 
 // Devuelve todos los productos.
 export async function getAllProducts(req: Request, res: Response) {
-  const products = await prisma.product.findMany();
+  const products = await prisma.product.findMany({
+    include: { brand: true, category: true },
+  });
   res.status(200).json(products);
 }
 
@@ -43,6 +45,7 @@ export async function getProduct(req: Request, res: Response) {
   const { productId } = await paramsSchema.parseAsync(req.params);
   const product = await prisma.product.findUniqueOrThrow({
     where: { id: productId },
+    include: { brand: true, category: true },
   });
   return res.status(200).json(product);
 }
