@@ -41,7 +41,11 @@ const createSchema = z.object({
 
 const updateSchema = z.object({
   params: paramsSchema,
-  body: bodySchema.partial(),
+  body: bodySchema
+    .extend({
+      isTrashed: z.boolean(),
+    })
+    .partial(),
 });
 
 const createSlug = (value: string) =>
