@@ -6,21 +6,23 @@ const paramsSchema = z.object({
   categoryId: z.coerce.number().int(),
 });
 
-const createSchema = z.object({
+const bodySchema = z.object({
   name: z.string().min(1),
   description: z.string().min(1).optional(),
 });
 
-const updateSchema = z.object({
+const getSchema = z.object({
   params: paramsSchema,
-  body: createSchema.partial(),
 });
 
-export async function createCategory(req: Request, res: Response) {
-  const data = await createSchema.parseAsync(req.body);
-  const category = await prisma.category.create({ data });
-  return res.status(200).json(category);
-}
+const createSchema = z.object({
+  body: bodySchema,
+});
+
+const updateSchema = z.object({
+  params: paramsSchema,
+  body: bodySchema.partial(),
+});
 
 // Devuelve todos los productos.
 export async function getAllCategories(req: Request, res: Response) {
@@ -29,11 +31,17 @@ export async function getAllCategories(req: Request, res: Response) {
 }
 
 export async function getCategory(req: Request, res: Response) {
-  const { categoryId } = await paramsSchema.parseAsync(req.params);
+  const { params } = await getSchema.parseAsync(req);
   const category = await prisma.category.findUniqueOrThrow({
-    where: { id: categoryId },
+    where: { id: params.categoryId },
   });
   return res.status(200).send(category);
+}
+
+export async function createCategory(req: Request, res: Response) {
+  const { body: data } = await createSchema.parseAsync(req);
+  const category = await prisma.category.create({ data });
+  return res.status(200).json(category);
 }
 
 export async function updateCategory(req: Request, res: Response) {
@@ -46,9 +54,9 @@ export async function updateCategory(req: Request, res: Response) {
 }
 
 export async function deleteCategory(req: Request, res: Response) {
-  const { categoryId } = await paramsSchema.parseAsync(req.params);
+  const { params } = await getSchema.parseAsync(req);
   const category = await prisma.category.delete({
-    where: { id: categoryId },
+    where: { id: params.categoryId },
   });
   return res.status(200).json(category);
 }

@@ -5,23 +5,29 @@ import prisma from "../../db";
 import slugid from "../../utils/slugid";
 import transformDecimal from "../../utils/transformDecimal";
 
-const paramsSchema = z.object({
-  productId: z.coerce.number().int(),
-});
+const paramsSchema = z.object({ productId: z.coerce.number().int() });
 
-const createSchema = z.object({
+const bodySchema = z.object({
   name: z.string().min(1),
   description: z.string().min(1).optional(),
   imageUrl: z.string(),
   price: z.string().transform(transformDecimal),
   stock: z.number().int(),
-  brand: z.number().int(),
-  category: z.number().int(),
+  brandId: z.number().int(),
+  categoryId: z.number().int(),
+});
+
+const getSchema = z.object({
+  params: paramsSchema,
+});
+
+const createSchema = z.object({
+  body: bodySchema,
 });
 
 const updateSchema = z.object({
   params: paramsSchema,
-  body: createSchema.partial(),
+  body: bodySchema.partial(),
 });
 
 const createSlug = (value: string) =>
@@ -42,9 +48,9 @@ export async function getAllProducts(req: Request, res: Response) {
 
 // Devuelve un producto basado en su ID./ resultado {}
 export async function getProduct(req: Request, res: Response) {
-  const { productId } = await paramsSchema.parseAsync(req.params);
+  const { params } = await getSchema.parseAsync(req);
   const product = await prisma.product.findUniqueOrThrow({
-    where: { id: productId },
+    where: { id: params.productId },
     include: { brand: true, category: true },
   });
   return res.status(200).json(product);
@@ -52,7 +58,9 @@ export async function getProduct(req: Request, res: Response) {
 
 // Crea un nuevo producto.
 export async function createProduct(req: Request, res: Response) {
-  const { brand, category, ...data } = await createSchema.parseAsync(req.body);
+  const {
+    body: { brandId, categoryId, ...data },
+  } = await createSchema.parseAsync(req);
   // Calculate the slug by parsing the provided name.
   // Added loop in case of unique constraint violation.
   let product = null;
@@ -63,8 +71,8 @@ export async function createProduct(req: Request, res: Response) {
         data: {
           ...data,
           slug,
-          category: { connect: { id: category } },
-          brand: { connect: { id: brand } },
+          category: { connect: { id: categoryId } },
+          brand: { connect: { id: brandId } },
         },
       });
     } catch (err) {
@@ -84,7 +92,7 @@ export async function createProduct(req: Request, res: Response) {
 // Actualiza un producto basado en su ID.
 export async function updateProduct(req: Request, res: Response) {
   const {
-    body: { brand, category, ...data },
+    body: { brandId, categoryId, ...data },
     params,
   } = await updateSchema.parseAsync(req);
   let product = null;
@@ -97,8 +105,8 @@ export async function updateProduct(req: Request, res: Response) {
         data: {
           ...data,
           slug,
-          brandId: brand,
-          categoryId: category,
+          brandId: brandId,
+          categoryId: categoryId,
         },
       });
     } catch (err) {
@@ -117,9 +125,9 @@ export async function updateProduct(req: Request, res: Response) {
 
 // Borra un producto basado en su ID.
 export async function deleteProduct(req: Request, res: Response) {
-  const { productId } = await paramsSchema.parseAsync(req.params);
+  const { params } = await getSchema.parseAsync(req);
   const product = await prisma.product.delete({
-    where: { id: productId },
+    where: { id: params.productId },
   });
   return res.status(200).json(product);
 }

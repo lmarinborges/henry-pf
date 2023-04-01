@@ -6,14 +6,22 @@ const paramsSchema = z.object({
   brandId: z.coerce.number().int(),
 });
 
-const createSchema = z.object({
+const bodySchema = z.object({
   name: z.string().min(1),
   description: z.string().min(1).optional(),
 });
 
+const getSchema = z.object({
+  params: paramsSchema,
+});
+
+const createSchema = z.object({
+  body: bodySchema,
+});
+
 const updateSchema = z.object({
   params: paramsSchema,
-  body: createSchema.partial(),
+  body: bodySchema.partial(),
 });
 
 export async function getAllBrands(req: Request, res: Response) {
@@ -22,9 +30,9 @@ export async function getAllBrands(req: Request, res: Response) {
 }
 
 export async function getBrand(req: Request, res: Response) {
-  const { brandId } = await paramsSchema.parseAsync(req.params);
+  const { params } = await getSchema.parseAsync(req);
   const brand = await prisma.brand.findUniqueOrThrow({
-    where: { id: brandId },
+    where: { id: params.brandId },
   });
   res.status(200).json(brand);
 }
@@ -39,15 +47,15 @@ export async function updateBrand(req: Request, res: Response) {
 }
 
 export async function deleteBrand(req: Request, res: Response) {
-  const { brandId } = await paramsSchema.parseAsync(req.params);
+  const { params } = await getSchema.parseAsync(req);
   const brand = await prisma.brand.delete({
-    where: { id: brandId },
+    where: { id: params.brandId },
   });
   res.status(200).json(brand);
 }
 
 export async function createBrand(req: Request, res: Response) {
-  const data = await createSchema.parseAsync(req.body);
+  const { body: data } = await createSchema.parseAsync(req);
   const brand = await prisma.brand.create({ data });
   res.status(200).json(brand);
 }
