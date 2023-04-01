@@ -17,6 +17,7 @@ import NotFoundPage from "./pages/notfound";
 import ProductsPage from "./pages/products";
 import ProductPage from "./pages/products/product";
 
+
 const routes = createBrowserRouter(
   createRoutesFromElements([
     <Route errorElement={<ErrorPage />}>
