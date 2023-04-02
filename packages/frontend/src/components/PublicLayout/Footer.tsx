@@ -10,6 +10,12 @@ import {
 
 import { ReactNode } from "react";
 
+import { BsInstagram } from 'react-icons/bs';
+
+import { BsYoutube } from 'react-icons/bs';
+
+import {AiFillTwitterCircle} from 'react-icons/ai';
+
 const SocialButton = ({
   children,
   label,
@@ -61,13 +67,13 @@ export default function Footer() {
           <Text>© 2022 XSport Club. All rights reserved</Text>
           <Stack direction={"row"} spacing={6}>
             <SocialButton label={"Twitter"} href={"#"}>
-              twitter
+            <AiFillTwitterCircle/>
             </SocialButton>
             <SocialButton label={"YouTube"} href={"#"}>
-              youtube
+            <BsYoutube/>
             </SocialButton>
             <SocialButton label={"Instagram"} href={"#"}>
-              Instagram
+            <BsInstagram />
             </SocialButton>
           </Stack>
         </Container>
