@@ -14,12 +14,15 @@ import { v2 as cloudinary } from 'cloudinary'
 const paramsSchema = z.object({ productId: z.coerce.number().int() });
 
 const imageSchema = z.object({
-  name: z.string(),
-  mimetype: z.string().refine((val) =>
-    val?.startsWith("image/") ?? false
-  ),
-  tempFilePath: z.string().nonempty()
+  image: z.object({
+    name: z.string(),
+    mimetype: z.string().refine((val) =>
+      val?.startsWith("image/") ?? false
+    ),
+    tempFilePath: z.string().nonempty()
+  })
 })
+
 
 
 const bodySchema = z.object({
@@ -51,6 +54,7 @@ const getSchema = z.object({
 
 const createSchema = z.object({
   body: bodySchema,
+  files: imageSchema
 });
 
 const updateSchema = z.object({
@@ -103,21 +107,17 @@ export async function getProduct(req: Request, res: Response) {
 
 // Crea un nuevo producto.
 export async function createProduct(req: Request, res: Response) {
-  if (!req.files || !req.files.image) {
-    throw new Error('no existe ninguna imagen , se esperaba {image : "file"}')
-  }
-  const image = req.files.image;
-  const { tempFilePath } = await imageSchema.parseAsync(image);
+  const { image } = await imageSchema.parseAsync(req.files);
   const options = {
-    width: 500,
-    height: 500,
+    width: 800,
+    height: 800,
     crop: "fill",
   };
   // convitiendo a numero como medida temporal
   req.body.brandId = parseInt(req.body.brandId)
   req.body.categoryId = parseInt(req.body.categoryId)
   req.body.stock = parseInt(req.body.stock)
-  const result = await cloudinary.uploader.upload(tempFilePath, options);
+  const result = await cloudinary.uploader.upload(image.tempFilePath, options);
   req.body.imageUrl = result.url
   const {
     body: { brandId, categoryId, ...data },
