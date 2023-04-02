@@ -132,7 +132,7 @@ export default function CreateProductForm() {
             p={8}
           >
             <Stack spacing={4}>
-              <FormControl id="name" isInvalid={errors.name}>
+              <FormControl id="name" isInvalid={!!errors.name}>
                 <FormLabel>Name</FormLabel>
                 <Input
                   {...register("name", { required: true })}
@@ -146,7 +146,7 @@ export default function CreateProductForm() {
                 </FormHelperText>
               </FormControl>
 
-              <FormControl id="description" isInvalid={errors.description}>
+              <FormControl id="description" isInvalid={!!errors.description}>
                 <FormLabel>Description</FormLabel>
                 <Textarea
                   {...register("description", { required: true })}
@@ -160,7 +160,7 @@ export default function CreateProductForm() {
                 </FormHelperText>
               </FormControl>
 
-              <FormControl id="url" isInvalid={errors.image}>
+              <FormControl id="url" isInvalid={!!errors.image}>
                 <FormLabel>Enter the image of the article</FormLabel>
                 <Input
                   {...register("image", {
@@ -179,7 +179,7 @@ export default function CreateProductForm() {
                 </FormHelperText>
               </FormControl>
 
-              <FormControl id="price" isInvalid={errors.price}>
+              <FormControl id="price" isInvalid={!!errors.price}>
                 <FormLabel>Price</FormLabel>
                 <InputGroup>
                   <InputLeftAddon children="$" />
@@ -204,7 +204,7 @@ export default function CreateProductForm() {
                 </FormHelperText>
               </FormControl>
 
-              <FormControl id="stock" isInvalid={errors.stock}>
+              <FormControl id="stock" isInvalid={!!errors.stock}>
                 <FormLabel>Stock</FormLabel>
                 <Input
                   {...register("stock", {
@@ -223,7 +223,7 @@ export default function CreateProductForm() {
                 </FormErrorMessage>
                 <FormHelperText>Enter the price of the product</FormHelperText>
               </FormControl>
-              <FormControl isInvalid={errors.brandId}>
+              <FormControl isInvalid={!!errors.brandId}>
                 <FormLabel htmlFor="brands">Marcas</FormLabel>
                 <Select
                   placeholder="Select brand"
@@ -240,7 +240,7 @@ export default function CreateProductForm() {
                   {errors.brands && "Debes seleccionar al menos una marca"}
                 </FormErrorMessage>
               </FormControl>
-              <FormControl isInvalid={errors.categoryId}>
+              <FormControl isInvalid={!!errors.categoryId}>
                 <FormLabel htmlFor="categories">Marcas</FormLabel>
                 <Select
                   placeholder="Select category"
