@@ -5,6 +5,11 @@ import { z } from "zod";
 import prisma from "../../db";
 import slugid from "../../utils/slugid";
 import transformDecimal from "../../utils/transformDecimal";
+// configuracion previa para cloudinary
+import configureCloudinary from '../../utils/cloudinary.config';
+configureCloudinary()
+import { v2 as cloudinary } from 'cloudinary'
+
 
 const paramsSchema = z.object({ productId: z.coerce.number().int() });
 
@@ -98,13 +103,20 @@ export async function getProduct(req: Request, res: Response) {
 
 // Crea un nuevo producto.
 export async function createProduct(req: Request, res: Response) {
+  console.log(typeof req.body.brandId);
+
   if (!req.files || !req.files.image) {
     throw new Error('no existe ninguna imagen , se esperaba {image : "file"}')
   }
   const image = req.files.image;
   const { tempFilePath } = await imageSchema.parseAsync(image);
-
-
+  const options = {
+    width: 500,
+    height: 500,
+    crop: "fill",
+  };
+  const result = await cloudinary.uploader.upload(tempFilePath, options);
+  req.body.imageUrl = result.url
   const {
     body: { brandId, categoryId, ...data },
   } = await createSchema.parseAsync(req);

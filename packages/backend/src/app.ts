@@ -14,6 +14,7 @@ const app = express();
 // Middleware
 app.use(morgan());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(fileUpload({
     useTempFiles: true,
     tempFileDir: "/tmp/",
