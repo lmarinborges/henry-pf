@@ -16,7 +16,7 @@ import HomePage from "./pages/home";
 import NotFoundPage from "./pages/notfound";
 import ProductsPage from "./pages/products";
 import ProductPage from "./pages/products/product";
-
+import CreateProductForm from "./features/components/CreateProductForm";
 
 const routes = createBrowserRouter(
   createRoutesFromElements([
@@ -26,13 +26,13 @@ const routes = createBrowserRouter(
         <Route path="home" element={<HomePage />} />
         <Route path="about" element={<AboutPage />} />
         <Route path="contact" element={<ContactPage />} />
-        <Route path="products" element={<ProductsPage />}/>
+        <Route path="products" element={<ProductsPage />} />
         <Route path="products/1" element={<ProductPage />} />
-        
       </Route>
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<Navigate to="products" />} />
         <Route path="products" element={<ProductsAdminPage />} />
+        <Route path="CreateProduct" element={<CreateProductForm />} />
       </Route>
       <Route path="*" element={<NotFoundPage />} />
     </Route>,
