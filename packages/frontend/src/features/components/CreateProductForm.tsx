@@ -48,6 +48,10 @@ function validateImage(file: File[]) {
     return true;
   }
 }
+type BrandAndCategory = {
+  id: number;
+  name: string;
+};
 
 export default function CreateProductForm() {
   const [brands, setBrands] = useState([]);
@@ -229,7 +233,7 @@ export default function CreateProductForm() {
                   placeholder="Select brand"
                   {...register("brandId", { required: true })}
                 >
-                  {brands.map((brand) => (
+                  {brands.map((brand: BrandAndCategory) => (
                     <option key={brand.id} value={brand.id}>
                       {brand.name.charAt(0).toUpperCase() +
                         brand.name.slice(1).toLowerCase()}
@@ -246,7 +250,7 @@ export default function CreateProductForm() {
                   placeholder="Select category"
                   {...register("categoryId", { required: true })}
                 >
-                  {categories.map((category) => (
+                  {categories.map((category: BrandAndCategory) => (
                     <option key={category.id} value={category.id}>
                       {category.name.charAt(0).toUpperCase() +
                         category.name.slice(1).toLowerCase()}
