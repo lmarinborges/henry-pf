@@ -28,8 +28,8 @@ const bodySchema = z.object({
   imageUrl: z.string(),
   price: z.string().transform(transformDecimal),
   stock: z.number().int(),
-  brandId: z.number().int(),
-  categoryId: z.number().int(),
+  brandId: z.number().int().optional(),
+  categoryId: z.number().int().optional(),
 });
 
 const getAllSchema = z.object({
@@ -103,8 +103,6 @@ export async function getProduct(req: Request, res: Response) {
 
 // Crea un nuevo producto.
 export async function createProduct(req: Request, res: Response) {
-  console.log(typeof req.body.brandId);
-
   if (!req.files || !req.files.image) {
     throw new Error('no existe ninguna imagen , se esperaba {image : "file"}')
   }
@@ -115,6 +113,10 @@ export async function createProduct(req: Request, res: Response) {
     height: 500,
     crop: "fill",
   };
+  // convitiendo a numero como medida temporal
+  req.body.brandId = parseInt(req.body.brandId)
+  req.body.categoryId = parseInt(req.body.categoryId)
+  req.body.stock = parseInt(req.body.stock)
   const result = await cloudinary.uploader.upload(tempFilePath, options);
   req.body.imageUrl = result.url
   const {
@@ -134,7 +136,9 @@ export async function createProduct(req: Request, res: Response) {
           brand: { connect: { id: brandId } },
         },
       });
+      console.log(product);
     } catch (err) {
+      console.log(err);
       if (
         err instanceof PrismaClientKnownRequestError &&
         err.code === "P2002"

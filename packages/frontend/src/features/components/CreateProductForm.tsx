@@ -15,8 +15,11 @@ import {
   FormErrorMessage,
   InputLeftAddon,
   InputGroup,
+  Select,
 } from "@chakra-ui/react";
+import axios from "axios";
 
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 const validateUrl = (value: any) => {
@@ -47,6 +50,35 @@ function validateImage(file: File[]) {
 }
 
 export default function CreateProductForm() {
+  const [brands, setBrands] = useState([]);
+
+  useEffect(() => {
+    const fetchBrands = async () => {
+      try {
+        const response = await axios.get("http://localhost:4000/brands");
+        setBrands(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchBrands();
+  }, []);
+  const [categories, setcategories] = useState([]);
+
+  useEffect(() => {
+    const fetchcategories = async () => {
+      try {
+        const response = await axios.get("http://localhost:4000/categories");
+        setcategories(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchcategories();
+  }, []);
+
   const {
     register,
     handleSubmit,
@@ -54,10 +86,30 @@ export default function CreateProductForm() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (values: any) => {
+  const onSubmit = async (values: any) => {
     console.log(values);
+    // extracting the first object from the list in image
+    const imageFile = values.image[0];
+    // Crea un objeto FormData para enviar el archivo
+    let newData = values;
+    newData.image = imageFile;
+    const url = "http://localhost:4000/products";
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    axios
+      .post(url, newData, config)
+      .then((response) => {
+        console.log(response.data);
+        return response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+        throw error;
+      });
   };
-
   return (
     <Flex
       minH={"100vh"}
@@ -108,18 +160,19 @@ export default function CreateProductForm() {
                 </FormHelperText>
               </FormControl>
 
-              <FormControl id="url" isInvalid={errors.url}>
-                <FormLabel>Enter the url of the article</FormLabel>
+              <FormControl id="url" isInvalid={errors.image}>
+                <FormLabel>Enter the image of the article</FormLabel>
                 <Input
-                  {...register("url", {
+                  {...register("image", {
                     required: true,
                     validate: validateImage,
                   })}
                   placeholder="https://..."
                   type="file"
+                  multiple={false}
                 />
                 <FormErrorMessage>
-                  {errors.url && "The uploaded file is not a valid image"}
+                  {errors.image && "The uploaded file is not a valid image"}
                 </FormErrorMessage>
                 <FormHelperText>
                   You only need a URL. Example: https://www.ahem...
@@ -170,7 +223,41 @@ export default function CreateProductForm() {
                 </FormErrorMessage>
                 <FormHelperText>Enter the price of the product</FormHelperText>
               </FormControl>
-
+              <FormControl isInvalid={errors.brandId}>
+                <FormLabel htmlFor="brands">Marcas</FormLabel>
+                <Select
+                  placeholder="Select brand"
+                  {...register("brandId", { required: true })}
+                >
+                  {brands.map((brand) => (
+                    <option key={brand.id} value={brand.id}>
+                      {brand.name.charAt(0).toUpperCase() +
+                        brand.name.slice(1).toLowerCase()}
+                    </option>
+                  ))}
+                </Select>
+                <FormErrorMessage>
+                  {errors.brands && "Debes seleccionar al menos una marca"}
+                </FormErrorMessage>
+              </FormControl>
+              <FormControl isInvalid={errors.categoryId}>
+                <FormLabel htmlFor="categories">Marcas</FormLabel>
+                <Select
+                  placeholder="Select category"
+                  {...register("categoryId", { required: true })}
+                >
+                  {categories.map((category) => (
+                    <option key={category.id} value={category.id}>
+                      {category.name.charAt(0).toUpperCase() +
+                        category.name.slice(1).toLowerCase()}
+                    </option>
+                  ))}
+                </Select>
+                <FormErrorMessage>
+                  {errors.categories &&
+                    "Debes seleccionar al menos una categoria"}
+                </FormErrorMessage>
+              </FormControl>
               <Stack spacing={10}>
                 <Button
                   type="submit"
