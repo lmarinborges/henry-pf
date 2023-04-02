@@ -8,6 +8,15 @@ import transformDecimal from "../../utils/transformDecimal";
 
 const paramsSchema = z.object({ productId: z.coerce.number().int() });
 
+const imageSchema = z.object({
+  name: z.string(),
+  mimetype: z.string().refine((val) =>
+    val?.startsWith("image/") ?? false
+  ),
+  tempFilePath: z.string().nonempty()
+})
+
+
 const bodySchema = z.object({
   name: z.string().min(1),
   description: z.string().min(1).optional(),
@@ -89,6 +98,13 @@ export async function getProduct(req: Request, res: Response) {
 
 // Crea un nuevo producto.
 export async function createProduct(req: Request, res: Response) {
+  if (!req.files || !req.files.image) {
+    throw new Error('no existe ninguna imagen , se esperaba {image : "file"}')
+  }
+  const image = req.files.image;
+  const { tempFilePath } = await imageSchema.parseAsync(image);
+
+
   const {
     body: { brandId, categoryId, ...data },
   } = await createSchema.parseAsync(req);

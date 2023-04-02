@@ -7,13 +7,17 @@ import brandsRouter from "./modules/brands";
 import categoriesRouter from "./modules/categories";
 import productsRouter from "./modules/products";
 import logger from "./utils/logger";
+import fileUpload from "express-fileupload";
 
 const app = express();
 
 // Middleware
 app.use(morgan());
 app.use(express.json());
-
+app.use(fileUpload({
+    useTempFiles: true,
+    tempFileDir: "/tmp/",
+}));
 // Routes
 app.use(productsRouter);
 app.use(brandsRouter);
@@ -21,44 +25,44 @@ app.use(categoriesRouter);
 
 // 404 Handler
 app.use((req, res) => {
-  res.status(404).json({
-    status: 404,
-    message: "Requested resource does not exist.",
-  });
+    res.status(404).json({
+        status: 404,
+        message: "Requested resource does not exist.",
+    });
 });
 
 // Error handler
 app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
-  if (res.headersSent) return next(err);
-  if (err instanceof ZodError) {
-    res.status(400).json({ status: 400, errors: err.issues });
-  } else if (
-    err instanceof PrismaClientKnownRequestError &&
-    (err.name === "NotFoundError" || err.code === "P2025")
-  ) {
-    res
-      .status(404)
-      .json({ status: 404, message: "Requested resource does not exist." });
-  } else if (
-    err instanceof PrismaClientKnownRequestError &&
-    err.code === "P2003"
-  ) {
-    res.status(409).json({
-      status: 409,
-      message: "A field with an invalid ID was provided.",
-    });
-  } else {
-    if (err instanceof Error) {
-      logger.error(err.message);
-      logger.debug(err.stack);
+    if (res.headersSent) return next(err);
+    if (err instanceof ZodError) {
+        res.status(400).json({ status: 400, errors: err.issues });
+    } else if (
+        err instanceof PrismaClientKnownRequestError &&
+        (err.name === "NotFoundError" || err.code === "P2025")
+    ) {
+        res
+            .status(404)
+            .json({ status: 404, message: "Requested resource does not exist." });
+    } else if (
+        err instanceof PrismaClientKnownRequestError &&
+        err.code === "P2003"
+    ) {
+        res.status(409).json({
+            status: 409,
+            message: "A field with an invalid ID was provided.",
+        });
     } else {
-      logger.error(err);
+        if (err instanceof Error) {
+            logger.error(err.message);
+            logger.debug(err.stack);
+        } else {
+            logger.error(err);
+        }
+        res.status(500).json({
+            status: 500,
+            message: "Internal server error.",
+        });
     }
-    res.status(500).json({
-      status: 500,
-      message: "Internal server error.",
-    });
-  }
 });
 
 export default app;
