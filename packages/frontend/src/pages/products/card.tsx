@@ -49,7 +49,7 @@ function Rating({ rating, numReviews }: RatingProps) {
 
 function Card({ product }:any) {
     return (
-        <Box margin={5} maxW="360px">
+        <Box margin={5} minW='320px' maxW='320px' >
             <Box
                 bg={useColorModeValue("white", "gray.800")}
                 maxW="sm"
@@ -72,8 +72,8 @@ function Card({ product }:any) {
                     src={product.imageURL}
                     alt={`Picture of ${product.name}`}
                     roundedTop="lg"
-                    boxSize="500px"
-                    objectFit="cover"
+                    height={200}
+                    margin='auto'
                 />
 
                 <Box p="6">
