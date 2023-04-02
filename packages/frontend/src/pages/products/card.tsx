@@ -44,36 +44,34 @@ function Rating({ rating, numReviews }: RatingProps) {
     </Box>
   );
 }
+function Card({ product }:any) {
+    return (
+        <Box margin={5} minW='320px' maxW='320px' >
+            <Box
+                bg={useColorModeValue("white", "gray.800")}
+                maxW="sm"
+                borderWidth="1px"
+                rounded="lg"
+                shadow="lg"
+                position="relative"
+            >
+                {product.isNew && (
+                    <Circle
+                        size="10px"
+                        position="absolute"
+                        top={2}
+                        right={2}
+                        bg="red.200"
+                    />
+                )}
 
-function Card({ product }: any) {
-  return (
-    <Box margin={5} maxW="360px">
-      <Box
-        bg={useColorModeValue("white", "gray.800")}
-        maxW="sm"
-        borderWidth="1px"
-        rounded="lg"
-        shadow="lg"
-        position="relative"
-      >
-        {product.isNew && (
-          <Circle
-            size="10px"
-            position="absolute"
-            top={2}
-            right={2}
-            bg="red.200"
-          />
-        )}
-
-        <Image
-          src={product.imageUrl}
-          alt={`Picture of ${product.name}`}
-          roundedTop="lg"
-          boxSize="500px"
-          objectFit="cover"
-        />
-
+                <Image
+                    src={product.imageURL}
+                    alt={`Picture of ${product.name}`}
+                    roundedTop="lg"
+                    height={200}
+                    margin='auto'
+                />
         <Box p="6">
           <Box display="flex" alignItems="baseline">
             {product.isNew && (
