@@ -15,7 +15,8 @@ import ErrorPage from "./pages/error";
 import HomePage from "./pages/home";
 import NotFoundPage from "./pages/notfound";
 import ProductsPage from "./pages/products";
-import ProductPage from "./pages/products/product";
+import ProductPage from "./pages/products/product"
+
 
 
 const routes = createBrowserRouter(
@@ -27,7 +28,7 @@ const routes = createBrowserRouter(
         <Route path="about" element={<AboutPage />} />
         <Route path="contact" element={<ContactPage />} />
         <Route path="products" element={<ProductsPage />}/>
-        <Route path="products/1" element={<ProductPage />} />
+        <Route path="products/:productId" element={<ProductPage />} />
         
       </Route>
       <Route path="/admin" element={<AdminLayout />}>
@@ -41,8 +42,11 @@ const routes = createBrowserRouter(
 
 export default function App() {
   return (
-    <ChakraProvider>
-      <RouterProvider router={routes} />
-    </ChakraProvider>
+
+   
+      <ChakraProvider>
+        <RouterProvider router={routes} />
+      </ChakraProvider>
+    
   );
 }

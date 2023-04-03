@@ -6,6 +6,10 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+//type Review {
+//  comment String 
+//  stars Int
+//}
 
 model Product {
   id          Int       @id @default(autoincrement())
@@ -21,6 +25,7 @@ model Product {
   categoryId  Int?
   isTrashed   Boolean   @default(false)
   createdAt   DateTime  @default(now())
+  //reviews     Review[]
 }
 
 model Category {

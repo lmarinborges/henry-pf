@@ -8,6 +8,8 @@ import {
     Icon,
     chakra,
     Tooltip,
+    Container,
+    Link
 } from "@chakra-ui/react";
 import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 import { FiShoppingCart } from "react-icons/fi";
@@ -67,14 +69,18 @@ function Card({ product }:any) {
                         bg="red.200"
                     />
                 )}
-
-                <Image
-                    src={product.imageURL}
-                    alt={`Picture of ${product.name}`}
-                    roundedTop="lg"
-                    height={200}
-                    margin='auto'
-                />
+                
+                <Container boxSize="300px" centerContent>
+                    <Image
+                        src={product.imageUrl}
+                        alt={`Picture of ${product.name}`}
+                        roundedTop="lg"
+                        boxSize="10 0%"
+                        alignContent="center"
+                        justifyContent="center"
+                        objectFit="cover"
+                    />
+                </Container>
 
                 <Box p="6">
                     <Box display="flex" alignItems="baseline">
@@ -101,7 +107,7 @@ function Card({ product }:any) {
                             lineHeight="tight"
                             isTruncated
                         >
-                            {product.name}
+                            <Link href={`http://localhost:5173/products/${product.id}`}>{product.name}</Link>
                         </Box>
                         <Tooltip
                             label="Add to cart"
@@ -133,7 +139,7 @@ function Card({ product }:any) {
                             <Box as="span" color={"gray.600"} fontSize="lg">
                                 £
                             </Box>
-                            {product.price.toFixed(2)}
+                            {Number(product.price).toFixed(2)}
                         </Box>
                     </Flex>
                 </Box>
