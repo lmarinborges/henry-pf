@@ -1,9 +1,22 @@
 import {Card,CardBody,CardFooter,Image,Stack,Heading,Text,Divider,ButtonGroup,Button,Container,Box,Textarea,Select,Flex,} from "@chakra-ui/react";
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch,useSelector } from "react-redux";
 import { BsStar, BsStarFill, BsStarHalf } from 'react-icons/bs';
+import { useParams } from "react-router-dom";
+import {RootState,AppDispatch} from '../../redux/store/index'
+import * as actions from "../../redux/actions/index";
 
 export default function ProductPage(props: any) {
+
+  const {productId}=useParams() ;
+  
+  const dispatch:AppDispatch= useDispatch();
+  
+  useEffect(()=>{
+    if (productId)  dispatch(actions.getProductDetail(productId));
+  },[dispatch,productId]);
+  
+  const prod=useSelector((state:RootState)=>state.productDetail);
 
   const [text, setText] = useState("")
   const [num, setNum] = useState(0)
@@ -56,7 +69,6 @@ export default function ProductPage(props: any) {
           .fill('')
           .map((_, i) => {
             const roundedRating = Math.round(ratinge*2)/2;
-            console.log(roundedRating)
             if (roundedRating - i >= 1) {
               return (
                 <BsStarFill
@@ -81,19 +93,19 @@ export default function ProductPage(props: any) {
         <CardBody>
           <Container boxSize="70%" centerContent>
             <Image
-              src="https://th.bing.com/th/id/OIP.eAMRPPUeTKr9B6gYLlVuBAHaHa?pid=ImgDet&rs=1"
+              src={prod.imageUrl}
               borderRadius="lg"
             />
           </Container>
 
           <Stack mt="6" spacing="3">
-            <Heading size="md">suplemento</Heading>
+            <Heading size="md">{prod.name}</Heading>
             <Text>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.{" "}
+              {prod.description}
             </Text>
-            <Text>Stock: 15</Text>
+            <Text>Stock: {prod.stock}</Text>
             <Text color="red" fontSize="2xl">
-              $300
+              ${prod.price}
             </Text>
           </Stack>
         </CardBody>

@@ -7,10 +7,12 @@ import brandsRouter from "./modules/brands";
 import categoriesRouter from "./modules/categories";
 import productsRouter from "./modules/products";
 import logger from "./utils/logger";
+import * as cors from 'cors';
 
 const app = express();
 
 // Middleware
+app.use(cors.default())
 app.use(morgan());
 app.use(express.json());
 
