@@ -40,3 +40,7 @@ export async function updateUser(req: Request, res: Response) {
 export async function deleteUser(req: Request, res: Response) {
   unimplemented(req, res);
 }
+
+export async function facebookAuth(req: Request, res: Response) {
+  res.send("bienvenido");
+}
