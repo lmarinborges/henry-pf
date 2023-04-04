@@ -9,20 +9,30 @@ import productsRouter from "./modules/products";
 import logger from "./utils/logger";
 import * as cors from "cors";
 import usersRouter from "./modules/users";
-
+import facebookRouter from "./modules/users/facebook.routes";
+import passport from "passport";
+import session from "express-session";
 const app = express();
 
 // Middleware
 app.use(cors.default());
 app.use(morgan());
 app.use(express.json());
-
+app.use(
+  session({
+    secret: "my-secret", // Reemplaza con tu propia clave secreta
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 // Routes
 app.use(productsRouter);
 app.use(brandsRouter);
 app.use(categoriesRouter);
 app.use(usersRouter);
-
+app.use(facebookRouter);
 // 404 Handler
 app.use((req, res) => {
   res.status(404).json({

@@ -64,6 +64,6 @@ export async function deleteUser(req: Request, res: Response) {
   unimplemented(req, res);
 }
 
-export async function facebookAuth(req: Request, res: Response) {
-  res.send("bienvenido");
+export async function facebookAuthenticated(req: Request, res: Response) {
+  res.json({ state: "success", message: "bienvenido usuario de facebook" });
 }
