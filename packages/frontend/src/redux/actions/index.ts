@@ -12,23 +12,25 @@ export const CREATE_PRODUCT = "CREATE_PRODUCT";
 export const DELETE_PRODUCT = "DELETE_PRODUCT";
 
 export const getAllProducts = (orderBy:string, alphaOrder:string, currentPage:string, brandFilter:number ,categoryFilter:number )=> async (dispatch:AppDispatch) => {
+  console.log(typeof categoryFilter)
+  console.log(typeof brandFilter)
   if(categoryFilter===0 && brandFilter===0){ 
-    await fetch(`http://localhost:4000/products?column=${orderBy}&&order=${alphaOrder}&&page=${currentPage}`)
+    await fetch(`http://localhost:4000/products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}`)
       .then((res) => res.json())
       .then((data)=>dispatch({ type: GET_ALL_PRODUCTS, payload: data}));
   }
   else if(categoryFilter!==0 && brandFilter!==0){
-    await fetch(`http://localhost:4000/products?column=${orderBy}&&order=${alphaOrder}&&page=${currentPage}&&categoryId=${categoryFilter}&&brandId=${brandFilter}`)
-    .then((res) => res.json())
-    .then((data)=>dispatch({ type: GET_ALL_PRODUCTS, payload: data}));
-  }
-  else if(categoryFilter!==0 && brandFilter===0){
-    await fetch(`http://localhost:4000/products?column=${orderBy}&&order=${alphaOrder}&&page=${currentPage}&&brandId=${brandFilter}`)
+    await fetch(`http://localhost:4000/products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&categoryId=${categoryFilter}&brandId=${brandFilter}`)
     .then((res) => res.json())
     .then((data)=>dispatch({ type: GET_ALL_PRODUCTS, payload: data}));
   }
   else if(categoryFilter===0 && brandFilter!==0){
-    await fetch(`http://localhost:4000/products?column=${orderBy}&&order=${alphaOrder}&&page=${currentPage}&&categoryId=${categoryFilter}`)
+    await fetch(`http://localhost:4000/products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&brandId=${brandFilter}`)
+    .then((res) => res.json())
+    .then((data)=>dispatch({ type: GET_ALL_PRODUCTS, payload: data}));
+  }
+  else if(categoryFilter!==0 && brandFilter===0){
+    await fetch(`http://localhost:4000/products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&categoryId=${categoryFilter}`)
     .then((res) => res.json())
     .then((data)=>dispatch({ type: GET_ALL_PRODUCTS, payload: data}));
   }
