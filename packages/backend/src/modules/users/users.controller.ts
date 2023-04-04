@@ -4,12 +4,29 @@ import unimplemented from "../../utils/unimplemented";
 import { z } from "zod";
 
 const paramsSchema = z.object({
-  brandId: z.coerce.number().int(),
+  userId: z.coerce.number().int(),
 });
 
+const passwordSchema = z
+  .string()
+  .min(8)
+  .regex(/[a-z]/, {
+    message: "La contraseña debe contener al menos una letra minúscula.",
+  })
+  .regex(/[A-Z]/, {
+    message: "La contraseña debe contener al menos una letra mayúscula.",
+  })
+  .regex(/\d/, { message: "La contraseña debe contener al menos un número." })
+  .regex(/[@#$%^&+=!_]/, {
+    message: "La contraseña debe contener al menos un carácter especial.",
+  });
+
 const bodySchema = z.object({
-  name: z.string().min(1),
-  description: z.string().min(1).optional(),
+  name: z.string().min(1).optional(),
+  email: z.string().email().min(5),
+  password: passwordSchema,
+  role: z.string().optional(),
+  state: z.string(),
 });
 
 const getSchema = z.object({
