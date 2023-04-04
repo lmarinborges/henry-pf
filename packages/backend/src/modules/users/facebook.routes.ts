@@ -6,12 +6,13 @@ import { Request, Response } from "express";
 import prisma from "../../db";
 import crypto from "crypto";
 import { z } from "zod";
+import { encryptPassword } from "./encrypt";
 
 const facebookRouter = Router();
 
 // validacion de la respuesta de facebook
 const facebookSchema = z.object({
-  id: z.string().min(1).optional(),
+  id: z.string().min(1),
   email: z.string().email().optional(),
   name: z.string(),
 });
@@ -43,12 +44,15 @@ passport.use(
         // Usamos las primeras 10 letras del hash como correo temporal
         email_temp = !email ? hash.slice(0, 10) + "@example.com" : email;
 
+        //hashear el id que se usará como contraseña
+        const hashedPassword: string = await encryptPassword(id);
+
         const user_created = await prisma.user.upsert({
           where: { email: email_temp },
           create: {
             email: email_temp,
             name: name,
-            password: id,
+            password: hashedPassword,
             role: "USER",
             state: "Active",
           },
