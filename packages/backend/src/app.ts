@@ -7,12 +7,13 @@ import brandsRouter from "./modules/brands";
 import categoriesRouter from "./modules/categories";
 import productsRouter from "./modules/products";
 import logger from "./utils/logger";
-import * as cors from 'cors';
+import * as cors from "cors";
+import usersRouter from "./modules/users";
 
 const app = express();
 
 // Middleware
-app.use(cors.default())
+app.use(cors.default());
 app.use(morgan());
 app.use(express.json());
 
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use(productsRouter);
 app.use(brandsRouter);
 app.use(categoriesRouter);
+app.use(usersRouter);
 
 // 404 Handler
 app.use((req, res) => {
