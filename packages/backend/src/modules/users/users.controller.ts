@@ -4,20 +4,15 @@ import unimplemented from "../../utils/unimplemented";
 import { z } from "zod";
 
 const paramsSchema = z.object({
-  brandId: z.coerce.number().int(),
+  userId: z.coerce.number().int(),
 });
 
 const bodySchema = z.object({
-  name: z.string().min(1),
-  description: z.string().min(1).optional(),
-});
-
-const getSchema = z.object({
-  params: paramsSchema,
-});
-
-const createSchema = z.object({
-  body: bodySchema,
+  name: z.string().min(1).optional(),
+  email: z.string().min(1),
+  password: z.string().min(1).optional(),
+  role: z.enum(["USER", "ADMIN"]),
+  state: z.string().min(1),
 });
 
 const updateSchema = z.object({
@@ -32,9 +27,14 @@ export async function getAllUsers(req: Request, res: Response) {
 export async function createUser(req: Request, res: Response) {
   unimplemented(req, res);
 }
-
 export async function updateUser(req: Request, res: Response) {
-  unimplemented(req, res);
+  // TODO check password and catch
+  const { body: data, params } = await updateSchema.parseAsync(req);
+  const user = await prisma.user.update({
+    where: { id: params.userId },
+    data: { ...data },
+  });
+  return res.status(200).json(user);
 }
 
 export async function deleteUser(req: Request, res: Response) {
