@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { facebookAuthenticated } from "./users.controller";
+import { facebookAuthenticated, isAuthenticated } from "./users.controller";
 import passport from "passport";
 import { Strategy as FacebookStrategy } from "passport-facebook";
 import { Request, Response } from "express";
@@ -26,14 +26,10 @@ passport.use(
       callbackURL: "http://localhost:4000/auth/facebook/callback",
     },
     async function (accessToken, refreshToken, profile, cb) {
-      console.log(profile._json);
-
       try {
         const { email, name, id } = await facebookSchema.parseAsync(
           profile._json
         );
-        console.log(name);
-
         // en caso no se tenga acceso a email
         let email_temp = email;
 
@@ -82,16 +78,6 @@ passport.deserializeUser(async (id: number, done) => {
     done(error);
   }
 });
-// verificar autenticacion
-const isAuthenticated = (req: Request, res: Response, next: any) => {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.status(403).json({
-    status: "failed",
-    message: "no tienes permisos o aun no estas autenticado",
-  });
-};
 
 // rutas para login(auth , callback) ,logout , ruta de prueba y fallo
 facebookRouter.get("/failed", (req, res) => {

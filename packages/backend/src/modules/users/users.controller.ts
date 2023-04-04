@@ -64,6 +64,17 @@ export async function deleteUser(req: Request, res: Response) {
   unimplemented(req, res);
 }
 
+// verificar autenticacion
+export const isAuthenticated = (req: Request, res: Response, next: any) => {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.status(403).json({
+    status: "failed",
+    message: "no tienes permisos o aun no estas autenticado",
+  });
+};
+
 export async function facebookAuthenticated(req: Request, res: Response) {
   res.json({ state: "success", message: "bienvenido usuario de facebook" });
 }
