@@ -41,3 +41,17 @@ model Brand {
   description String?
   product     Product[]
 }
+
+model User {
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
+  name     String?
+  password String?
+  role     Role     @default(USER)
+  state    String
+}
+
+enum Role {
+  USER
+  ADMIN
+}
