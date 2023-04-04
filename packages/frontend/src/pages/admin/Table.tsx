@@ -20,8 +20,6 @@ interface Product {
     stock: string;
     brand: Brand;
     category: Category;
-    brandId: number;
-    categoryId: number;
 }
 
 interface Brand {
@@ -58,11 +56,11 @@ const Tabla = ({ data }: { data: Product[] }) => {
             },
             {
                 Header: "Brand",
-                accessor: "brand.name",
+                accessor: (row: Product) => row.brand.name,
             },
             {
                 Header: "Category",
-                accessor: "category.name",
+                accessor: (row: Product) => row.category.name,
             },
             {
                 Header: "Actions",
