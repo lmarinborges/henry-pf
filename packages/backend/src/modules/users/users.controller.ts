@@ -2,6 +2,7 @@ import prisma from "../../db";
 import { Request, Response } from "express";
 import unimplemented from "../../utils/unimplemented";
 import { z } from "zod";
+import { encryptPassword } from "./encrypt";
 
 const paramsSchema = z.object({
   userId: z.coerce.number().int(),
@@ -25,7 +26,7 @@ const bodySchema = z.object({
   name: z.string().min(1).optional(),
   email: z.string().email().min(5),
   password: passwordSchema,
-  role: z.string().optional(),
+  role: z.enum(["USER", "ADMIN"]),
   state: z.string(),
 });
 
@@ -47,7 +48,12 @@ export async function getAllUsers(req: Request, res: Response) {
 }
 
 export async function createUser(req: Request, res: Response) {
-  unimplemented(req, res);
+  const { body: data } = await createSchema.parseAsync(req);
+  const hashedPassword: string = await encryptPassword(data.password);
+  const user = await prisma.user.create({
+    data: { ...data, password: hashedPassword },
+  });
+  return res.status(200).json(user);
 }
 
 export async function updateUser(req: Request, res: Response) {
