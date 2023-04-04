@@ -31,7 +31,6 @@ const routes = createBrowserRouter(
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<Navigate to="products" />} />
         <Route path="products" element={<ProductsAdminPage />} />
-        <Route path="CreateProduct" element={<CreateProductForm />} />
       </Route>
       <Route path="*" element={<NotFoundPage />} />
     </Route>,
