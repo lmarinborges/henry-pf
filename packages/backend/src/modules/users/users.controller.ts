@@ -34,6 +34,10 @@ const getSchema = z.object({
   params: paramsSchema,
 });
 
+const createSchema = z.object({
+  body: bodySchema,
+});
+
 const updateSchema = z.object({
   params: paramsSchema,
   body: bodySchema.partial(),
