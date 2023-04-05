@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 import AdminLayout from "./components/AdminLayout";
 import PublicLayout from "./components/PublicLayout";
+import CreateProductForm from "./features/components/CreateProductForm";
 import AboutPage from "./pages/about";
 import ProductsAdminPage from "./pages/admin/products";
 import ContactPage from "./pages/contact";
@@ -34,6 +35,7 @@ const routes = createBrowserRouter(
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<Navigate to="products" />} />
         <Route path="products" element={<ProductsAdminPage />} />
+        <Route path="createProduct" element={<CreateProductForm />} />
       </Route>
       <Route path="*" element={<NotFoundPage />} />
     </Route>,
