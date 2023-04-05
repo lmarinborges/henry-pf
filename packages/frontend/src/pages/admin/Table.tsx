@@ -18,6 +18,7 @@ interface Product {
     description: string;
     price: string;
     stock: string;
+    isTrashed:boolean;
     brand: Brand;
     category: Category;
 }
@@ -34,7 +35,7 @@ interface Category {
     description: string;
 }
 
-const Tabla = ({ data }: { data: Product[] }) => {
+const Tabla = ({ data, handleEdit, handleDelete }: { data: Product[], handleEdit: any, handleDelete: any }) => {
     const columns: Column<Product>[] = useMemo(
         () => [
             {
@@ -53,6 +54,10 @@ const Tabla = ({ data }: { data: Product[] }) => {
             {
                 Header: "Stock",
                 accessor: "stock",
+            },
+            {
+                Header: "Borrado",
+                accessor: (row: Product) => row.isTrashed?'Borrado':'Activo',
             },
             {
                 Header: "Brand",
@@ -85,16 +90,10 @@ const Tabla = ({ data }: { data: Product[] }) => {
                 ),
             },
         ],
-        []
+        [handleEdit, handleDelete ]
     );
 
-    const handleEdit = (id: number) => {
-        // Implementar lógica de edición aquí
-    };
-
-    const handleDelete = (id: number) => {
-        // Implementar lógica de edición aquí
-    };
+   
 
     const tableData = useMemo(() => data, [data]);
 

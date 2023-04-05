@@ -1,50 +1,72 @@
 import React from "react";
 import Tabla from "./Table";
-import {Flex} from "@chakra-ui/react"
+import { Box, Button, Flex, Text } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../redux/store/index";
 import { useEffect, useState } from "react";
 import * as actions from "../../redux/actions/index";
 
 const ProductsAdminPage = () => {
-    const [orderBy, setOrder] = useState("name");
-    const [alphaOrder, setAlpha] = useState("asc");
-    const [currentPage, setPage] = useState("1");
-    const [brandFilter, setBrand] = useState(0);
-    const [categoryFilter, setCategory] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [Pages, setPages] = useState(0);
 
     const dispatch: AppDispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(actions.getAllCategories());
-        dispatch(actions.getAllBrands());
-        dispatch(
-            actions.getAllProducts(
-                orderBy,
-                alphaOrder,
-                currentPage,
-                brandFilter,
-                categoryFilter
-            )
-        );
-    }, [
-        dispatch,
-        orderBy,
-        alphaOrder,
-        currentPage,
-        brandFilter,
-        categoryFilter,
-    ]);
-
-    const data = useSelector((state: RootState) => state.products);
+    const data = useSelector((state: RootState) => [...state.adminProducts]);
     const allItems = useSelector((state: RootState) => state.totalItems);
     const cardsPerPage = useSelector((state: RootState) => state.cardsForPages);
-    const categories = useSelector((state: RootState) => state.categories);
-    const brands = useSelector((state: RootState) => state.brands);
 
+    useEffect(() => {
+        dispatch(actions.getProductsPerPage(currentPage));
+        setPages(Math.round(allItems / cardsPerPage) + 1);
+    }, [dispatch, currentPage, allItems, cardsPerPage]);
+
+    console.log(currentPage, Pages);
+    console.log(data);
+
+    const nextPage = () => {
+        let num = currentPage + 1;
+        if (num <= Pages) setCurrentPage(() => num);
+    };
+    const backPage = () => {
+        let num = currentPage - 1;
+        if (num > 0) {
+            setCurrentPage(() => num);
+        }
+    };
+    const handleEdit = (id: number) => {
+        // Implementar lógica de edición aquí
+        alert(id);
+    };
+
+    const handleDelete = (id: number) => {
+        if (window.confirm('¿Está seguro de que desea realizar esta acción?')) {
+            // La acción se ejecutará si el usuario hace clic en "Aceptar"
+            // Coloca aquí la lógica para ejecutar la acción que desea confirmar
+            const found = data.find((e: any) => e.id === id);
+            dispatch(actions.deleteProduct(found));
+            dispatch(actions.getProductsPerPage(currentPage))
+          } 
+    };
     return (
-        <Flex justifyContent="center">
-            <Tabla data={data} />;
+        <Flex direction="column" alignItems="center">
+            <Tabla
+                data={data}
+                handleEdit={handleEdit}
+                handleDelete={handleDelete}
+            />
+            <Box
+                display="flex"
+                alignItems="baseline"
+                justifyContent="space-around"
+            >
+                <Button m="5" onClick={backPage}>
+                    Anterior
+                </Button>
+                <Text m="5">{currentPage}</Text>
+                <Button m="5" onClick={nextPage}>
+                    siguiente
+                </Button>
+            </Box>
         </Flex>
     );
 };
