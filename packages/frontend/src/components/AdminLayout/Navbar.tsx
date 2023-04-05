@@ -22,6 +22,7 @@ export interface NavbarProps {
 
 const DRAWER_ITEMS = [
   { label: "Productos", icon: MdConveyorBelt, to: "/admin/products" },
+  { label: "Crear Producto", icon: MdConveyorBelt, to: "/admin/createProduct" },
 ];
 
 export default function Navbar(props: NavbarProps) {
@@ -69,6 +70,7 @@ export default function Navbar(props: NavbarProps) {
           <Flex flexDirection="column">
             {DRAWER_ITEMS.map((value, index) => (
               <Link
+                key={value.label}
                 paddingX="6"
                 paddingY="3"
                 display="flex"
