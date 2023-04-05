@@ -14,11 +14,12 @@ export default function ProductsPage() {
     const [categoryFilter, setCategory]=useState(0);
 
     const dispatch:AppDispatch= useDispatch();
+    
 
     useEffect(()=>{
+        dispatch(actions.getAllProducts(orderBy,alphaOrder,currentPage,brandFilter,categoryFilter));
         dispatch(actions.getAllCategories());
         dispatch(actions.getAllBrands());
-        dispatch(actions.getAllProducts(orderBy,alphaOrder,currentPage,brandFilter,categoryFilter));
     },[dispatch,orderBy,alphaOrder,currentPage,brandFilter,categoryFilter]);
 
     const data= useSelector((state:RootState)=>state.products);
@@ -34,28 +35,34 @@ export default function ProductsPage() {
     }
 
     const categoriesSelectChange= (e:any) =>{
-        setCategory(e)
+      
+        setCategory(Number(e.target.value))
     }
 
     const brandSelectChange= (e:any) =>{
-        setBrand(e)
+       
+        setBrand(Number(e.target.value))
     }
 
-    for(var i=0;i<Math.round(allItems/cardsPerPage);i++){
+    for(var i=0;i<Math.ceil(allItems/cardsPerPage);i++){
         pageNumbers.push(i+1)
     }
     
-    const pageButtons = pageNumbers.map((e,i)=>{
+    const pageButtons =pageNumbers.map((e,i)=>{
         return <Button color="red" size={"sm"} fontSize="20px" variant="ghost" onClick={()=>onClickPage(e)} value={currentPage} key={i}>{e}</Button>
     })
 
-    const categoriesOptions=categories.map((e:any, i:any)=>{
-        return <option value={e.id}>{e.name}</option>
+    const categoriesOptions=categories.map((e:any)=>{
+        return <option key={e.id}value={e.id}>{e.name}</option>
     })
     
+    const brandsOptions=brands.map((e:any)=>{
+        return <option key={e.id} value={e.id}>{e.name}</option>
+    })
+
     return (
         <Container bg={"black"}>
-
+            
             <Text color={"white"} fontSize="18px" m="5px">Ordenar por Nombre o Precio :</Text>
             <RadioGroup onChange={setOrder} value={orderBy} defaultValue="name" >
                 <Stack direction={"row"} justifyContent="center" spacing={"3"} >
@@ -72,11 +79,15 @@ export default function ProductsPage() {
                 </Stack>
             </RadioGroup>
 
-            <Select placeholder='Seleccione Categoria' onChange={categoriesSelectChange} variant="filled" color="black" bg="white" colorScheme="blackAlpha" borderColor="red" mb="2" >
-                <option value={0} key="0">Todas las categorias</option>
+            <Select onChange={categoriesSelectChange} variant="filled" color="black" bg="white" colorScheme="blackAlpha" borderColor="red" mb="2" >
+                <option value={Number(0)} key="0">Todas las categorias</option>
                 {categoriesOptions}
             </Select>
-            
+
+            <Select  onChange={brandSelectChange} variant="filled" color="black" bg="white" colorScheme="blackAlpha" borderColor="red" mb="2" >
+                <option value={Number(0)} key="0">Todas las Marcas</option>
+                {brandsOptions}
+            </Select>
         
             <Text m="10px" fontSize="20px" color="white">Productos: </Text>
 
@@ -87,8 +98,8 @@ export default function ProductsPage() {
                 
 
             <Flex alignItems="center" justifyContent="center" dir="row" wrap="wrap" >
-            {data.map((e:any) => {
-                return <Card product={e}></Card>;
+            {data.map((e:any, i:any) => {
+                return <Card key={i} product={e}></Card>;
             })}
             </Flex>
         </Container>
