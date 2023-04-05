@@ -1,4 +1,4 @@
-import {GET_ALL_PRODUCTS,GET_PRODUCT_DETAILS,CREATE_PRODUCT,DELETE_PRODUCT, GET_ALL_BRANDS, GET_ALL_CATEGORIES} from "../actions/index";
+import {GET_ALL_PRODUCTS,GET_PRODUCT_DETAILS,CREATE_PRODUCT,DELETE_PRODUCT, GET_ALL_BRANDS, GET_ALL_CATEGORIES, ADD_PRODUCT_TO_CART} from "../actions/index";
   
 interface sliceState{
   products: Array<any>,
@@ -6,7 +6,8 @@ interface sliceState{
   categories:any,
   productDetail:any,
   totalItems:any,
-  cardsForPages:any
+  cardsForPages:any,
+  cart:Array<any>
 
 }
 
@@ -16,8 +17,8 @@ const initialState:sliceState = {
   categories:[],
   productDetail: {},
   totalItems:0,
-  cardsForPages:0
-
+  cardsForPages:0,
+  cart:[]
 };
 
 const rootReducer = (state = initialState, action: any) => {
@@ -39,10 +40,12 @@ const rootReducer = (state = initialState, action: any) => {
       return {...state, products:state.products.filter((e:any) => e.id===action.payload)}
 
     case GET_PRODUCT_DETAILS:
-      console.log(action.payload)
       return {...state, productDetail:action.payload}
     default: return state
     
+    case ADD_PRODUCT_TO_CART:
+      console.log(action.payload)
+      return{...state, cart:[...state.cart, action.payload]}
   }
 };
 

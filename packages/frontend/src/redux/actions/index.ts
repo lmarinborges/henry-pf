@@ -10,6 +10,7 @@ export const GET_ALL_CATEGORIES = "GET_ALL_CATEGORIES";
 export const GET_PRODUCT_DETAILS = "GET_PRODUCT_DETAILS";
 export const CREATE_PRODUCT = "CREATE_PRODUCT";
 export const DELETE_PRODUCT = "DELETE_PRODUCT";
+export const ADD_PRODUCT_TO_CART = "ADD_PRODUCT_TO_CART";
 
 export const getAllProducts = (orderBy:string, alphaOrder:string, currentPage:string, brandFilter:number ,categoryFilter:number )=> async (dispatch:AppDispatch) => {
   console.log(typeof categoryFilter)
@@ -37,7 +38,6 @@ export const getAllProducts = (orderBy:string, alphaOrder:string, currentPage:st
   
 };
 
-
 export const getProductDetail = (id: string)=> async (dispatch:AppDispatch)=>{
   const data= await fetch(`http://localhost:4000/products/${id}`)
   .then((res)=> res.json())
@@ -63,8 +63,14 @@ export const getAllBrands = () => async (dispatch: AppDispatch) => {
     .then((data) => data.json())
     dispatch({ type: GET_ALL_BRANDS, payload: res });
 };
+
 export const getAllCategories = () => async (dispatch: AppDispatch) => {
   const res= await fetch("http://localhost:4000/categories")
     .then((data) => data.json())
    dispatch({ type: GET_ALL_CATEGORIES, payload: res });
 };
+
+export const addProductToCart = (product:any)=>async (dispatch:AppDispatch)=>{
+  console.log(product)
+  dispatch({type:ADD_PRODUCT_TO_CART, payload:product})
+}

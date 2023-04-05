@@ -14,6 +14,8 @@ import {
 import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 import { FiShoppingCart } from "react-icons/fi";
 
+
+
 interface RatingProps {
     rating: number;
     numReviews: number;
@@ -50,6 +52,10 @@ function Rating({ rating, numReviews }: RatingProps) {
 }
 
 function Card({ product }:any) {
+    const onClickCart=()=>{
+        localStorage.setItem(product.name,JSON.stringify(product))
+    }
+
     return (
         <Box margin={5} minW='320px' maxW='320px' >
             <Box
@@ -116,14 +122,14 @@ function Card({ product }:any) {
                             color={"gray.800"}
                             fontSize={"1.2em"}
                         >
-                            <chakra.a href={"#"} display={"flex"}>
+                            <chakra.button display={"flex"} onClick={onClickCart}>
                                 <Icon
                                     as={FiShoppingCart}
                                     h={7}
                                     w={7}
                                     alignSelf={"center"}
                                 />
-                            </chakra.a>
+                            </chakra.button>
                         </Tooltip>
                     </Flex>
 
