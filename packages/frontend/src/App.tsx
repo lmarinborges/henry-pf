@@ -16,6 +16,7 @@ import HomePage from "./pages/home";
 import NotFoundPage from "./pages/notfound";
 import ProductsPage from "./pages/products";
 import ProductPage from "./pages/products/product"
+import CreateProductForm from "./features/components/CreateProductForm";
 
 
 
@@ -29,7 +30,7 @@ const routes = createBrowserRouter(
         <Route path="contact" element={<ContactPage />} />
         <Route path="products" element={<ProductsPage />}/>
         <Route path="products/:productId" element={<ProductPage />} />
-        
+        <Route path="createProduct" element={<CreateProductForm />}/>
       </Route>
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<Navigate to="products" />} />
