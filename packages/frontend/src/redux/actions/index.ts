@@ -66,3 +66,14 @@ export const getAllCategories = () => async (dispatch: AppDispatch) => {
     .then((data) => data.json())
    dispatch({ type: GET_ALL_CATEGORIES, payload: res });
 };
+
+export const getProductsPerPage = (page:number) => async (dispatch:AppDispatch)=> {
+  const res = await axios.get(`http://localhost:4000/products?page=${page}`)
+  console.log(res.data)
+  dispatch({type:GET_ALL_PRODUCTS, payload: res.data })
+}
+
+export const deleteProduct = (data:any) => async (dispatch:AppDispatch)=> {
+  const res = await axios.patch(`http://localhost:4000/products/${data.id}`,{...data, isTrashed:true})
+ dispatch({type:DELETE_PRODUCT, payload: res.data.id })
+}

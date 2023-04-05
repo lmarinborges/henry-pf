@@ -133,7 +133,7 @@ export default function HomePage() {
       <Stack
         align={'center'}
         spacing={{ base: 8, md: 10 }}
-        py={{ base: 20, md: 28 }}
+        py={{ base: 2, md: 15 }}
         direction={{ base: 'column', md: 'row' }}>
         <Stack flex={1} spacing={{ base: 5, md: 10 }}>
           <Heading
@@ -164,11 +164,12 @@ export default function HomePage() {
           <Stack
             spacing={{ base: 4, sm: 6 }}
             direction={{ base: 'column', sm: 'row' }}>
+              
             <Button
               rounded={'full'}
               size={'lg'}
               fontWeight={'normal'}
-              px={6}
+              px={8}
               colorScheme={'red.500'}
               bg={'red.400'}
               _hover={{ bg: 'red' }}>
