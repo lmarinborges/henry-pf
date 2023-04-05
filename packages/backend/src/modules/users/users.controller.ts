@@ -9,10 +9,14 @@ const paramsSchema = z.object({
 
 const bodySchema = z.object({
   name: z.string().min(1).optional(),
-  email: z.string().min(1),
+  email: z.string().email(),
   password: z.string().min(1).optional(),
   role: z.enum(["USER", "ADMIN"]),
   state: z.string().min(1),
+});
+
+const getSchema = z.object({
+  params: paramsSchema,
 });
 
 const updateSchema = z.object({
@@ -21,7 +25,16 @@ const updateSchema = z.object({
 });
 
 export async function getAllUsers(req: Request, res: Response) {
-  unimplemented(req, res);
+  const users = await prisma.user.findMany();
+  return res.status(200).send(users);
+}
+
+export async function getUser(req: Request, res: Response) {
+  const { params } = await getSchema.parseAsync(req);
+  const user = await prisma.user.findUniqueOrThrow({
+    where: { id: params.userId },
+  });
+  return res.status(200).send(user);
 }
 
 export async function createUser(req: Request, res: Response) {
@@ -35,6 +48,7 @@ export async function updateUser(req: Request, res: Response) {
     data: { ...data },
   });
   return res.status(200).json(user);
+  unimplemented(req, res);
 }
 
 export async function deleteUser(req: Request, res: Response) {
