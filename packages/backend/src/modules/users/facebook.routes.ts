@@ -7,6 +7,7 @@ import prisma from "../../db";
 import crypto from "crypto";
 import { z } from "zod";
 import { encryptPassword } from "./encrypt";
+import { facebookConfig } from "../../config";
 
 const facebookRouter = Router();
 
@@ -19,45 +20,43 @@ const facebookSchema = z.object({
 
 // Estrategia de passport-facebook
 passport.use(
-  new FacebookStrategy(
-    {
-      clientID: "197497532989315",
-      clientSecret: "bd60405b11f819f3374cd81cd2e7b27f",
-      callbackURL: "http://localhost:4000/auth/facebook/callback",
-    },
-    async function (accessToken, refreshToken, profile, cb) {
-      try {
-        const { email, name, id } = await facebookSchema.parseAsync(
-          profile._json
-        );
-        // en caso no se tenga acceso a email
-        let email_temp = email;
-        // Concatenamos el nombre y el ID de Facebook del usuario
-        const str = name + id;
-        // Obtenemos el hash SHA256 de la cadena concatenada
-        const hash = crypto.createHash("sha256").update("input").digest("hex");
-        // Usamos las primeras 10 letras del hash como correo temporal
-        email_temp = !email ? hash.slice(0, 10) + "@example.com" : email;
-        //hashear el id que se usará como contraseña
-        const hashedPassword: string = await encryptPassword(id);
-        const user_created = await prisma.user.upsert({
-          where: { email: email_temp },
-          create: {
-            email: email_temp,
-            name: name,
-            password: hashedPassword,
-            role: "USER",
-            state: "Active",
-          },
-          update: {},
-        });
-        return cb(null, user_created);
-      } catch (error) {
-        console.error(error);
-        return cb(error);
-      }
+  new FacebookStrategy(facebookConfig(), async function (
+    accessToken,
+    refreshToken,
+    profile,
+    cb
+  ) {
+    try {
+      const { email, name, id } = await facebookSchema.parseAsync(
+        profile._json
+      );
+      // en caso no se tenga acceso a email
+      let email_temp = email;
+      // Concatenamos el nombre y el ID de Facebook del usuario
+      const str = name + id;
+      // Obtenemos el hash SHA256 de la cadena concatenada
+      const hash = crypto.createHash("sha256").update("input").digest("hex");
+      // Usamos las primeras 10 letras del hash como correo temporal
+      email_temp = !email ? hash.slice(0, 10) + "@example.com" : email;
+      //hashear el id que se usará como contraseña
+      const hashedPassword: string = await encryptPassword(id);
+      const user_created = await prisma.user.upsert({
+        where: { email: email_temp },
+        create: {
+          email: email_temp,
+          name: name,
+          password: hashedPassword,
+          role: "USER",
+          state: "Active",
+        },
+        update: {},
+      });
+      return cb(null, user_created);
+    } catch (error) {
+      console.error(error);
+      return cb(error);
     }
-  )
+  })
 );
 
 passport.serializeUser(function (user: any, done) {

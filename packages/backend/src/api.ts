@@ -19,7 +19,7 @@ import usersRouter from "./modules/users/users.router";
 const apiRouter = Router()
   // Middleware
   .use(express.json())
-  .use(session(sessionConfig))
+  .use(session(sessionConfig()))
   .use(passport.initialize())
   .use(passport.session())
 
