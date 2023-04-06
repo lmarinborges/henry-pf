@@ -9,6 +9,7 @@ import productsRouter from "./modules/products";
 import logger from "./utils/logger";
 import * as cors from "cors";
 import usersRouter from "./modules/users";
+import reviewsRouter from "./modules/reviews";
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use(productsRouter);
 app.use(brandsRouter);
 app.use(categoriesRouter);
 app.use(usersRouter);
+app.use(reviewsRouter);
 
 // 404 Handler
 app.use((req, res) => {
