@@ -9,6 +9,7 @@ import productsRouter from "./modules/products";
 import logger from "./utils/logger";
 import * as cors from "cors";
 import usersRouter from "./modules/users";
+import reviewsRouter from "./modules/reviews";
 import facebookRouter from "./modules/users/facebook.routes";
 import passport from "passport";
 import session from "express-session";
@@ -32,7 +33,9 @@ app.use(productsRouter);
 app.use(brandsRouter);
 app.use(categoriesRouter);
 app.use(usersRouter);
+app.use(reviewsRouter);
 app.use(facebookRouter);
+
 // 404 Handler
 app.use((req, res) => {
   res.status(404).json({
