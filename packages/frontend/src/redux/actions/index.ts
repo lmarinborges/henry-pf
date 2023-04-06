@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../../libs/axios";
 import { AppDispatch } from "../store/index";
 
 // Aca deben declarar las variables donde tengan el action types.
@@ -22,43 +22,41 @@ export const getAllProducts =
   ) =>
   async (dispatch: AppDispatch) => {
     if (categoryFilter === 0 && brandFilter === 0) {
-      await fetch(
-        `http://localhost:4000/products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}`
-      )
-        .then((res) => res.json())
-        .then((data) => dispatch({ type: GET_ALL_PRODUCTS, payload: data }));
+      await axios
+        .get(
+          `products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}`
+        )
+        .then((res) => dispatch({ type: GET_ALL_PRODUCTS, payload: res.data }));
     } else if (categoryFilter !== 0 && brandFilter !== 0) {
-      await fetch(
-        `http://localhost:4000/products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&categoryId=${categoryFilter}&brandId=${brandFilter}`
-      )
-        .then((res) => res.json())
-        .then((data) => dispatch({ type: GET_ALL_PRODUCTS, payload: data }));
+      await axios
+        .get(
+          `products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&categoryId=${categoryFilter}&brandId=${brandFilter}`
+        )
+        .then((res) => dispatch({ type: GET_ALL_PRODUCTS, payload: res.data }));
     } else if (categoryFilter === 0 && brandFilter !== 0) {
-      await fetch(
-        `http://localhost:4000/products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&brandId=${brandFilter}`
-      )
-        .then((res) => res.json())
-        .then((data) => dispatch({ type: GET_ALL_PRODUCTS, payload: data }));
+      await axios
+        .get(
+          `products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&brandId=${brandFilter}`
+        )
+        .then((res) => dispatch({ type: GET_ALL_PRODUCTS, payload: res.data }));
     } else if (categoryFilter !== 0 && brandFilter === 0) {
-      await fetch(
-        `http://localhost:4000/products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&categoryId=${categoryFilter}`
-      )
-        .then((res) => res.json())
-        .then((data) => dispatch({ type: GET_ALL_PRODUCTS, payload: data }));
+      await axios
+        .get(
+          `products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&categoryId=${categoryFilter}`
+        )
+        .then((res) => dispatch({ type: GET_ALL_PRODUCTS, payload: res.data }));
     }
   };
 
 export const getProductDetail =
   (id: string) => async (dispatch: AppDispatch) => {
-    const data = await fetch(`http://localhost:4000/products/${id}`).then(
-      (res) => res.json()
-    );
-    dispatch({ type: GET_PRODUCT_DETAILS, payload: data });
+    const res = await axios.get(`products/${id}`);
+    dispatch({ type: GET_PRODUCT_DETAILS, payload: res.data });
   };
 
 export const createProduct = (data: any) => async (dispatch: AppDispatch) => {
   const res = await axios
-    .post(`http://localhost:4000/products/`, {
+    .post(`products`, {
       name: data.name,
       description: data.description,
       imageUrl: data.imageUrl,
@@ -72,28 +70,24 @@ export const createProduct = (data: any) => async (dispatch: AppDispatch) => {
 };
 
 export const getAllBrands = () => async (dispatch: AppDispatch) => {
-  const res = await fetch("http://localhost:4000/brands").then((data) =>
-    data.json()
-  );
-  dispatch({ type: GET_ALL_BRANDS, payload: res });
+  const res = await axios.get("brands");
+  dispatch({ type: GET_ALL_BRANDS, payload: res.data });
 };
 
 export const getAllCategories = () => async (dispatch: AppDispatch) => {
-  const res = await fetch("http://localhost:4000/categories").then((data) =>
-    data.json()
-  );
-  dispatch({ type: GET_ALL_CATEGORIES, payload: res });
+  const res = await axios.get("categories");
+  dispatch({ type: GET_ALL_CATEGORIES, payload: res.data });
 };
 
 export const getProductsPerPage =
   (page: number) => async (dispatch: AppDispatch) => {
-    const res = await axios.get(`http://localhost:4000/products?page=${page}`);
+    const res = await axios.get(`products?page=${page}`);
     console.log(res.data);
     dispatch({ type: GET_ALL_PRODUCTS, payload: res.data });
   };
 
 export const deleteProduct = (data: any) => async (dispatch: AppDispatch) => {
-  const res = await axios.patch(`http://localhost:4000/products/${data.id}`, {
+  const res = await axios.patch(`products/${data.id}`, {
     ...data,
     isTrashed: true,
   });

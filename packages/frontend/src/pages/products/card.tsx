@@ -13,6 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 import { FiShoppingCart } from "react-icons/fi";
+import { Link as RouterLink } from "react-router-dom";
 
 interface RatingProps {
   rating: number;
@@ -100,7 +101,7 @@ function Card({ product }: any) {
               lineHeight="tight"
               isTruncated
             >
-              <Link href={`http://localhost:5173/products/${product.id}`}>
+              <Link as={RouterLink} to={`${product.id}`}>
                 {product.name}
               </Link>
             </Box>
