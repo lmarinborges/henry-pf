@@ -18,7 +18,6 @@ import NotFoundPage from "./pages/notfound";
 import ProductsPage from "./pages/products";
 import ProductPage from "./pages/products/product"
 import ShoppingCart from "./pages/products/shoppingcart";
-import CreateProductForm from "./features/components/CreateProductForm";
 
 
 
