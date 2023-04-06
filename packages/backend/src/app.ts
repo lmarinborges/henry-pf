@@ -7,23 +7,32 @@ import brandsRouter from "./modules/brands";
 import categoriesRouter from "./modules/categories";
 import productsRouter from "./modules/products";
 import logger from "./utils/logger";
-import * as cors from "cors";
+import cors from "cors";
 import usersRouter from "./modules/users";
 import reviewsRouter from "./modules/reviews";
 import facebookRouter from "./modules/users/facebook.routes";
 import passport from "passport";
 import session from "express-session";
+import localRouter from "./modules/users/local.routes";
 const app = express();
 
 // Middleware
-app.use(cors.default());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 app.use(morgan());
 app.use(express.json());
 app.use(
   session({
     secret: "my-secret", // Reemplaza con tu propia clave secreta
-    resave: false,
+    resave: true,
     saveUninitialized: false,
+    cookie: {
+      maxAge: 60 * 60 * 1000, // 1 hora
+    },
   })
 );
 app.use(passport.initialize());
@@ -35,6 +44,7 @@ app.use(categoriesRouter);
 app.use(usersRouter);
 app.use(reviewsRouter);
 app.use(facebookRouter);
+app.use(localRouter);
 
 // 404 Handler
 app.use((req, res) => {
