@@ -5,7 +5,7 @@ import {
   FormLabel,
   Input,
   Stack,
-  Link,
+  Select,
   Button,
   Heading,
   Text,
@@ -13,32 +13,91 @@ import {
   Textarea,
   FormHelperText,
 } from "@chakra-ui/react";
+import { getAllBrands, getAllCategories, createProduct } from '../../redux/actions';
+import { RootState, AppDispatch } from "../../redux/store";
+import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect } from "react";
 
-import { useForm } from "react-hook-form";
+interface CreateProductFormData {
+  name: string;
+  description: string;
+  imageUrl: string,
+  price: string;
+  stock: number,
+  brandId: number;
+  categoryId: number
+};
 
-const validateUrl = (value: any) => {
-  try {
-    const url = new URL(value);
-    console.log(url.protocol);
-    
-    return url.protocol === "https:";
-  } catch (e) {
-    return false;
-  }
+type Brand = {
+  id: string,
+	name: string,
+	description: string
+};
+
+type Category = {
+  id: string,
+	name: string,
+	description: string
 };
 
 export default function CreateProductForm() {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm();
+  
+  //estado
+  const [product, setProduct] = useState<CreateProductFormData>({
+    name: '',
+    description: '',
+    imageUrl: '',
+    price: '',
+    stock: 0,
+    brandId: 0,
+    categoryId: 0
+  });
 
-  const onSubmit = (values: any) => {
-    console.log(values);
+  const dispatch : AppDispatch = useDispatch()
+
+  useEffect(()=>{
+    dispatch(getAllBrands());
+    dispatch(getAllCategories());
+  }, [dispatch])
+
+  // let brands = useSelector<RootState, Brand[]>(state => state.brands) as Brand[]
+  // let categories = useSelector<RootState, Category[]>(state => state.categories) as Category[]
+  const brands= useSelector((state:RootState)=>state.brands);
+  const categories= useSelector((state:RootState)=>state.categories);
+  
+
+  var property: string;
+  const handleProductChange = ( e : any)=>{
+    var value: any;
+    if(e.target.name === 'brandId' || e.target.name === 'categoryId' || e.target.name === 'stock'){
+      property = e.target.name;
+      value = Number(e.target.value);
+    } else {
+      property = e.target.name;
+      value = e.target.value;
+    }
+    setProduct({
+      ...product,
+      [property]:value
+    })
+  }
+  
+  const submitHandler = ( e : any ) => {
+    console.log(product);
+    e.preventDefault();
+    dispatch(createProduct(product));
+    alert("el producto se creo con exitoo wacho");
+    setProduct({
+      name: '',
+      description: '',
+      imageUrl: '',
+      price: '',
+      stock: 0,
+      brandId: 0,
+      categoryId: 0
+    })
   };
-
+  
   return (
     <Flex
       minH={"100vh"}
@@ -47,13 +106,13 @@ export default function CreateProductForm() {
       bg={useColorModeValue("gray.50", "gray.800")}
     >
       <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
-        <Stack align={"center"}>
-          <Heading fontSize={"4xl"}>Add your products easily!</Heading>
-          <Text fontSize={"lg"} color={"gray.600"}>
-            complete the data of your products and sell more! 📦
+        <Stack align={"left"} px={2}>
+          <Heading fontSize={"4xl"}>Agrega tus productos fácilmente!</Heading>
+          <Text fontSize={"lg"} color={"gray.600"} px={1}>
+          completa los datos de tus productos y vende más! 📦
           </Text>
         </Stack>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={submitHandler}>
           <Box
             rounded={"lg"}
             bg={useColorModeValue("white", "gray.700")}
@@ -62,57 +121,96 @@ export default function CreateProductForm() {
           >
             <Stack spacing={4}>
               <FormControl id="name">
-                <FormLabel>Name</FormLabel>
+                <FormLabel>Name:</FormLabel>
                 <Input
-                  {...register("name", { required: true })}
-                  placeholder="Enter the name of your product..."
+                  placeholder="Ingrese el nombre de su producto..."
+                  value={product.name}
+                  name="name"
+                  onChange={handleProductChange}
                 />
-                <FormHelperText>
-                  Requires the product to bear a name
-                </FormHelperText>
               </FormControl>
 
-              <FormControl id="description">
-                <FormLabel>Description</FormLabel>
+              <FormControl id="description">                
+                <FormLabel>Descripción:</FormLabel>
                 <Textarea
-                  {...register("description", { required: true })}
-                  placeholder="Describe your product..."
+                  placeholder="Breve descripcion de su producto..."
+                  value={product.description}
+                  name="description"
+                  onChange={ handleProductChange}
                 />
                 <FormHelperText>
-                  Requires the product to carry a brief description
+                  Requiere que el producto lleve una descripción breve
                 </FormHelperText>
               </FormControl>
 
               <FormControl id="url" isRequired>
-                <FormLabel>Enter the url of the article</FormLabel>
-                <Input
-                  {...register("url", {
-                    required: true,
-                    validate: validateUrl,
-                  })}
+                <FormLabel>Agregue una imagen de su producto:</FormLabel>
+                <Input                 
                   placeholder="https://..."
+                  name="imageUrl"
+                  value={product.imageUrl}
+                  onChange={ handleProductChange}
                   type="file"
                 />
-                <FormHelperText>
-                  You only need a URL. Example: https://www.ahem...
-                </FormHelperText>
               </FormControl>
 
               <FormControl id="price">
-                <FormLabel>Price</FormLabel>
-                <Input {...register("price", { required: true })} />
-                <FormHelperText>
-                  Requires the product to bear a name
-                </FormHelperText>
+                <FormLabel>Price:</FormLabel>
+                <Input
+                  placeholder="Ingrese el precio del producto"
+                  value={product.price}
+                  name="price"
+                  onChange={ handleProductChange}
+                />
               </FormControl>
 
               <FormControl id="stock">
-                <FormLabel>Stock</FormLabel>
+                <FormLabel>Stock:</FormLabel>
                 <Input
-                  {...register("stock", { required: true })}
                   placeholder="Enter the available stock of your product..."
+                  value={product.stock}
+                  name="stock"
+                  onChange={ handleProductChange}
                 />
-                <FormHelperText>Enter the price of the product</FormHelperText>
+                <FormHelperText>Ingrese el stock disponible de su producto...</FormHelperText>
+              </FormControl>
+
+              <FormControl id="brand">
+                <FormLabel>Selecciona la marca de tu producto:</FormLabel>
+                <Select 
+                  placeholder="Marca del producto"
+                  value={product.brandId}
+                  name="brandId"
+                  onChange={ handleProductChange}
+                  >
+                  {brands.length > 0 &&
+                      brands.map((e: Brand, i: number)=>{
+                          return <option key={i} value={e.id}>{e.name}</option>
+                      })
+                      }
+                  </Select>
+                <FormHelperText>
+                  Si la marca de tu producto no aparece, agrégala aquí
+                  </FormHelperText>
+              </FormControl>
+
+              <FormControl id="category">
+                <FormLabel>Selecciona la categoria del tu producto:</FormLabel>
+                  <Select 
+                    placeholder="Categorias"
+                    value={product.categoryId}
+                    name="categoryId"
+                    onChange={ handleProductChange}
+                    >
+                   {categories.length > 0 &&
+                    categories.map((e: Category, i:number)=>{
+                        return <option key={i} value={e.id}>{e.name}</option>
+                    })
+                    }
+                  </Select>
+                  <FormHelperText>
+                    Si la marca de tu producto no aparece, agrégala aquí
+                </FormHelperText>
               </FormControl>
 
               <Stack spacing={10}>
@@ -125,7 +223,7 @@ export default function CreateProductForm() {
                     bg: "#E6E6E6",
                   }}
                 >
-                  Add product
+                  Agrega nuevo producto
                 </Button>
               </Stack>
             </Stack>

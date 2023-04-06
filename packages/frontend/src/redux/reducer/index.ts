@@ -2,29 +2,37 @@ import {GET_ALL_PRODUCTS,GET_PRODUCT_DETAILS,CREATE_PRODUCT,DELETE_PRODUCT, GET_
   
 interface sliceState{
   products: Array<any>,
+  adminProducts: Array<any>,
   brands:any,
   categories:any,
   productDetail:any,
   totalItems:any,
-  cardsForPages:any
+  cardsForPages:any,
+
 
 }
 
 const initialState:sliceState = {
   products: [],
+  adminProducts:[],
   brands:[],
   categories:[],
   productDetail: {},
   totalItems:0,
-  cardsForPages:0
-
+  cardsForPages:0,
+  
 };
 
 const rootReducer = (state = initialState, action: any) => {
   switch (action.type) {
     // Acá va tu código:
     case GET_ALL_PRODUCTS:
-      return {...state, products:action.payload.products, totalItems:action.payload.totalItems, cardsForPages:action.payload.pageSize }
+      return {...state, 
+        products:action.payload.products.filter((e:any)=> !e.isTrashed), 
+        totalItems:action.payload.totalItems, 
+        cardsForPages:action.payload.pageSize,
+        adminProducts:action.payload.products,
+      }
 
     case GET_ALL_CATEGORIES:
       return {...state, categories:action.payload}
@@ -36,13 +44,13 @@ const rootReducer = (state = initialState, action: any) => {
       return{...state, products:[...state.products, action.payload]}
 
     case DELETE_PRODUCT:
-      return {...state, products:state.products.filter((e:any) => e.id===action.payload)}
+      return {...state, products:state.products.filter((e:any) => e.id !== action.payload)}
 
     case GET_PRODUCT_DETAILS:
-      console.log(action.payload)
       return {...state, productDetail:action.payload}
     default: return state
     
+  
   }
 };
 
