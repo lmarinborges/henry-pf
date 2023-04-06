@@ -27,6 +27,9 @@ const getAllSchema = z.object({
       brandId: z.coerce.number().int(),
       order: z.enum(["asc", "desc"]),
       column: z.enum(["name", "price"]),
+      isTrashed: z.string().transform((value) => {
+        return value === "true";
+      }),
     })
     .partial(),
 });
@@ -60,12 +63,18 @@ const PAGE_SIZE = 5;
 
 // Devuelve todos los productos.
 export async function getAllProducts(req: Request, res: Response) {
+  console.log(req);
+
   const { query } = await getAllSchema.parseAsync(req);
+  console.log(query);
   const where: Prisma.ProductWhereInput = {
     name: { contains: query.search, mode: "insensitive" },
     categoryId: query.categoryId,
     brandId: query.brandId,
+    isTrashed: query.isTrashed,
   };
+  console.log(where.isTrashed);
+
   const totalItems = await prisma.product.count({ where });
   const products = await prisma.product.findMany({
     take: query.page ? PAGE_SIZE : undefined,
