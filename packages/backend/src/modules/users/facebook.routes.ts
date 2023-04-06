@@ -88,7 +88,14 @@ facebookRouter.get(
 facebookRouter.get(
   "/auth/facebook/callback",
   passport.authenticate("facebook", { failureRedirect: "/failed" }),
-  UserAuthenticated
+  function (req, res) {
+    // Emitimos un mensaje al cliente indicando que se ha autenticado correctamente
+    res.send(
+      "<script>window.opener.postMessage({ isAuthenticated: true, userData: " +
+        JSON.stringify(req.user) +
+        ' }, "http://localhost:5173"); window.close();</script>'
+    );
+  }
 );
 
 facebookRouter.get("/privateUsers", isAuthenticated, UserAuthenticated);
