@@ -13,7 +13,7 @@ export const SearchBar = () => {
           alignItems="center"
           pl={4}
           pr={2}
-          bg='white'
+          bg="white"
         >
           <Input
             focusBorderColor="transparent"
@@ -21,7 +21,7 @@ export const SearchBar = () => {
             bgColor="transparent"
             p="0px"
             placeholder="¿Que deseas buscar?"
-            _hover={{borderColor:"none"}}
+            _hover={{ borderColor: "none" }}
             size={{ base: "lg" }}
           />
           <Button
@@ -29,7 +29,7 @@ export const SearchBar = () => {
             background="transparent"
             color="#00c3ab"
             borderRadius="99999px"
-            _hover={{ bg: "gray.300"}}
+            _hover={{ bg: "gray.300" }}
             bg="gray.200"
           >
             <GoSearch />

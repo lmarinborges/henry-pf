@@ -22,6 +22,7 @@ import { useParams } from "react-router-dom";
 import { RootState, AppDispatch } from "../../redux/store/index";
 import * as actions from "../../redux/actions/index";
 
+<<<<<<< HEAD
 export default function ProductPage() {
   const { productId } = useParams();
 
@@ -45,6 +46,22 @@ export default function ProductPage() {
 
   const [text, setText] = useState("");
   const [num, setNum] = useState(0);
+=======
+export default function ProductPage(props: any) {
+  const { productId } = useParams();
+
+  const dispatch: AppDispatch = useDispatch();
+
+  useEffect(() => {
+    if (productId) dispatch(actions.getProductDetail(productId));
+  }, [dispatch, productId]);
+
+  const prod = useSelector((state: RootState) => state.productDetail);
+
+  const [text, setText] = useState("");
+  const [num, setNum] = useState(0);
+  const [review, setReview] = useState({ coment: "", stars: -1 });
+>>>>>>> 5614a70 (style: format project with prettier)
 
   const handleTextChange = (e: any) => {
     let inputValue = e.target.value;
@@ -56,6 +73,7 @@ export default function ProductPage() {
     setNum(inputValue);
   };
 
+<<<<<<< HEAD
   const onClickCart = () => {
     localStorage.setItem(prod.name, JSON.stringify(prod));
   };
@@ -83,6 +101,44 @@ export default function ProductPage() {
   );
 
   const reviewCount = reviews ? reviews.length : 0;
+=======
+  const onClickComent = () => {
+    let rev = { coment: text, stars: num };
+    setReview(rev);
+  };
+
+  const onClickCart = () => {
+    localStorage.setItem(prod.name, JSON.stringify(prod));
+  };
+
+  const reviews = [
+    {
+      coment:
+        "feo el producto, no me ha servido para nada y no me convence, creo que fue una perdida de tiempo y  plata",
+      stars: 5.0,
+    },
+    { coment: "¡muy buen producto!", stars: 5.5 },
+    { coment: "buen producto", stars: 4.5 },
+  ];
+
+  const comentarios = reviews.map((element, i) => {
+    return (
+      <Text
+        key={i}
+        color="white"
+        bg={"gray"}
+        m="2"
+        p="2"
+        borderRadius="10px"
+        marginInlineStart="20px"
+      >
+        {element.coment}
+      </Text>
+    );
+  });
+
+  const reviewCount = reviews.length;
+>>>>>>> 5614a70 (style: format project with prettier)
 
   var votation = 0;
 
@@ -96,7 +152,11 @@ export default function ProductPage() {
     ratinge: number;
   }
 
+<<<<<<< HEAD
   function Rating({ ratinge }: RatingProps) {
+=======
+  function Rating({ ratinge, numReviews }: RatingProps) {
+>>>>>>> 5614a70 (style: format project with prettier)
     return (
       <Box display="flex" alignItems="center">
         {Array(5)
@@ -158,7 +218,11 @@ export default function ProductPage() {
       </Card>
       <Box display="flex" mt="2" alignItems="center">
         <Flex justifyContent="space-between" alignContent="center">
+<<<<<<< HEAD
           <Rating ratinge={rating} />
+=======
+          <Rating ratinge={rating} numReviews={reviewCount} />
+>>>>>>> 5614a70 (style: format project with prettier)
         </Flex>
         <Box as="span" ml="10%" color="white" fontSize="sm">
           <Text fontSize="15px">{reviewCount} reviews</Text>

@@ -9,14 +9,13 @@ export default function PublicLayout() {
   return (
     <>
       <Navbar height={NAVBAR_HEIGHT} />
-        <Container
-          size="sm"
-          px="3"
-          pb="3"
-          pt={`calc(${NAVBAR_HEIGHT} + var(--chakra-sizes-3))`}
-        >
-        </Container>
-        <Outlet />
+      <Container
+        size="sm"
+        px="3"
+        pb="3"
+        pt={`calc(${NAVBAR_HEIGHT} + var(--chakra-sizes-3))`}
+      ></Container>
+      <Outlet />
       <Footer />
     </>
   );

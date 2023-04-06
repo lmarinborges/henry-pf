@@ -13,63 +13,69 @@ import {
   Textarea,
   FormHelperText,
 } from "@chakra-ui/react";
-import { getAllBrands, getAllCategories, createProduct } from '../../redux/actions';
+import {
+  getAllBrands,
+  getAllCategories,
+  createProduct,
+} from "../../redux/actions";
 import { RootState, AppDispatch } from "../../redux/store";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 
 interface CreateProductFormData {
   name: string;
   description: string;
-  imageUrl: string,
+  imageUrl: string;
   price: string;
-  stock: number,
+  stock: number;
   brandId: number;
-  categoryId: number
-};
+  categoryId: number;
+}
 
 type Brand = {
-  id: string,
-	name: string,
-	description: string
+  id: string;
+  name: string;
+  description: string;
 };
 
 type Category = {
-  id: string,
-	name: string,
-	description: string
+  id: string;
+  name: string;
+  description: string;
 };
 
 export default function CreateProductForm() {
-  
   //estado
   const [product, setProduct] = useState<CreateProductFormData>({
-    name: '',
-    description: '',
-    imageUrl: '',
-    price: '',
+    name: "",
+    description: "",
+    imageUrl: "",
+    price: "",
     stock: 0,
     brandId: 0,
-    categoryId: 0
+    categoryId: 0,
   });
 
-  const dispatch : AppDispatch = useDispatch()
+  const dispatch: AppDispatch = useDispatch();
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(getAllBrands());
     dispatch(getAllCategories());
-  }, [dispatch])
+  }, [dispatch]);
 
   // let brands = useSelector<RootState, Brand[]>(state => state.brands) as Brand[]
   // let categories = useSelector<RootState, Category[]>(state => state.categories) as Category[]
-  const brands= useSelector((state:RootState)=>state.brands);
-  const categories= useSelector((state:RootState)=>state.categories);
-  
+  const brands = useSelector((state: RootState) => state.brands);
+  const categories = useSelector((state: RootState) => state.categories);
 
   var property: string;
-  const handleProductChange = ( e : any)=>{
+  const handleProductChange = (e: any) => {
     var value: any;
-    if(e.target.name === 'brandId' || e.target.name === 'categoryId' || e.target.name === 'stock'){
+    if (
+      e.target.name === "brandId" ||
+      e.target.name === "categoryId" ||
+      e.target.name === "stock"
+    ) {
       property = e.target.name;
       value = Number(e.target.value);
     } else {
@@ -78,26 +84,26 @@ export default function CreateProductForm() {
     }
     setProduct({
       ...product,
-      [property]:value
-    })
-  }
-  
-  const submitHandler = ( e : any ) => {
+      [property]: value,
+    });
+  };
+
+  const submitHandler = (e: any) => {
     console.log(product);
     e.preventDefault();
     dispatch(createProduct(product));
     alert("el producto se creo con exitoo wacho");
     setProduct({
-      name: '',
-      description: '',
-      imageUrl: '',
-      price: '',
+      name: "",
+      description: "",
+      imageUrl: "",
+      price: "",
       stock: 0,
       brandId: 0,
-      categoryId: 0
-    })
+      categoryId: 0,
+    });
   };
-  
+
   return (
     <Flex
       minH={"100vh"}
@@ -109,7 +115,7 @@ export default function CreateProductForm() {
         <Stack align={"left"} px={2}>
           <Heading fontSize={"4xl"}>Agrega tus productos fácilmente!</Heading>
           <Text fontSize={"lg"} color={"gray.600"} px={1}>
-          completa los datos de tus productos y vende más! 📦
+            completa los datos de tus productos y vende más! 📦
           </Text>
         </Stack>
         <form onSubmit={submitHandler}>
@@ -130,13 +136,13 @@ export default function CreateProductForm() {
                 />
               </FormControl>
 
-              <FormControl id="description">                
+              <FormControl id="description">
                 <FormLabel>Descripción:</FormLabel>
                 <Textarea
                   placeholder="Breve descripcion de su producto..."
                   value={product.description}
                   name="description"
-                  onChange={ handleProductChange}
+                  onChange={handleProductChange}
                 />
                 <FormHelperText>
                   Requiere que el producto lleve una descripción breve
@@ -145,11 +151,11 @@ export default function CreateProductForm() {
 
               <FormControl id="url" isRequired>
                 <FormLabel>Agregue una imagen de su producto:</FormLabel>
-                <Input                 
+                <Input
                   placeholder="https://..."
                   name="imageUrl"
                   value={product.imageUrl}
-                  onChange={ handleProductChange}
+                  onChange={handleProductChange}
                   type="file"
                 />
               </FormControl>
@@ -160,7 +166,7 @@ export default function CreateProductForm() {
                   placeholder="Ingrese el precio del producto"
                   value={product.price}
                   name="price"
-                  onChange={ handleProductChange}
+                  onChange={handleProductChange}
                 />
               </FormControl>
 
@@ -170,46 +176,54 @@ export default function CreateProductForm() {
                   placeholder="Enter the available stock of your product..."
                   value={product.stock}
                   name="stock"
-                  onChange={ handleProductChange}
+                  onChange={handleProductChange}
                 />
-                <FormHelperText>Ingrese el stock disponible de su producto...</FormHelperText>
+                <FormHelperText>
+                  Ingrese el stock disponible de su producto...
+                </FormHelperText>
               </FormControl>
 
               <FormControl id="brand">
                 <FormLabel>Selecciona la marca de tu producto:</FormLabel>
-                <Select 
+                <Select
                   placeholder="Marca del producto"
                   value={product.brandId}
                   name="brandId"
-                  onChange={ handleProductChange}
-                  >
+                  onChange={handleProductChange}
+                >
                   {brands.length > 0 &&
-                      brands.map((e: Brand, i: number)=>{
-                          return <option key={i} value={e.id}>{e.name}</option>
-                      })
-                      }
-                  </Select>
+                    brands.map((e: Brand, i: number) => {
+                      return (
+                        <option key={i} value={e.id}>
+                          {e.name}
+                        </option>
+                      );
+                    })}
+                </Select>
                 <FormHelperText>
                   Si la marca de tu producto no aparece, agrégala aquí
-                  </FormHelperText>
+                </FormHelperText>
               </FormControl>
 
               <FormControl id="category">
                 <FormLabel>Selecciona la categoria del tu producto:</FormLabel>
-                  <Select 
-                    placeholder="Categorias"
-                    value={product.categoryId}
-                    name="categoryId"
-                    onChange={ handleProductChange}
-                    >
-                   {categories.length > 0 &&
-                    categories.map((e: Category, i:number)=>{
-                        return <option key={i} value={e.id}>{e.name}</option>
-                    })
-                    }
-                  </Select>
-                  <FormHelperText>
-                    Si la marca de tu producto no aparece, agrégala aquí
+                <Select
+                  placeholder="Categorias"
+                  value={product.categoryId}
+                  name="categoryId"
+                  onChange={handleProductChange}
+                >
+                  {categories.length > 0 &&
+                    categories.map((e: Category, i: number) => {
+                      return (
+                        <option key={i} value={e.id}>
+                          {e.name}
+                        </option>
+                      );
+                    })}
+                </Select>
+                <FormHelperText>
+                  Si la marca de tu producto no aparece, agrégala aquí
                 </FormHelperText>
               </FormControl>
 
