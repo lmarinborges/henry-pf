@@ -13,7 +13,7 @@ export default function ProductPage(props: any) {
   const dispatch:AppDispatch= useDispatch();
   
   useEffect(()=>{
-    if (productId)  dispatch(actions.getProductDetail(productId));
+    if (productId) dispatch(actions.getProductDetail(productId));
   },[dispatch,productId]);
   
   const prod=useSelector((state:RootState)=>state.productDetail);
@@ -32,10 +32,14 @@ export default function ProductPage(props: any) {
     setNum(inputValue)
   };
 
-  const onClickComent=(e: any)=>{
-    let rev={coment:text,stars:num}
+  const onClickComent=()=>{
+      let rev={coment:text,stars:num}
     setReview(rev)
   };
+
+  const onClickCart=()=>{
+    localStorage.setItem(prod.name,JSON.stringify(prod))
+  }
 
   const reviews = [
     { coment: "feo el producto, no me ha servido para nada y no me convence, creo que fue una perdida de tiempo y  plata", stars: 5.0 },
@@ -115,7 +119,7 @@ export default function ProductPage(props: any) {
             <Button variant="solid" colorScheme="red">
               Comprar
             </Button>
-            <Button variant="ghost" colorScheme="red">
+            <Button variant="ghost" colorScheme="red" onClick={onClickCart}>
               Añadir al carrito
             </Button>
           </ButtonGroup>
@@ -123,9 +127,8 @@ export default function ProductPage(props: any) {
       </Card>
       <Box display="flex" mt="2" alignItems="center">
       <Flex justifyContent="space-between" alignContent="center">
-              <Rating ratinge={rating} numReviews={reviewCount} />
-
-            </Flex>
+        <Rating ratinge={rating} numReviews={reviewCount} />
+      </Flex>
         <Box as="span" ml="10%" color="white" fontSize="sm">
           <Text fontSize="15px">{reviewCount} reviews</Text>
         </Box>

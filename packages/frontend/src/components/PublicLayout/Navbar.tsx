@@ -11,7 +11,7 @@ import {
   LayoutProps,
   Link,
   Text,
-  useDisclosure,
+  useDisclosure
 } from "@chakra-ui/react";
 import {
   MdAlternateEmail,
@@ -57,7 +57,7 @@ export default function Navbar(props: NavbarProps) {
           icon={<HamburgerIcon />}
           onClick={onOpen}
         />
-        <IconButton
+        <Link href="/products/shoppingcart"><IconButton
           _hover={{ backgroundColor: "rgba(0, 0, 0, 0.03)" }}
           _active={{ backgroundColor: "rgba(0, 0, 0, 0.05)" }}
           color="rgba(0, 0, 0, 0.68)"
@@ -65,7 +65,7 @@ export default function Navbar(props: NavbarProps) {
           borderRadius="full"
           aria-label="Ver carrito de compras"
           icon={<MdShoppingCart />}
-        />
+        /></Link>
       </Flex>
       <Drawer size="xs" placement="left" isOpen={isOpen} onClose={onClose}>
         <DrawerOverlay />
