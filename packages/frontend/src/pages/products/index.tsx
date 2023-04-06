@@ -35,12 +35,10 @@ export default function ProductsPage() {
     }
 
     const categoriesSelectChange= (e:any) =>{
-      
         setCategory(Number(e.target.value))
     }
 
     const brandSelectChange= (e:any) =>{
-       
         setBrand(Number(e.target.value))
     }
 

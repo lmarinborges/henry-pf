@@ -11,6 +11,7 @@ export const GET_PRODUCT_DETAILS = "GET_PRODUCT_DETAILS";
 export const CREATE_PRODUCT = "CREATE_PRODUCT";
 export const DELETE_PRODUCT = "DELETE_PRODUCT";
 
+
 export const getAllProducts = (orderBy:string, alphaOrder:string, currentPage:string, brandFilter:number ,categoryFilter:number )=> async (dispatch:AppDispatch) => {
   console.log(typeof categoryFilter)
   console.log(typeof brandFilter)
@@ -37,7 +38,6 @@ export const getAllProducts = (orderBy:string, alphaOrder:string, currentPage:st
   
 };
 
-
 export const getProductDetail = (id: string)=> async (dispatch:AppDispatch)=>{
   const data= await fetch(`http://localhost:4000/products/${id}`)
   .then((res)=> res.json())
@@ -63,6 +63,7 @@ export const getAllBrands = () => async (dispatch: AppDispatch) => {
     .then((data) => data.json())
     dispatch({ type: GET_ALL_BRANDS, payload: res });
 };
+
 export const getAllCategories = () => async (dispatch: AppDispatch) => {
   const res= await fetch("http://localhost:4000/categories")
     .then((data) => data.json())
@@ -79,3 +80,4 @@ export const deleteProduct = (data:any) => async (dispatch:AppDispatch)=> {
   const res = await axios.patch(`http://localhost:4000/products/${data.id}`,{...data, isTrashed:true})
  dispatch({type:DELETE_PRODUCT, payload: res.data.id })
 }
+
