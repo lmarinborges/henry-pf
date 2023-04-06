@@ -1,92 +1,23 @@
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import express, { NextFunction, Request, Response } from "express";
+import express, { Request, Response } from "express";
 import "express-async-errors";
-import session from "express-session";
-import passport from "passport";
-import { ZodError } from "zod";
-import { sessionMaxAge, sessionSecret } from "./config";
+import path from "path";
+import apiRouter from "./api";
 import morgan from "./middleware/morgan";
-import brandsRouter from "./modules/brands";
-import categoriesRouter from "./modules/categories";
-import productsRouter from "./modules/products";
-import reviewsRouter from "./modules/reviews";
-import usersRouter from "./modules/users";
-import facebookRouter from "./modules/users/facebook.routes";
-import localRouter from "./modules/users/local.routes";
-import logger from "./utils/logger";
 
 const app = express();
 
 // Middleware
 app.use(morgan());
-app.use(express.json());
-app.use(
-  session({
-    secret: sessionSecret(),
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      maxAge: sessionMaxAge(),
-      httpOnly: true,
-      sameSite: "strict",
-      secure: process.env.NODE_ENV === "production",
-    },
-  })
-);
+app.use(express.static("public"));
 
-// Authentication
-app.use(passport.initialize());
-app.use(passport.session());
+// API Routes
+app.use("/api", apiRouter);
 
-// Routes
-app.use(productsRouter);
-app.use(brandsRouter);
-app.use(categoriesRouter);
-app.use(usersRouter);
-app.use(reviewsRouter);
-app.use(facebookRouter);
-app.use(localRouter);
-
-// 404 Handler
-app.use((req, res) => {
-  res.status(404).json({
-    status: 404,
-    message: "Requested resource does not exist.",
+// Frontend
+if (process.env.NODE_ENV === "production") {
+  app.get("*", (_req: Request, res: Response) => {
+    res.sendFile(path.resolve("public", "index.html"));
   });
-});
-
-// Error handler
-app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
-  if (res.headersSent) return next(err);
-  if (err instanceof ZodError) {
-    res.status(400).json({ status: 400, errors: err.issues });
-  } else if (
-    err instanceof PrismaClientKnownRequestError &&
-    (err.name === "NotFoundError" || err.code === "P2025")
-  ) {
-    res
-      .status(404)
-      .json({ status: 404, message: "Requested resource does not exist." });
-  } else if (
-    err instanceof PrismaClientKnownRequestError &&
-    err.code === "P2003"
-  ) {
-    res.status(409).json({
-      status: 409,
-      message: "A field with an invalid ID was provided.",
-    });
-  } else {
-    if (err instanceof Error) {
-      logger.error(err.message);
-      logger.debug(err.stack);
-    } else {
-      logger.error(err);
-    }
-    res.status(500).json({
-      status: 500,
-      message: "Internal server error.",
-    });
-  }
-});
+}
 
 export default app;
