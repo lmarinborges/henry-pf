@@ -72,7 +72,6 @@ export async function updateUser(req: Request, res: Response) {
     data: { ...data },
   });
   return res.status(200).json(user);
-  unimplemented(req, res);
 }
 
 export async function deleteUser(req: Request, res: Response) {
@@ -90,6 +89,10 @@ export const isAuthenticated = (req: Request, res: Response, next: any) => {
   });
 };
 
-export async function facebookAuthenticated(req: Request, res: Response) {
-  res.json({ state: "success", message: "bienvenido usuario de facebook" });
+export async function UserAuthenticated(req: Request, res: Response) {
+  res.json({
+    state: "success",
+    message: "bienvenido usuario de facebook",
+    user: req.user,
+  });
 }

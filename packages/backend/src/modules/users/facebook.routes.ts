@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { facebookAuthenticated, isAuthenticated } from "./users.controller";
+import { UserAuthenticated, isAuthenticated } from "./users.controller";
 import passport from "passport";
 import { Strategy as FacebookStrategy } from "passport-facebook";
 import { Request, Response } from "express";
@@ -32,17 +32,14 @@ passport.use(
         );
         // en caso no se tenga acceso a email
         let email_temp = email;
-
         // Concatenamos el nombre y el ID de Facebook del usuario
         const str = name + id;
         // Obtenemos el hash SHA256 de la cadena concatenada
         const hash = crypto.createHash("sha256").update("input").digest("hex");
         // Usamos las primeras 10 letras del hash como correo temporal
         email_temp = !email ? hash.slice(0, 10) + "@example.com" : email;
-
         //hashear el id que se usará como contraseña
         const hashedPassword: string = await encryptPassword(id);
-
         const user_created = await prisma.user.upsert({
           where: { email: email_temp },
           create: {
@@ -54,7 +51,6 @@ passport.use(
           },
           update: {},
         });
-
         return cb(null, user_created);
       } catch (error) {
         console.error(error);
@@ -81,8 +77,9 @@ passport.deserializeUser(async (id: number, done) => {
 
 // rutas para login(auth , callback) ,logout , ruta de prueba y fallo
 facebookRouter.get("/failed", (req, res) => {
-  res.send("la autenticacion falló");
+  res.json({ state: "failed", message: "la autenticacion falló" });
 });
+
 facebookRouter.get(
   "/auth/facebook",
   passport.authenticate("facebook", { scope: ["email"] })
@@ -91,12 +88,10 @@ facebookRouter.get(
 facebookRouter.get(
   "/auth/facebook/callback",
   passport.authenticate("facebook", { failureRedirect: "/failed" }),
-  function (req, res) {
-    res.json({ state: "success", user: req.user });
-  }
+  UserAuthenticated
 );
 
-facebookRouter.get("/privateUsers", isAuthenticated, facebookAuthenticated);
+facebookRouter.get("/privateUsers", isAuthenticated, UserAuthenticated);
 
 facebookRouter.get("/logout", function (req, res, next) {
   req.logout(function (err) {
