@@ -1,42 +1,43 @@
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import express, { NextFunction, Request, Response } from "express";
 import "express-async-errors";
+import session from "express-session";
+import passport from "passport";
 import { ZodError } from "zod";
+import { sessionMaxAge, sessionSecret } from "./config";
 import morgan from "./middleware/morgan";
 import brandsRouter from "./modules/brands";
 import categoriesRouter from "./modules/categories";
 import productsRouter from "./modules/products";
-import logger from "./utils/logger";
-import cors from "cors";
-import usersRouter from "./modules/users";
 import reviewsRouter from "./modules/reviews";
+import usersRouter from "./modules/users";
 import facebookRouter from "./modules/users/facebook.routes";
-import passport from "passport";
-import session from "express-session";
 import localRouter from "./modules/users/local.routes";
+import logger from "./utils/logger";
+
 const app = express();
 
 // Middleware
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    credentials: true,
-  })
-);
 app.use(morgan());
 app.use(express.json());
 app.use(
   session({
-    secret: "my-secret", // Reemplaza con tu propia clave secreta
-    resave: true,
+    secret: sessionSecret(),
+    resave: false,
     saveUninitialized: false,
     cookie: {
-      maxAge: 60 * 60 * 1000, // 1 hora
+      maxAge: sessionMaxAge(),
+      httpOnly: true,
+      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
     },
   })
 );
+
+// Authentication
 app.use(passport.initialize());
 app.use(passport.session());
+
 // Routes
 app.use(productsRouter);
 app.use(brandsRouter);
