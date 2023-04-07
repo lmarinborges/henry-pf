@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { MdConveyorBelt } from "react-icons/md";
 import { Link as RouterLink } from "react-router-dom";
-import LoginButton from "../../features/components/loginButton";
+import UserMenu from "../../features/components/loginButton";
 
 export interface NavbarProps {
   height: LayoutProps["height"];
@@ -55,7 +55,7 @@ export default function Navbar(props: NavbarProps) {
           Panel de Administrador
         </Text>
         <Flex justifyContent="flex-end">
-          <LoginButton />
+          <UserMenu />
         </Flex>
       </Flex>
       <Drawer size="xs" placement="left" isOpen={isOpen} onClose={onClose}>

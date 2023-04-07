@@ -6,12 +6,9 @@ import {
   HStack,
   Heading,
   Input,
-  Stack,
 } from "@chakra-ui/react";
 import { FaFacebook, FaTwitter } from "react-icons/fa";
 import { useForm } from "react-hook-form";
-import axios from "axios";
-import { AxiosError } from "axios";
 import {
   addUserFromFb,
   addUserFromLocal,
@@ -26,7 +23,6 @@ const LoginPage = ({ SuddenCLose }) => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm();
   const user = useSelector((state: RootState) => state.user);
@@ -122,11 +118,9 @@ const LoginPage = ({ SuddenCLose }) => {
 
 const RegisterPage = ({ SuddenCLose }) => {
   const dispatch: AppDispatch = useDispatch();
-  const [authenticated, setIsAuthenticated] = useState(false);
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm();
   const user = useSelector((state: RootState) => state.user);
