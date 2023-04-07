@@ -51,7 +51,7 @@ export default function Navbar(props: NavbarProps) {
         px="2"
         backdropFilter="blur(8px)"
         boxShadow="sm"
-        >
+      >
         <IconButton
           _hover={{ backgroundColor: "rgba(0, 0, 0, 0.03)" }}
           _active={{ backgroundColor: "rgba(0, 0, 0, 0.05)" }}
@@ -60,16 +60,18 @@ export default function Navbar(props: NavbarProps) {
           aria-label="Abrir menú"
           icon={<HamburgerIcon />}
           onClick={onOpen}
+        />
+        <Link href="/products/shoppingcart">
+          <IconButton
+            _hover={{ backgroundColor: "rgba(0, 0, 0, 0.03)" }}
+            _active={{ backgroundColor: "rgba(0, 0, 0, 0.05)" }}
+            color="rgba(0, 0, 0, 0.68)"
+            variant="ghost"
+            borderRadius="full"
+            aria-label="Ver carrito de compras"
+            icon={<MdShoppingCart />}
           />
-        <Link href="/products/shoppingcart"><IconButton
-          _hover={{ backgroundColor: "rgba(0, 0, 0, 0.03)" }}
-          _active={{ backgroundColor: "rgba(0, 0, 0, 0.05)" }}
-          color="rgba(0, 0, 0, 0.68)"
-          variant="ghost"
-          borderRadius="full"
-          aria-label="Ver carrito de compras"
-          icon={<MdShoppingCart />}
-          /></Link>
+        </Link>
       </Flex>
       <Drawer size="xs" placement="left" isOpen={isOpen} onClose={onClose}>
         <DrawerOverlay />
@@ -81,7 +83,7 @@ export default function Navbar(props: NavbarProps) {
             display="flex"
             justifyContent="space-between"
             alignItems="center"
-            >
+          >
             <Text mt="1.5">Menú</Text>
             <DrawerCloseButton position="unset" borderRadius="full" />
           </DrawerHeader>
@@ -103,17 +105,15 @@ export default function Navbar(props: NavbarProps) {
                 {value.label}
               </Link>
             ))}
-          
           </Flex>
           <DrawerFooter>
-            <Button 
-              marginRight='auto'  
-              backgroundColor='transparent' 
-              variant="unstyled" 
-              my='-3'
+            <Button
+              marginRight="auto"
+              backgroundColor="transparent"
+              variant="unstyled"
+              my="-3"
             >
-              <ToggleColorMode/>
-
+              <ToggleColorMode />
             </Button>
           </DrawerFooter>
         </DrawerContent>
