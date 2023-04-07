@@ -96,7 +96,7 @@ export const deleteProduct = (data: any) => async (dispatch: AppDispatch) => {
 
 export const createReview = (data: any) => async (dispatch: AppDispatch) => {
   const res = await axios
-    .post(`http://localhost:4000/reviews/`, {
+    .post(`reviews`, {
       comments: data.comment,
       score: Number(data.score),
       productId: Number(data.productId),
@@ -108,10 +108,8 @@ export const createReview = (data: any) => async (dispatch: AppDispatch) => {
 
 export const getProductReviews =
   (productId: string) => async (dispatch: AppDispatch) => {
-    const data = await fetch(`http://localhost:4000/reviews/${productId}`).then(
-      (res) => res.json()
-    );
-    dispatch({ type: GET_PRODUCT_REVIEWS, payload: data });
+    const res = await axios.get(`reviews/${productId}`);
+    dispatch({ type: GET_PRODUCT_REVIEWS, payload: res.data });
   };
 export const addUserFromFb = () => async (dispatch: AppDispatch) => {
   const width = 600;
