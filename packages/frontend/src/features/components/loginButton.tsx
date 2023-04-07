@@ -12,6 +12,7 @@ import {
   MenuItem,
   Box,
 } from "@chakra-ui/react";
+import { logoutUser } from "../../redux/actions";
 import { LoginPage, RegisterPage } from "./LoginRegisterForm";
 import { RootState, AppDispatch } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
@@ -31,7 +32,13 @@ const LoginButton = () => {
 
   return (
     <>
-      <Button onClick={onLogOpen} fontWeight={"bold"} fontSize={"0.8em"} m={3}>
+      <Button
+        onClick={onLogOpen}
+        fontWeight={"bold"}
+        fontSize={"0.8em"}
+        my="4"
+        m={3}
+      >
         Iniciar sesión
       </Button>
       <Button
@@ -40,6 +47,7 @@ const LoginButton = () => {
         colorScheme="red"
         fontSize={"0.8em"}
         m={3}
+        my="4"
         _hover={{
           bg: "#8B0000",
         }}
@@ -84,6 +92,7 @@ function LoggedButton(user) {
         fontWeight="medium"
         borderRadius="md"
         py="1"
+        my="4"
       >
         <Avatar name={user.name} size="sm" mr="2" />
       </MenuButton>
@@ -116,6 +125,8 @@ function UserMenu() {
     console.log(user);
     if (user.name) {
       setIsUser(true);
+    } else {
+      setIsUser(false);
     }
   }, [user]);
 

@@ -180,3 +180,9 @@ export const registerUser = (data: any) => async (dispatch: AppDispatch) => {
     );
   }
 };
+
+export const logoutUser = () => async (dispatch: AppDispatch) => {
+  const res = await axios.get(`http://localhost:4000/logout`);
+  // verificamos si se deslogueo correctamente
+  dispatch({ type: ADD_USER, payload: {} });
+};
