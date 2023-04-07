@@ -9,11 +9,7 @@ export default function ShoppingCart() {
   var storage: Array<any> = [];
 
   for (var i = 0; i < localStorage.length; i++) {
-<<<<<<< HEAD
     if (localStorage.key(i)?.includes("chakra") !== true) {
-=======
-    if (localStorage.key(i)?.includes("-") !== true) {
->>>>>>> 5614a70 (style: format project with prettier)
       storage.push(localStorage.key(i));
     }
   }
@@ -25,7 +21,6 @@ export default function ShoppingCart() {
     } else return null;
   });
 
-<<<<<<< HEAD
   useEffect(() => {
     if (totalPrice === 0) {
       var init: number = 0;
@@ -36,8 +31,6 @@ export default function ShoppingCart() {
     }
   }, [totalPrice, products]);
 
-=======
->>>>>>> 5614a70 (style: format project with prettier)
   const totalValue = (val: number, rest: boolean) => {
     let result = 0;
     if (rest === true) {

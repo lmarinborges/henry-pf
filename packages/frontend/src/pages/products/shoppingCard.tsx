@@ -89,11 +89,7 @@ export default function ShoppingCard(props: any) {
         justifyContent={"space-between"}
         centerContent
       >
-<<<<<<< HEAD
         <Text>Total: ${Number(totalProduct).toFixed(2)}</Text>
-=======
-        <Text>Total: {Number(totalProduct).toFixed(2)}</Text>
->>>>>>> 5614a70 (style: format project with prettier)
         <Button size={"md"} variant="solid" colorScheme="red">
           Comprar
         </Button>
