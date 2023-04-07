@@ -5,11 +5,11 @@ import {
   DELETE_PRODUCT,
   GET_ALL_BRANDS,
   GET_ALL_CATEGORIES,
-  ADD_USER,
+  CREATE_REVIEW,
+  GET_PRODUCT_REVIEWS,
 } from "../actions/index";
 
 interface sliceState {
-  user: any;
   products: Array<any>;
   adminProducts: Array<any>;
   brands: any;
@@ -17,10 +17,11 @@ interface sliceState {
   productDetail: any;
   totalItems: any;
   cardsForPages: any;
+  reviews: Array<any>;
+  productReviews: Array<any>;
 }
 
 const initialState: sliceState = {
-  user: {},
   products: [],
   adminProducts: [],
   brands: [],
@@ -28,6 +29,8 @@ const initialState: sliceState = {
   productDetail: {},
   totalItems: 0,
   cardsForPages: 0,
+  reviews: [],
+  productReviews: [],
 };
 
 const rootReducer = (state = initialState, action: any) => {
@@ -59,11 +62,15 @@ const rootReducer = (state = initialState, action: any) => {
 
     case GET_PRODUCT_DETAILS:
       return { ...state, productDetail: action.payload };
-
-    case ADD_USER:
-      return { ...state, user: action.payload };
     default:
       return state;
+
+    case CREATE_REVIEW:
+      console.log(action.payload);
+      return { ...state, reviews: [...state.products, action.payload] };
+
+    case GET_PRODUCT_REVIEWS:
+      return { ...state, productReviews: action.payload };
   }
 };
 

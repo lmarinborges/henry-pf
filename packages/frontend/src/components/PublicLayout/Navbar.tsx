@@ -5,9 +5,12 @@ import {
   DrawerContent,
   DrawerHeader,
   DrawerOverlay,
+  DrawerFooter,
   Flex,
   Icon,
   IconButton,
+  Button,
+  Box,
   LayoutProps,
   Link,
   Text,
@@ -21,6 +24,7 @@ import {
   MdShoppingCart,
 } from "react-icons/md";
 import { Link as RouterLink } from "react-router-dom";
+import ToggleColorMode from "../../feature/ToggleColorMode";
 
 export interface NavbarProps {
   height: LayoutProps["height"];
@@ -47,7 +51,7 @@ export default function Navbar(props: NavbarProps) {
         px="2"
         backdropFilter="blur(8px)"
         boxShadow="sm"
-      >
+        >
         <IconButton
           _hover={{ backgroundColor: "rgba(0, 0, 0, 0.03)" }}
           _active={{ backgroundColor: "rgba(0, 0, 0, 0.05)" }}
@@ -56,7 +60,7 @@ export default function Navbar(props: NavbarProps) {
           aria-label="Abrir menú"
           icon={<HamburgerIcon />}
           onClick={onOpen}
-        />
+          />
         <Link href="/products/shoppingcart"><IconButton
           _hover={{ backgroundColor: "rgba(0, 0, 0, 0.03)" }}
           _active={{ backgroundColor: "rgba(0, 0, 0, 0.05)" }}
@@ -65,7 +69,7 @@ export default function Navbar(props: NavbarProps) {
           borderRadius="full"
           aria-label="Ver carrito de compras"
           icon={<MdShoppingCart />}
-        /></Link>
+          /></Link>
       </Flex>
       <Drawer size="xs" placement="left" isOpen={isOpen} onClose={onClose}>
         <DrawerOverlay />
@@ -77,14 +81,14 @@ export default function Navbar(props: NavbarProps) {
             display="flex"
             justifyContent="space-between"
             alignItems="center"
-          >
+            >
             <Text mt="1.5">Menú</Text>
             <DrawerCloseButton position="unset" borderRadius="full" />
           </DrawerHeader>
           <Flex flexDirection="column">
             {DRAWER_ITEMS.map((value, index) => (
               <Link
-                paddingX="6"
+                paddingX="8"
                 paddingY="3"
                 display="flex"
                 alignItems="center"
@@ -99,7 +103,19 @@ export default function Navbar(props: NavbarProps) {
                 {value.label}
               </Link>
             ))}
+          
           </Flex>
+          <DrawerFooter>
+            <Button 
+              marginRight='auto'  
+              backgroundColor='transparent' 
+              variant="unstyled" 
+              my='-3'
+            >
+              <ToggleColorMode/>
+
+            </Button>
+          </DrawerFooter>
         </DrawerContent>
       </Drawer>
     </>
