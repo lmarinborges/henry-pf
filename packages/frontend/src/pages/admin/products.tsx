@@ -1,10 +1,11 @@
 import React from "react";
 import Tabla from "./Table";
-import { Box, Button, Flex, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Text, useDisclosure } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../redux/store/index";
 import { useEffect, useState } from "react";
 import * as actions from "../../redux/actions/index";
+import { EditTable } from "./editTable/EditTable";
 
 const ProductsAdminPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -20,8 +21,8 @@ const ProductsAdminPage = () => {
         setPages(Math.round(allItems / cardsPerPage) + 1);
     }, [dispatch, currentPage, allItems, cardsPerPage]);
 
-    console.log(currentPage, Pages);
-    console.log(data);
+    // console.log(currentPage, Pages);
+    // console.log(data);
 
     const nextPage = () => {
         let num = currentPage + 1;
@@ -33,9 +34,13 @@ const ProductsAdminPage = () => {
             setCurrentPage(() => num);
         }
     };
+
+    let [idProduct, setIdProduct] = useState(0)
+
     const handleEdit = (id: number) => {
         // Implementar lógica de edición aquí
-        alert(id);
+        onOpen()
+        setIdProduct(id)
     };
 
     const handleDelete = (id: number) => {
@@ -47,7 +52,13 @@ const ProductsAdminPage = () => {
             dispatch(actions.getProductsPerPage(currentPage))
           } 
     };
+
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
     return (
+        <>
+        <EditTable onClose={onClose} isOpen={isOpen} idProduct={idProduct} />
+
         <Flex direction="column" alignItems="center">
             <Tabla
                 data={data}
@@ -68,6 +79,7 @@ const ProductsAdminPage = () => {
                 </Button>
             </Box>
         </Flex>
+        </>
     );
 };
 

@@ -87,7 +87,7 @@ export const getAllCategories = () => async (dispatch: AppDispatch) => {
 export const getProductsPerPage =
   (page: number) => async (dispatch: AppDispatch) => {
     const res = await axios.get(`http://localhost:4000/products?page=${page}`);
-    console.log(res.data);
+    // console.log(res.data);
     dispatch({ type: GET_ALL_PRODUCTS, payload: res.data });
   };
 
@@ -98,6 +98,26 @@ export const deleteProduct = (data: any) => async (dispatch: AppDispatch) => {
   });
   dispatch({ type: DELETE_PRODUCT, payload: res.data.id });
 };
+
+export const patchProduct = async (data: any) => {
+  let res: any = {
+    name: data.name,
+    description: data.description,
+    imageUrl: data.imageUrl,
+    price: data.price,
+    stock: data.stock ? Number.parseInt(data.stock) : "",
+    brandId: data.brandId,
+    categoryId: data.categoryId
+  }
+
+  var propsData: any
+  for (const key in res) {
+    if (res[key] !== "") propsData = {...propsData, [key]:res[key]}
+  }
+
+  let result = await axios.patch(`http://localhost:4000/products/${data.id}`, propsData)
+  console.log(result.data);
+}
 
 export const createReview = (data: any) => async (dispatch: AppDispatch) => {
   const res = await axios
