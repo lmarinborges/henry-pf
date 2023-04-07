@@ -15,6 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { MdConveyorBelt } from "react-icons/md";
 import { Link as RouterLink } from "react-router-dom";
+import LoginButton from "../../features/components/loginButton";
 
 export interface NavbarProps {
   height: LayoutProps["height"];
@@ -33,6 +34,7 @@ export default function Navbar(props: NavbarProps) {
         as="header"
         alignItems="center"
         height={props.height}
+        justifyContent="space-between"
         position="fixed"
         width="full"
         px="2"
@@ -49,9 +51,12 @@ export default function Navbar(props: NavbarProps) {
           icon={<HamburgerIcon />}
           onClick={onOpen}
         />
-        <Text fontSize="lg" pt="0.5">
+        <Text fontSize="lg" pt="0.5" flex={1}>
           Panel de Administrador
         </Text>
+        <Flex justifyContent="flex-end">
+          <LoginButton />
+        </Flex>
       </Flex>
       <Drawer size="xs" placement="left" isOpen={isOpen} onClose={onClose}>
         <DrawerOverlay />
