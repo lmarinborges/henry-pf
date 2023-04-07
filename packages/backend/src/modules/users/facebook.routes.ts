@@ -91,7 +91,7 @@ facebookRouter.get(
   function (req, res) {
     // Emitimos un mensaje al cliente indicando que se ha autenticado correctamente
     res.send(
-      "<script>window.opener.postMessage({ isAuthenticated: true, userData: " +
+      "<script>window.opener.postMessage({ isAuthenticated: true, user: " +
         JSON.stringify(req.user) +
         ' }, "http://localhost:5173"); window.close();</script>'
     );
