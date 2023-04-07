@@ -7,6 +7,7 @@ export const GET_ALL_BRANDS = "GET_ALL_BRANDS";
 export const GET_ALL_CATEGORIES = "GET_ALL_CATEGORIES";
 export const GET_PRODUCT_DETAILS = "GET_PRODUCT_DETAILS";
 export const CREATE_PRODUCT = "CREATE_PRODUCT";
+export const SEARCH_PRODUCT = "SEARCH_PRODUCT";
 export const DELETE_PRODUCT = "DELETE_PRODUCT";
 export const CREATE_REVIEW = "CREATE_REVIEW";
 export const GET_PRODUCT_REVIEWS = "GET_PRODUCT_REVIEWS";
@@ -18,35 +19,67 @@ export const getAllProducts =
     alphaOrder: string,
     currentPage: string,
     brandFilter: number,
-    categoryFilter: number
+    categoryFilter: number,
+    search: string
   ) =>
   async (dispatch: AppDispatch) => {
-    if (categoryFilter === 0 && brandFilter === 0) {
+    if (categoryFilter === 0 && brandFilter === 0 && search === "") {
       await fetch(
         `http://localhost:4000/products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}`
       )
         .then((res) => res.json())
         .then((data) => dispatch({ type: GET_ALL_PRODUCTS, payload: data }));
-    } else if (categoryFilter !== 0 && brandFilter !== 0) {
+    } else if (categoryFilter !== 0 && brandFilter !== 0 && search === "") {
       await fetch(
         `http://localhost:4000/products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&categoryId=${categoryFilter}&brandId=${brandFilter}`
       )
         .then((res) => res.json())
         .then((data) => dispatch({ type: GET_ALL_PRODUCTS, payload: data }));
-    } else if (categoryFilter === 0 && brandFilter !== 0) {
+    } else if (categoryFilter === 0 && brandFilter !== 0 && search === "") {
       await fetch(
         `http://localhost:4000/products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&brandId=${brandFilter}`
       )
         .then((res) => res.json())
         .then((data) => dispatch({ type: GET_ALL_PRODUCTS, payload: data }));
-    } else if (categoryFilter !== 0 && brandFilter === 0) {
+    } else if (categoryFilter !== 0 && brandFilter === 0 && search === "") {
       await fetch(
         `http://localhost:4000/products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&categoryId=${categoryFilter}`
       )
         .then((res) => res.json())
         .then((data) => dispatch({ type: GET_ALL_PRODUCTS, payload: data }));
     }
+    else if (categoryFilter === 0 && brandFilter === 0 && search !== "") {
+      await fetch(
+        `http://localhost:4000/products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&&search=${search}`
+      )
+        .then((res) => res.json())
+        .then((data) => dispatch({ type: GET_ALL_PRODUCTS, payload: data }));
+    } else if (categoryFilter !== 0 && brandFilter !== 0 && search !== "") {
+      await fetch(
+        `http://localhost:4000/products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&categoryId=${categoryFilter}&brandId=${brandFilter}&&search=${search}`
+      )
+        .then((res) => res.json())
+        .then((data) => dispatch({ type: GET_ALL_PRODUCTS, payload: data }));
+    } else if (categoryFilter === 0 && brandFilter !== 0 && search !== "") {
+      await fetch(
+        `http://localhost:4000/products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&brandId=${brandFilter}&&search=${search}`
+      )
+        .then((res) => res.json())
+        .then((data) => dispatch({ type: GET_ALL_PRODUCTS, payload: data }));
+    } else if (categoryFilter !== 0 && brandFilter === 0 && search !== "") {
+      await fetch(
+        `http://localhost:4000/products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&categoryId=${categoryFilter}&&search=${search}`
+      )
+        .then((res) => res.json())
+        .then((data) => dispatch({ type: GET_ALL_PRODUCTS, payload: data }));
+    }
   };
+
+export const getSearch = (name: string) => async (dispatch:AppDispatch)=>{
+  const search: string = name;
+  
+  dispatch({type:SEARCH_PRODUCT, payload:search})
+}
 
 export const getProductDetail =
   (id: string) => async (dispatch: AppDispatch) => {
