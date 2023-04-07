@@ -7,9 +7,11 @@ import {
   GET_ALL_CATEGORIES,
   CREATE_REVIEW,
   GET_PRODUCT_REVIEWS,
+  ADD_USER,
 } from "../actions/index";
 
 interface sliceState {
+  user: any;
   products: Array<any>;
   adminProducts: Array<any>;
   brands: any;
@@ -22,6 +24,7 @@ interface sliceState {
 }
 
 const initialState: sliceState = {
+  user: {},
   products: [],
   adminProducts: [],
   brands: [],
@@ -71,6 +74,8 @@ const rootReducer = (state = initialState, action: any) => {
 
     case GET_PRODUCT_REVIEWS:
       return { ...state, productReviews: action.payload };
+    case ADD_USER:
+      return { ...state, user: action.payload };
   }
 };
 
