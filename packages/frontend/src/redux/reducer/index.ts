@@ -5,6 +5,7 @@ import {
   DELETE_PRODUCT,
   GET_ALL_BRANDS,
   GET_ALL_CATEGORIES,
+  SEARCH_PRODUCT,
   CREATE_REVIEW,
   GET_PRODUCT_REVIEWS,
 } from "../actions/index";
@@ -17,6 +18,7 @@ interface sliceState {
   productDetail: any;
   totalItems: any;
   cardsForPages: any;
+  search: string;
   reviews: Array<any>;
   productReviews: Array<any>;
 }
@@ -29,6 +31,7 @@ const initialState: sliceState = {
   productDetail: {},
   totalItems: 0,
   cardsForPages: 0,
+  search: "",
   reviews: [],
   productReviews: [],
 };
@@ -44,6 +47,9 @@ const rootReducer = (state = initialState, action: any) => {
         cardsForPages: action.payload.pageSize,
         adminProducts: action.payload.products,
       };
+
+    case SEARCH_PRODUCT:
+      return { ...state, search: action.payload };
 
     case GET_ALL_CATEGORIES:
       return { ...state, categories: action.payload };

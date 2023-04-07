@@ -1,9 +1,10 @@
-import { Flex,Container, Radio, RadioGroup, Stack, Text, Button, Select } from "@chakra-ui/react";
+import { Flex,Container, Radio, RadioGroup, Stack, Text, Button, Select, Box } from "@chakra-ui/react";
 import Card from "./card";
 import { useDispatch,useSelector } from "react-redux";
 import {RootState,AppDispatch} from '../../redux/store/index';
 import { useEffect, useState } from "react";
 import * as actions from "../../redux/actions/index";
+import { SearchBar } from "../../feature/searchBar/SearchBar";
 
 export default function ProductsPage() {
 
@@ -15,12 +16,13 @@ export default function ProductsPage() {
 
     const dispatch:AppDispatch= useDispatch();
     
+    const search= useSelector((state:RootState)=>state.search);
 
     useEffect(()=>{
-        dispatch(actions.getAllProducts(orderBy,alphaOrder,currentPage,brandFilter,categoryFilter));
+        dispatch(actions.getAllProducts(orderBy,alphaOrder,currentPage,brandFilter,categoryFilter,search));
         dispatch(actions.getAllCategories());
         dispatch(actions.getAllBrands());
-    },[dispatch,orderBy,alphaOrder,currentPage,brandFilter,categoryFilter]);
+    },[dispatch,orderBy,alphaOrder,currentPage,brandFilter,categoryFilter,search]);
 
     const data= useSelector((state:RootState)=>state.products);
     const allItems= useSelector((state:RootState)=>state.totalItems);
@@ -61,6 +63,10 @@ export default function ProductsPage() {
     return (
         <Container bg={"black"}>
             
+            <Box bgColor="black" pt="10px" pb="0px" mb="-20px">
+                <SearchBar/>
+            </Box>
+
             <Text color={"white"} fontSize="18px" m="5px">Ordenar por Nombre o Precio :</Text>
             <RadioGroup onChange={setOrder} value={orderBy} defaultValue="name" >
                 <Stack direction={"row"} justifyContent="center" spacing={"3"} >
