@@ -256,17 +256,22 @@ export const registerUser = (data: any) => async (dispatch: AppDispatch) => {
 };
 
 export const logoutUser = () => async (dispatch: AppDispatch) => {
-  const res = await axios.get(`http://localhost:4000/logout`);
+  const res = await axios.get(`http://localhost:4000/logout`, {
+    withCredentials: true,
+  });
   // verificamos si se deslogueo correctamente
   dispatch({ type: ADD_USER, payload: {} });
 };
 
 export const verifyUser = () => async (dispatch: AppDispatch) => {
   try {
-    const res = await axios.get(`http://localhost:4000/privateUsers`);
+    const res = await axios.get("http://localhost:4000/privateUsers", {
+      withCredentials: true,
+    });
     //consulta si esta logueado para obtener el usuario
     dispatch({ type: ADD_USER, payload: res.data.user });
   } catch (error) {
     console.log(error);
+    dispatch({ type: ADD_USER, payload: {} });
   }
 };

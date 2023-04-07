@@ -8,9 +8,11 @@ const NAVBAR_HEIGHT = "48px";
 
 export default function AdminLayout() {
   const dispatch = useDispatch();
-
-  useEffect(() => {
+  const handleUserData = () => {
     dispatch(verifyUser());
+  };
+  useEffect(() => {
+    handleUserData();
   }, []);
 
   return (
