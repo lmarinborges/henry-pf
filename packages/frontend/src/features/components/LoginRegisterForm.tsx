@@ -18,7 +18,7 @@ import { RootState, AppDispatch } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 
-const LoginPage = ({ SuddenCLose }) => {
+const LoginPage = ({ SuddenCLose }: { SuddenCLose: () => void }) => {
   const dispatch: AppDispatch = useDispatch();
   const {
     register,
@@ -116,7 +116,7 @@ const LoginPage = ({ SuddenCLose }) => {
   );
 };
 
-const RegisterPage = ({ SuddenCLose }) => {
+const RegisterPage = ({ SuddenCLose }: { SuddenCLose: () => void }) => {
   const dispatch: AppDispatch = useDispatch();
   const {
     register,

@@ -18,6 +18,11 @@ import { RootState, AppDispatch } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 
+interface user {
+  name: string;
+  email: string;
+  state: string;
+}
 const LoginButton = () => {
   //para session
   const [LogIsOpen, setLogIsOpen] = useState(false);
@@ -76,7 +81,7 @@ const LoginButton = () => {
   );
 };
 
-function LoggedButton(user) {
+function LoggedButton(user: user) {
   const dispatch: AppDispatch = useDispatch();
   const handleLogout = () => {
     dispatch(logoutUser());
