@@ -1,14 +1,21 @@
 import {
   Button,
+  Menu,
+  MenuButton,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
-  ModalHeader,
   ModalOverlay,
+  Avatar,
+  MenuList,
+  MenuItem,
+  Box,
 } from "@chakra-ui/react";
-import { useState } from "react";
 import { LoginPage, RegisterPage } from "./LoginRegisterForm";
+import { RootState, AppDispatch } from "../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { useState, useEffect } from "react";
 
 const LoginButton = () => {
   //para session
@@ -61,4 +68,64 @@ const LoginButton = () => {
   );
 };
 
-export default LoginButton;
+function LoggedButton(user) {
+  const dispatch: AppDispatch = useDispatch();
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    console.log("deslogueado");
+  };
+  return (
+    <Menu>
+      <MenuButton
+        as={Button}
+        rightIcon={<i className="fas fa-caret-down"></i>}
+        variant="link"
+        fontSize="sm"
+        fontWeight="medium"
+        borderRadius="md"
+        py="1"
+      >
+        <Avatar name={user.name} size="sm" mr="2" />
+      </MenuButton>
+      <MenuList>
+        <MenuItem>
+          <i className="fas fa-sign-out-alt mr-2"></i>
+          {user.name}
+        </MenuItem>
+        <MenuItem onClick={handleLogout}>
+          <i className="fas fa-sign-out-alt mr-2"></i>
+          Desconectar
+        </MenuItem>
+      </MenuList>
+    </Menu>
+  );
+}
+
+function UserMenu() {
+  const [isUser, setIsUser] = useState(false);
+  const user = useSelector((state: RootState) => state.user);
+
+  useEffect(() => {
+    console.log(user);
+    if (user.name) {
+      setIsUser(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log(user);
+    if (user.name) {
+      setIsUser(true);
+    }
+  }, [user]);
+
+  return (
+    <>
+      <Box visibility={isUser ? "hidden" : "visible"}>{LoginButton()}</Box>;
+      <Box visibility={isUser ? "visible" : "hidden"}>{LoggedButton(user)}</Box>
+      ;
+    </>
+  );
+}
+
+export default UserMenu;
