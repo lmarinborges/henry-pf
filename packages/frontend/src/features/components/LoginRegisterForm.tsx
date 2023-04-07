@@ -8,87 +8,45 @@ import {
   Input,
   Stack,
 } from "@chakra-ui/react";
-import { useState } from "react";
 import { FaFacebook, FaTwitter } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { AxiosError } from "axios";
+import {
+  addUserFromFb,
+  addUserFromLocal,
+  registerUser,
+} from "../../redux/actions";
+import { RootState, AppDispatch } from "../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { useState, useEffect } from "react";
 
 const LoginPage = ({ SuddenCLose }) => {
-  const [authenticated, setIsAuthenticated] = useState(false);
+  const dispatch: AppDispatch = useDispatch();
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm();
-
+  const user = useSelector((state: RootState) => state.user);
   const onSubmit = async (values: any) => {
-    try {
-      const response = await axios.post(
-        "http://localhost:4000/localLogin",
-        {
-          email: values.email,
-          password: values.password,
-        },
-        {
-          withCredentials: true, // permite recibir cookies del servidor
-        }
-      );
-      const { state, user } = response.data;
-      if (state === "success") {
-        // La autenticación fue exitosa, hacer algo con los datos del usuario
-        console.log(`Bienvenido ${user.email}!`);
-        //el modal se cierra
-        SuddenCLose();
-        setIsAuthenticated(true);
-      } else {
-        // La autenticación falló, hacer algo en consecuencia
-        alert("la autenticacion falló");
-        console.log("La autenticación falló");
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    dispatch(addUserFromLocal(values));
   };
-
-  function loginWithFacebook() {
-    const width = 600;
-    const height = 400;
-    const left = window.screenX + (window.innerWidth - width) / 2;
-    const top = window.screenY + (window.innerHeight - height) / 2;
-
-    const authWindow = window.open(
-      "http://localhost:4000/auth/facebook",
-      "facebook-login",
-      `width=${width},height=${height},left=${left},top=${top}`
-    );
-    if (authWindow == null) {
-      throw Error("no se puede llamar al login");
+  useEffect(() => {
+    console.log(user);
+    if (user.name) {
+      SuddenCLose();
     }
-
-    const handleAuthResponse = (event: any) => {
-      if (event.origin !== "http://localhost:4000") return;
-      if (event.data.isAuthenticated) {
-        console.log(event.data);
-        SuddenCLose();
-        setIsAuthenticated(true);
-      }
-    };
-
-    window.addEventListener("message", handleAuthResponse);
-
-    const intervalId = setInterval(() => {
-      if (authWindow.closed) {
-        clearInterval(intervalId);
-        window.removeEventListener("message", handleAuthResponse);
-      }
-    }, 1000);
+  }, [user]);
+  function loginWithFacebook() {
+    dispatch(addUserFromFb());
   }
 
   return (
     <Box p={4} h="100%">
       <Box m="7%">
+        <Heading as="h2" size="lg" mb={4}></Heading>
         <Heading as="h2" size="lg" mb={4}>
           Iniciar Sesión
         </Heading>
@@ -163,6 +121,7 @@ const LoginPage = ({ SuddenCLose }) => {
 };
 
 const RegisterPage = ({ SuddenCLose }) => {
+  const dispatch: AppDispatch = useDispatch();
   const [authenticated, setIsAuthenticated] = useState(false);
   const {
     register,
@@ -170,86 +129,20 @@ const RegisterPage = ({ SuddenCLose }) => {
     watch,
     formState: { errors },
   } = useForm();
+  const user = useSelector((state: RootState) => state.user);
   const onSubmit = async (values: any) => {
-    const userData = {
-      name: values.name,
-      email: values.email,
-      password: values.password,
-      role: "USER", //por defecto
-      state: "active", // por defecto por ahora
-    };
-    try {
-      const response = await axios.post(
-        "http://localhost:4000/users",
-        userData
-      );
-      if (response.data.state === "success") {
-        alert("Bienvenido, revisa tu correo e inicia session");
-        const response = await axios.post(
-          "http://localhost:4000/localLogin",
-          {
-            email: values.email,
-            password: values.password,
-          },
-          {
-            withCredentials: true, // permite recibir cookies del servidor
-          }
-        );
-        const { state, user } = response.data;
-        if (state === "success") {
-          // La autenticación fue exitosa, hacer algo con los datos del usuario
-          console.log(`Bienvenido ${user.email}!`);
-          //el modal se cierra
-          SuddenCLose();
-          setIsAuthenticated(true);
-        } else {
-          // La autenticación falló, hacer algo en consecuencia
-          alert("la autenticacion falló");
-          console.log("La autenticación falló");
-        }
-      }
-      return response.data;
-    } catch (error: any) {
-      console.error(error.response?.data);
-      alert(
-        error.response?.data?.message ??
-          "Ocurrió un error al procesar la solicitud"
-      );
-    }
+    dispatch(registerUser(values));
   };
-  function loginWithFacebook() {
-    const width = 600;
-    const height = 400;
-    const left = window.screenX + (window.innerWidth - width) / 2;
-    const top = window.screenY + (window.innerHeight - height) / 2;
-
-    const authWindow = window.open(
-      "http://localhost:4000/auth/facebook",
-      "facebook-login",
-      `width=${width},height=${height},left=${left},top=${top}`
-    );
-    if (authWindow == null) {
-      throw Error("no se puede llamar al login");
+  useEffect(() => {
+    console.log(user);
+    if (user.name) {
+      SuddenCLose();
     }
-
-    const handleAuthResponse = (event: any) => {
-      if (event.origin !== "http://localhost:4000") return;
-      if (event.data.isAuthenticated) {
-        console.log(event.data);
-        SuddenCLose();
-        setIsAuthenticated(true);
-      }
-    };
-
-    window.addEventListener("message", handleAuthResponse);
-
-    const intervalId = setInterval(() => {
-      if (authWindow.closed) {
-        clearInterval(intervalId);
-        window.removeEventListener("message", handleAuthResponse);
-      }
-    }, 1000);
+  }, [user]);
+  function loginWithFacebook() {
+    dispatch(addUserFromFb());
   }
+
   return (
     <Box p={4} h="100%">
       <Box m="7%">
