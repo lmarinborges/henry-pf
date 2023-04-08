@@ -11,12 +11,16 @@ import {
   MenuList,
   MenuItem,
   Box,
+  Flex,
 } from "@chakra-ui/react";
 import { logoutUser } from "../../redux/actions";
+import { AiOutlineUserAdd, AiOutlineUser } from "react-icons/ai";
 import { LoginPage, RegisterPage } from "./LoginRegisterForm";
 import { RootState, AppDispatch } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
+import { IoLogIn } from "react-icons/io5";
+import { useBreakpointValue } from "@chakra-ui/react";
 
 interface user {
   name: string;
@@ -115,10 +119,81 @@ function LoggedButton(user: user) {
   );
 }
 
+function MiniUserButton() {
+  const dispatch: AppDispatch = useDispatch();
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    console.log("deslogueado");
+  };
+  //para session
+  const [LogIsOpen, setLogIsOpen] = useState(false);
+
+  const onLogClose = () => setLogIsOpen(false);
+  const onLogOpen = () => setLogIsOpen(true);
+  // para registro
+  const [RegIsOpen, setRegIsOpen] = useState(false);
+
+  const onRegClose = () => setRegIsOpen(false);
+  const onRegOpen = () => setRegIsOpen(true);
+  return (
+    <>
+      <Flex alignItems="center" height={"100vh"}>
+        <Menu>
+          <MenuButton
+            as={Button}
+            rightIcon={<i className="fas fa-caret-down"></i>}
+            variant="link"
+            fontSize="lg"
+            fontWeight="medium"
+            borderRadius="md"
+            my="4"
+          >
+            <AiOutlineUser />
+          </MenuButton>
+          <MenuList>
+            <MenuItem onClick={onLogOpen}>
+              <IoLogIn />
+              Inicia sesión
+            </MenuItem>
+            <MenuItem onClick={onRegOpen}>
+              <AiOutlineUserAdd />
+              Registrate
+            </MenuItem>
+          </MenuList>
+        </Menu>
+      </Flex>
+
+      <Modal isOpen={LogIsOpen} onClose={onLogClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalCloseButton />
+          <ModalBody>
+            <LoginPage SuddenCLose={() => setLogIsOpen(false)} />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+      <Modal isOpen={RegIsOpen} onClose={onRegClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalCloseButton />
+          <ModalBody>
+            <RegisterPage SuddenCLose={() => setRegIsOpen(false)} />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    </>
+  );
+}
 function UserMenu() {
   const [isUser, setIsUser] = useState(false);
   const user = useSelector((state: RootState) => state.user);
-
+  const isSmallScreen = useBreakpointValue({
+    base: true,
+    sm: true,
+    md: false,
+    lg: false,
+    xl: false,
+  });
   useEffect(() => {
     console.log(user);
     if (user.name) {
@@ -138,10 +213,16 @@ function UserMenu() {
   return (
     <>
       <Box
-        visibility={isUser ? "hidden" : "visible"}
-        display={isUser ? "none" : "block"}
+        visibility={isUser || isSmallScreen ? "hidden" : "visible"}
+        display={isUser || isSmallScreen ? "none" : "block"}
       >
         {LoginButton()}
+      </Box>
+      <Box
+        visibility={isUser || !isSmallScreen ? "hidden" : "visible"}
+        display={isUser || !isSmallScreen ? "none" : "block"}
+      >
+        {MiniUserButton()}
       </Box>
 
       <Box visibility={isUser ? "visible" : "hidden"}>{LoggedButton(user)}</Box>
