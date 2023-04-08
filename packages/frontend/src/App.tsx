@@ -19,8 +19,6 @@ import ProductsPage from "./pages/products";
 import ProductPage from "./pages/products/product"
 import ShoppingCart from "./pages/products/shoppingcart";
 
-
-
 const routes = createBrowserRouter(
   createRoutesFromElements([
     <Route errorElement={<ErrorPage />}>
