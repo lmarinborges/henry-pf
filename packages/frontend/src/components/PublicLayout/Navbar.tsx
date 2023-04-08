@@ -25,6 +25,7 @@ import {
 } from "react-icons/md";
 import { Link as RouterLink } from "react-router-dom";
 import ToggleColorMode from "../../feature/ToggleColorMode";
+import UserMenu from "../../features/components/loginButton";
 
 export interface NavbarProps {
   height: LayoutProps["height"];
@@ -61,17 +62,22 @@ export default function Navbar(props: NavbarProps) {
           icon={<HamburgerIcon />}
           onClick={onOpen}
         />
-        <Link href="/products/shoppingcart">
-          <IconButton
-            _hover={{ backgroundColor: "rgba(0, 0, 0, 0.03)" }}
-            _active={{ backgroundColor: "rgba(0, 0, 0, 0.05)" }}
-            color="rgba(0, 0, 0, 0.68)"
-            variant="ghost"
-            borderRadius="full"
-            aria-label="Ver carrito de compras"
-            icon={<MdShoppingCart />}
-          />
-        </Link>
+        <Flex alignItems="center" justifyContent="flex-end">
+          <Link href="/products/shoppingcart">
+            <IconButton
+              _hover={{ backgroundColor: "rgba(0, 0, 0, 0.03)" }}
+              _active={{ backgroundColor: "rgba(0, 0, 0, 0.05)" }}
+              color="rgba(0, 0, 0, 0.68)"
+              variant="ghost"
+              borderRadius="full"
+              aria-label="Ver carrito de compras"
+              icon={<MdShoppingCart />}
+            />
+          </Link>
+          <Flex justifyContent="flex-end" marginLeft="auto">
+            <UserMenu />
+          </Flex>
+        </Flex>
       </Flex>
       <Drawer size="xs" placement="left" isOpen={isOpen} onClose={onClose}>
         <DrawerOverlay />
