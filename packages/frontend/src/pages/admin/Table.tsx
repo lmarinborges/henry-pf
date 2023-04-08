@@ -2,50 +2,58 @@ import React, { useMemo } from "react";
 import { useTable } from "react-table";
 import { Column } from "react-table";
 import {
-    Table,
-    Thead,
-    Tbody,
-    Tr,
-    Th,
-    Td,
-    Button,
-    Flex,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  Button,
+  Flex,
 } from "@chakra-ui/react";
 
 interface Product {
-    id: number;
-    name: string;
-    description: string;
-    price: string;
-    stock: string;
-    isTrashed:boolean;
-    brand: Brand;
-    category: Category;
+  id: number;
+  name: string;
+  description: string;
+  price: string;
+  stock: string;
+  isTrashed: boolean;
+  brand: Brand;
+  category: Category;
 }
 
 interface Brand {
-    id: number;
-    name: string;
-    description: string;
+  id: number;
+  name: string;
+  description: string;
 }
 
 interface Category {
-    id: number;
-    name: string;
-    description: string;
+  id: number;
+  name: string;
+  description: string;
 }
 
-const Tabla = ({ data, handleEdit, handleDelete }: { data: Product[], handleEdit: any, handleDelete: any }) => {
-    const columns: Column<Product>[] = useMemo(
-        () => [
-            {
-                Header: "Name",
-                accessor: "name",
-            },
-            {
-                Header: "Description",
-                accessor: "description",
-            },
+const Tabla = ({
+  data,
+  handleEdit,
+  handleDelete,
+}: {
+  data: Product[];
+  handleEdit: any;
+  handleDelete: any;
+}) => {
+  const columns: Column<Product>[] = useMemo(
+    () => [
+      {
+        Header: "Name",
+        accessor: "name",
+      },
+      {
+        Header: "Description",
+        accessor: "description",
+      },
 
             {
                 Header: "Price",
@@ -103,44 +111,41 @@ const Tabla = ({ data, handleEdit, handleDelete }: { data: Product[], handleEdit
         [handleEdit, handleDelete ]
     );
 
-   
 
-    const tableData = useMemo(() => data, [data]);
 
-    const tableInstance = useTable({ columns, data: tableData });
 
-    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-        tableInstance;
+  const tableData = useMemo(() => data, [data]);
 
-    return (
-        <Table variant="simple" {...getTableProps()}>
-            <Thead>
-                {headerGroups.map((headerGroup) => (
-                    <Tr {...headerGroup.getHeaderGroupProps()}>
-                        {headerGroup.headers.map((column) => (
-                            <Th {...column.getHeaderProps()}>
-                                {column.render("Header")}
-                            </Th>
-                        ))}
-                    </Tr>
-                ))}
-            </Thead>
-            <Tbody {...getTableBodyProps()}>
-                {rows.map((row) => {
-                    prepareRow(row);
-                    return (
-                        <Tr {...row.getRowProps()}>
-                            {row.cells.map((cell) => (
-                                <Td {...cell.getCellProps()}>
-                                    {cell.render("Cell")}
-                                </Td>
-                            ))}
-                        </Tr>
-                    );
-                })}
-            </Tbody>
-        </Table>
-    );
+  const tableInstance = useTable({ columns, data: tableData });
+
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    tableInstance;
+
+  return (
+    <Table variant="simple" {...getTableProps()}>
+      <Thead>
+        {headerGroups.map((headerGroup) => (
+          <Tr {...headerGroup.getHeaderGroupProps()}>
+            {headerGroup.headers.map((column) => (
+              <Th {...column.getHeaderProps()}>{column.render("Header")}</Th>
+            ))}
+          </Tr>
+        ))}
+      </Thead>
+      <Tbody {...getTableBodyProps()}>
+        {rows.map((row) => {
+          prepareRow(row);
+          return (
+            <Tr {...row.getRowProps()}>
+              {row.cells.map((cell) => (
+                <Td {...cell.getCellProps()}>{cell.render("Cell")}</Td>
+              ))}
+            </Tr>
+          );
+        })}
+      </Tbody>
+    </Table>
+  );
 };
 
 export default Tabla;

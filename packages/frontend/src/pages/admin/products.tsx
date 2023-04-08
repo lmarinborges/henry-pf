@@ -1,43 +1,42 @@
 import React from "react";
 import Tabla from "./Table";
-import { Box, Button, Flex, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Text, useDisclosure } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../redux/store/index";
 import { useEffect, useState } from "react";
 import * as actions from "../../redux/actions/index";
+
 import axios from "axios";
+import { EditTable } from "./editTable/EditTable";
 
 const ProductsAdminPage = () => {
-    const [currentPage, setCurrentPage] = useState(1);
-    const [Pages, setPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [Pages, setPages] = useState(0);
 
-    const dispatch: AppDispatch = useDispatch();
-    const data = useSelector((state: RootState) => [...state.adminProducts]);
-    const allItems = useSelector((state: RootState) => state.totalItems);
-    const cardsPerPage = useSelector((state: RootState) => state.cardsForPages);
+  const dispatch: AppDispatch = useDispatch();
+  const data = useSelector((state: RootState) => [...state.adminProducts]);
+  const allItems = useSelector((state: RootState) => state.totalItems);
+  const cardsPerPage = useSelector((state: RootState) => state.cardsForPages);
 
-    useEffect(() => {
-        dispatch(actions.getProductsPerPage(currentPage));
-        setPages(Math.round(allItems / cardsPerPage) + 1);
-    }, [dispatch, currentPage, allItems, cardsPerPage]);
+  useEffect(() => {
+    dispatch(actions.getProductsPerPage(currentPage));
+    setPages(Math.round(allItems / cardsPerPage) + 1);
+  }, [dispatch, currentPage, allItems, cardsPerPage]);
 
-    console.log(currentPage, Pages);
-    console.log(data);
+  // console.log(currentPage, Pages);
+  // console.log(data);
 
-    const nextPage = () => {
-        let num = currentPage + 1;
-        if (num <= Pages) setCurrentPage(() => num);
-    };
-    const backPage = () => {
-        let num = currentPage - 1;
-        if (num > 0) {
-            setCurrentPage(() => num);
-        }
-    };
-    const handleEdit = (id: number) => {
-        // Implementar lógica de edición aquí
-        alert(id);
-    };
+  const nextPage = () => {
+    let num = currentPage + 1;
+    if (num <= Pages) setCurrentPage(() => num);
+  };
+  const backPage = () => {
+    let num = currentPage - 1;
+    if (num > 0) {
+      setCurrentPage(() => num);
+    }
+  };
+
 
     const handleDelete = async(value: any) => {
         if (value.isTrashed) {
@@ -80,6 +79,7 @@ const ProductsAdminPage = () => {
             </Box>
         </Flex>
     );
+
 };
 
 export default ProductsAdminPage;
