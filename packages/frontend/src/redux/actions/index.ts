@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../../libs/axios";
 import { AppDispatch } from "../store/index";
 
 // Aca deben declarar las variables donde tengan el action types.
@@ -82,15 +82,13 @@ export const getSearch = (name: string) => async (dispatch: AppDispatch) => {
 
 export const getProductDetail =
   (id: string) => async (dispatch: AppDispatch) => {
-    const data = await fetch(`http://localhost:4000/products/${id}`).then(
-      (res) => res.json()
-    );
-    dispatch({ type: GET_PRODUCT_DETAILS, payload: data });
+    const res = await axios.get(`products/${id}`);
+    dispatch({ type: GET_PRODUCT_DETAILS, payload: res.data });
   };
 
 export const createProduct = (data: any) => async (dispatch: AppDispatch) => {
   const res = await axios
-    .post(`http://localhost:4000/products/`, {
+    .post(`products`, {
       name: data.name,
       description: data.description,
       imageUrl: data.imageUrl,
@@ -104,17 +102,13 @@ export const createProduct = (data: any) => async (dispatch: AppDispatch) => {
 };
 
 export const getAllBrands = () => async (dispatch: AppDispatch) => {
-  const res = await fetch("http://localhost:4000/brands").then((data) =>
-    data.json()
-  );
-  dispatch({ type: GET_ALL_BRANDS, payload: res });
+  const res = await axios.get("brands");
+  dispatch({ type: GET_ALL_BRANDS, payload: res.data });
 };
 
 export const getAllCategories = () => async (dispatch: AppDispatch) => {
-  const res = await fetch("http://localhost:4000/categories").then((data) =>
-    data.json()
-  );
-  dispatch({ type: GET_ALL_CATEGORIES, payload: res });
+  const res = await axios.get("categories");
+  dispatch({ type: GET_ALL_CATEGORIES, payload: res.data });
 };
 
 export const getProductsPerPage =
@@ -125,7 +119,7 @@ export const getProductsPerPage =
   };
 
 export const deleteProduct = (data: any) => async (dispatch: AppDispatch) => {
-  const res = await axios.patch(`http://localhost:4000/products/${data.id}`, {
+  const res = await axios.patch(`products/${data.id}`, {
     ...data,
     isTrashed: true,
   });
@@ -157,7 +151,7 @@ export const patchProduct = async (data: any) => {
 
 export const createReview = (data: any) => async (dispatch: AppDispatch) => {
   const res = await axios
-    .post(`http://localhost:4000/reviews/`, {
+    .post(`reviews`, {
       comments: data.comment,
       score: Number(data.score),
       productId: Number(data.productId),
@@ -169,10 +163,8 @@ export const createReview = (data: any) => async (dispatch: AppDispatch) => {
 
 export const getProductReviews =
   (productId: string) => async (dispatch: AppDispatch) => {
-    const data = await fetch(`http://localhost:4000/reviews/${productId}`).then(
-      (res) => res.json()
-    );
-    dispatch({ type: GET_PRODUCT_REVIEWS, payload: data });
+    const res = await axios.get(`reviews/${productId}`);
+    dispatch({ type: GET_PRODUCT_REVIEWS, payload: res.data });
   };
 export const addUserFromFb = () => async (dispatch: AppDispatch) => {
   const width = 600;

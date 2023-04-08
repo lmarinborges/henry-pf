@@ -9,11 +9,11 @@ const ToggleColorMode = () => {
       onClick={() => toggleColorMode()}
       backgroundColor="transparent"
       variant="unstyled"
-      marginRight='auto'
-      mt='-2'
+      marginRight="auto"
+      mt="-2"
     >
       {colorMode === "dark" ? (
-        <SunIcon color="grey.050" backgroundColor='transparent'/>
+        <SunIcon color="grey.050" backgroundColor="transparent" />
       ) : (
         <MoonIcon color="black.700" />
       )}

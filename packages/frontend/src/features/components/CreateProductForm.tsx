@@ -27,8 +27,8 @@ import { useForm, SubmitHandler } from "react-hook-form";
 interface CreateProductFormData {
   name: string;
   description: string;
-  imageUrl: string;
   price: string;
+  imageUrl: string;
   stock: number;
   brandId: number;
   categoryId: number;
