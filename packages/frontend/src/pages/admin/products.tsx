@@ -36,6 +36,14 @@ const ProductsAdminPage = () => {
       setCurrentPage(() => num);
     }
   };
+  
+    let [idProduct, setIdProduct] = useState(0);
+
+    const handleEdit = (id: number) => {
+      // Implementar lógica de edición aquí
+      onOpen();
+      setIdProduct(id);
+    };
 
 
     const handleDelete = async(value: any) => {
