@@ -28,6 +28,7 @@ interface CreateProductFormData {
   name: string;
   description: string;
   price: string;
+  imageUrl: string;
   stock: number;
   brandId: number;
   categoryId: number;
