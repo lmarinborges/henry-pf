@@ -12,78 +12,87 @@ import {
   useColorModeValue,
   Textarea,
   FormHelperText,
-  useToast
+  useToast,
 } from "@chakra-ui/react";
-import { getAllBrands, getAllCategories, createProduct } from '../../redux/actions';
+import {
+  getAllBrands,
+  getAllCategories,
+  createProduct,
+} from "../../redux/actions";
 import { RootState, AppDispatch } from "../../redux/store";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-
-
 
 interface CreateProductFormData {
   name: string;
   description: string;
-  imageUrl: string,
+  imageUrl: string;
   price: string;
-  stock: number,
+  stock: number;
   brandId: number;
-  categoryId: number
-};
+  categoryId: number;
+}
 
 type Inputs = {
   name: string;
   description: string;
-  imageUrl: string,
+  imageUrl: string;
   price: string;
-  stock: number,
+  stock: number;
   brandId: number;
-  categoryId: number
+  categoryId: number;
 };
 
 type Brand = {
-  id: string,
-    name: string,
-    description: string
+  id: string;
+  name: string;
+  description: string;
 };
 
 type Category = {
-  id: string,
-    name: string,
-    description: string
+  id: string;
+  name: string;
+  description: string;
 };
 
 export default function CreateProductForm() {
-  const { register, handleSubmit, formState: { errors } } = useForm<Inputs>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>();
   //estado
   const [product, setProduct] = useState<CreateProductFormData>({
-    name: '',
-    description: '',
-    imageUrl: '',
-    price: '',
+    name: "",
+    description: "",
+    imageUrl: "",
+    price: "",
     stock: 0,
     brandId: 0,
-    categoryId: 0
+    categoryId: 0,
   });
 
-  const dispatch : AppDispatch = useDispatch()
-  
-  useEffect(()=>{
+  const dispatch: AppDispatch = useDispatch();
+
+  useEffect(() => {
     dispatch(getAllBrands());
-    dispatch(getAllCategories());  
-  }, [dispatch])
-  
+    dispatch(getAllCategories());
+  }, [dispatch]);
+
   // let brands = useSelector<RootState, Brand[]>(state => state.brands) as Brand[]
   // let categories = useSelector<RootState, Category[]>(state => state.categories) as Category[]
-  const brands= useSelector((state:RootState)=>state.brands);
-  const categories= useSelector((state:RootState)=>state.categories);
-  
+  const brands = useSelector((state: RootState) => state.brands);
+  const categories = useSelector((state: RootState) => state.categories);
 
   var property: string;
-  const handleProductChange = ( e : any)=>{
+  const handleProductChange = (e: any) => {
     var value: any;
-    if(e.target.name === 'brandId' || e.target.name === 'categoryId' || e.target.name === 'stock'){
+    if (
+      e.target.name === "brandId" ||
+      e.target.name === "categoryId" ||
+      e.target.name === "stock"
+    ) {
       property = e.target.name;
       value = Number(e.target.value);
     } else {
@@ -92,9 +101,9 @@ export default function CreateProductForm() {
     }
     setProduct({
       ...product,
-      [property]:value
-    })
-  }
+      [property]: value,
+    });
+  };
 
   const isNameInvalid = errors.name ? true : false;
   const isDescriptionInvalid = errors.description ? true : false;
@@ -103,29 +112,29 @@ export default function CreateProductForm() {
   // const isStockInvalid = errors.stock ? true : false;
   // const isBrandInvalid = errors.brandId ? true : false;
   // const isCategoryInvalid = errors.categoryId ? true : false;
-  
+
   const toast = useToast();
-    const onSubmit: SubmitHandler<Inputs> = (data) => {
-      console.log(data)
-      dispatch(createProduct(product));
-      toast({
-        title: 'Felicidades',
-        description: "Ha agregado un nuevo producto en su lista",
-        status: 'success',
-        duration: 4000,
-        isClosable: true
-      });
-      setProduct({
-        name: '',
-        description: '',
-        imageUrl: '',
-        price: '',
-        stock: 0,
-        brandId: 0,
-        categoryId: 0
-      })  
-    }
-  
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    console.log(data);
+    dispatch(createProduct(product));
+    toast({
+      title: "Felicidades",
+      description: "Ha agregado un nuevo producto en su lista",
+      status: "success",
+      duration: 4000,
+      isClosable: true,
+    });
+    setProduct({
+      name: "",
+      description: "",
+      imageUrl: "",
+      price: "",
+      stock: 0,
+      brandId: 0,
+      categoryId: 0,
+    });
+  };
+
   return (
     <Flex
       minH={"100vh"}
@@ -137,7 +146,7 @@ export default function CreateProductForm() {
         <Stack align={"left"} px={2}>
           <Heading fontSize={"4xl"}>Agrega tus productos fácilmente!</Heading>
           <Text fontSize={"lg"} color={"gray.600"} px={1}>
-          completa los datos de tus productos y vende más! 📦
+            completa los datos de tus productos y vende más! 📦
           </Text>
         </Stack>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -148,9 +157,7 @@ export default function CreateProductForm() {
             p={8}
           >
             <Stack spacing={4}>
-              <FormControl
-                isInvalid={isNameInvalid}
-                >
+              <FormControl isInvalid={isNameInvalid}>
                 <FormLabel>Nombre del producto:</FormLabel>
                 <Input
                   {...register("name", { required: true })}
@@ -160,50 +167,44 @@ export default function CreateProductForm() {
                   onChange={handleProductChange}
                   autoComplete="off"
                 />
-                {errors.name && 
-                  <FormHelperText color='red.300' >
+                {errors.name && (
+                  <FormHelperText color="red.300">
                     Requiere que el producto lleve un nombre
                   </FormHelperText>
-                }
+                )}
               </FormControl>
 
-              <FormControl 
-                id="description"
-                isInvalid={isDescriptionInvalid}
-              >                
+              <FormControl id="description" isInvalid={isDescriptionInvalid}>
                 <FormLabel>Descripción:</FormLabel>
                 <Textarea
                   {...register("description", { required: true })}
                   placeholder="Breve descripcion de su producto..."
                   value={product.description}
                   name="description"
-                  onChange={ handleProductChange}
+                  onChange={handleProductChange}
                 />
-                {errors.description && 
-                  <FormHelperText color='red.300' >
+                {errors.description && (
+                  <FormHelperText color="red.300">
                     Ingrese una breve descripcion de su producto
                   </FormHelperText>
-                }
+                )}
               </FormControl>
 
-              <FormControl 
-                id="imageUrl"
-                isInvalid={isImageInvalid}
-              >
+              <FormControl id="imageUrl" isInvalid={isImageInvalid}>
                 <FormLabel>Agregue una imagen de su producto:</FormLabel>
-                <Input                 
+                <Input
                   {...register("imageUrl", { required: true })}
                   placeholder="https://..."
                   name="imageUrl"
                   value={product.imageUrl}
-                  onChange={ handleProductChange}
+                  onChange={handleProductChange}
                   type="file"
                 />
-                {errors.imageUrl && 
-                  <FormHelperText color='red.300' >
+                {errors.imageUrl && (
+                  <FormHelperText color="red.300">
                     Debe ingresar una imagen de su producto
                   </FormHelperText>
-                }
+                )}
               </FormControl>
 
               <FormControl id="price">
@@ -214,13 +215,13 @@ export default function CreateProductForm() {
                   placeholder="Ingrese el precio del producto"
                   value={product.price}
                   name="price"
-                  onChange={ handleProductChange}
+                  onChange={handleProductChange}
                 />
-                {(!/^([0-9])*$/.test(product.price)) && 
-                  <FormHelperText color='red.300' >
+                {!/^([0-9])*$/.test(product.price) && (
+                  <FormHelperText color="red.300">
                     Ingrese sólo caracteres númericos
                   </FormHelperText>
-                }
+                )}
               </FormControl>
 
               <FormControl id="stock">
@@ -228,60 +229,67 @@ export default function CreateProductForm() {
                 <Input
                   autoComplete="off"
                   {...register("stock", { required: true })}
-                  placeholder="Enter the available stock of your product..."
                   value={product.stock}
                   name="stock"
-                  onChange={ handleProductChange}
+                  onChange={handleProductChange}
                 />
-                {(!/^([0-9])*$/.test(product.stock)) && 
-                  <FormHelperText color='red.300' >
+                {errors.stock && (
+                  <FormHelperText color="red.300">
                     Debe ingresar el stock disponible del producto
                   </FormHelperText>
-                }
+                )}
               </FormControl>
 
               <FormControl id="brandId">
                 <FormLabel>Selecciona la marca de tu producto:</FormLabel>
-                <Select 
+                <Select
                   {...register("brandId", { required: true })}
                   placeholder="Marca del producto"
                   value={product.brandId}
                   name="brandId"
-                  onChange={ handleProductChange}
-                  >
+                  onChange={handleProductChange}
+                >
                   {brands.length > 0 &&
-                      brands.map((e: Brand, i: number)=>{
-                          return <option key={i} value={e.id}>{e.name}</option>
-                      })
-                      }
+                    brands.map((e: Brand, i: number) => {
+                      return (
+                        <option key={i} value={e.id}>
+                          {e.name}
+                        </option>
+                      );
+                    })}
                 </Select>
-                {errors.brandId && 
-                  <FormHelperText color='red.300' >
-                    Es necesario que seleccione una marca de su producto o la cree
+                {errors.brandId && (
+                  <FormHelperText color="red.300">
+                    Es necesario que seleccione una marca de su producto o la
+                    cree
                   </FormHelperText>
-                }
+                )}
               </FormControl>
 
               <FormControl id="categoryId">
                 <FormLabel>Selecciona la categoria del tu producto:</FormLabel>
-                  <Select 
-                    {...register("categoryId", { required: true })}
-                    placeholder="Categorias"
-                    value={product.categoryId}
-                    name="categoryId"
-                    onChange={ handleProductChange}
-                    >
-                   {categories.length > 0 &&
-                    categories.map((e: Category, i:number)=>{
-                        return <option key={i} value={e.id}>{e.name}</option>
-                    })
-                    }
-                  </Select>
-                  {errors.categoryId && 
-                  <FormHelperText color='red.300' >
-                    Es necesario que seleccione la categoria de su producto o la cree
+                <Select
+                  {...register("categoryId", { required: true })}
+                  placeholder="Categorias"
+                  value={product.categoryId}
+                  name="categoryId"
+                  onChange={handleProductChange}
+                >
+                  {categories.length > 0 &&
+                    categories.map((e: Category, i: number) => {
+                      return (
+                        <option key={i} value={e.id}>
+                          {e.name}
+                        </option>
+                      );
+                    })}
+                </Select>
+                {errors.categoryId && (
+                  <FormHelperText color="red.300">
+                    Es necesario que seleccione la categoria de su producto o la
+                    cree
                   </FormHelperText>
-                }
+                )}
               </FormControl>
 
               <Stack spacing={10}>
@@ -292,7 +300,7 @@ export default function CreateProductForm() {
                   mt={8}
                   _hover={{
                     bg: "#E6E6E6",
-                    color:'red.600'
+                    color: "red.600",
                   }}
                 >
                   Agrega nuevo producto
