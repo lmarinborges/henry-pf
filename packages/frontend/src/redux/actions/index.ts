@@ -47,8 +47,7 @@ export const getAllProducts =
       )
         .then((res) => res.json())
         .then((data) => dispatch({ type: GET_ALL_PRODUCTS, payload: data }));
-    }
-    else if (categoryFilter === 0 && brandFilter === 0 && search !== "") {
+    } else if (categoryFilter === 0 && brandFilter === 0 && search !== "") {
       await fetch(
         `http://localhost:4000/products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&&search=${search}`
       )
@@ -75,11 +74,11 @@ export const getAllProducts =
     }
   };
 
-export const getSearch = (name: string) => async (dispatch:AppDispatch)=>{
+export const getSearch = (name: string) => async (dispatch: AppDispatch) => {
   const search: string = name;
-  
-  dispatch({type:SEARCH_PRODUCT, payload:search})
-}
+
+  dispatch({ type: SEARCH_PRODUCT, payload: search });
+};
 
 export const getProductDetail =
   (id: string) => async (dispatch: AppDispatch) => {
@@ -141,17 +140,20 @@ export const patchProduct = async (data: any) => {
     price: data.price,
     stock: data.stock ? Number.parseInt(data.stock) : "",
     brandId: data.brandId,
-    categoryId: data.categoryId
-  }
+    categoryId: data.categoryId,
+  };
 
-  var propsData: any
+  var propsData: any;
   for (const key in res) {
-    if (res[key] !== "") propsData = {...propsData, [key]:res[key]}
+    if (res[key] !== "") propsData = { ...propsData, [key]: res[key] };
   }
 
-  let result = await axios.patch(`http://localhost:4000/products/${data.id}`, propsData)
+  let result = await axios.patch(
+    `http://localhost:4000/products/${data.id}`,
+    propsData
+  );
   console.log(result.data);
-}
+};
 
 export const createReview = (data: any) => async (dispatch: AppDispatch) => {
   const res = await axios
@@ -254,7 +256,22 @@ export const registerUser = (data: any) => async (dispatch: AppDispatch) => {
 };
 
 export const logoutUser = () => async (dispatch: AppDispatch) => {
-  const res = await axios.get(`http://localhost:4000/logout`);
+  const res = await axios.get(`http://localhost:4000/logout`, {
+    withCredentials: true,
+  });
   // verificamos si se deslogueo correctamente
   dispatch({ type: ADD_USER, payload: {} });
+};
+
+export const verifyUser = () => async (dispatch: AppDispatch) => {
+  try {
+    const res = await axios.get("http://localhost:4000/privateUsers", {
+      withCredentials: true,
+    });
+    //consulta si esta logueado para obtener el usuario
+    dispatch({ type: ADD_USER, payload: res.data.user });
+  } catch (error) {
+    console.log(error);
+    dispatch({ type: ADD_USER, payload: {} });
+  }
 };

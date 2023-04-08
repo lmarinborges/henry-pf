@@ -137,9 +137,14 @@ function UserMenu() {
 
   return (
     <>
-      <Box visibility={isUser ? "hidden" : "visible"}>{LoginButton()}</Box>;
+      <Box
+        visibility={isUser ? "hidden" : "visible"}
+        display={isUser ? "none" : "block"}
+      >
+        {LoginButton()}
+      </Box>
+
       <Box visibility={isUser ? "visible" : "hidden"}>{LoggedButton(user)}</Box>
-      ;
     </>
   );
 }
