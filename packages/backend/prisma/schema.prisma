@@ -8,20 +8,22 @@ datasource db {
 }
 
 model Product {
-  id          Int       @id @default(autoincrement())
-  slug        String    @unique
+  id          Int                @id @default(autoincrement())
+  slug        String             @unique
   name        String
   description String?
   imageUrl    String
   price       Decimal
   stock       Int
-  brand       Brand?    @relation(fields: [brandId], references: [id], onDelete: SetNull, onUpdate: Cascade)
-  category    Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  brand       Brand?             @relation(fields: [brandId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  category    Category?          @relation(fields: [categoryId], references: [id], onDelete: SetNull, onUpdate: Cascade)
   brandId     Int?
   categoryId  Int?
-  isTrashed   Boolean   @default(false)
-  createdAt   DateTime  @default(now())
+  isTrashed   Boolean            @default(false)
+  createdAt   DateTime           @default(now())
   review      Review[]
+  orders      OrdersOnProducts[]
+  // Order       Order[]
 }
 
 model Category {
@@ -46,6 +48,7 @@ model User {
   role     Role     @default(USER)
   state    String
   review   Review[]
+  order    Order[]
 }
 
 enum Role {
@@ -54,11 +57,32 @@ enum Role {
 }
 
 model Review {
-id          Int      @id @default(autoincrement())
-user        User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-userId      Int
-productId   Int
-comments    String
-score       Int 
+  id        Int     @id @default(autoincrement())
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId    Int
+  productId Int
+  comments  String
+  score     Int
+}
+
+model Order {
+  id        Int                @id @default(autoincrement())
+  user      User               @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  //product   Product            @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId    Int
+  //productId Int
+  total     Decimal
+  createdAt DateTime           @default(now())
+  products  OrdersOnProducts[]
+}
+
+model OrdersOnProducts {
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int
+  order     Order   @relation(fields: [orderId], references: [id])
+  orderId   Int
+  quantity  Int     @default(1)
+
+  @@id([productId, orderId])
 }
