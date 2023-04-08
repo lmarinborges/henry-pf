@@ -69,8 +69,8 @@ const Tabla = ({ data, handleEdit, handleDelete }: { data: Product[], handleEdit
             },
             {
                 Header: "Actions",
-                accessor: "id",
-                Cell: ({ value }: { value: number }) => (
+                accessor: (row: Product) => {return {id:row.id ,isTrashed:row.isTrashed}},
+                Cell: ({ value }: { value: { id: number, isTrashed: boolean } }) => (
                     <Flex>
                         <Button
                             onClick={() => handleEdit(value)}
@@ -79,13 +79,23 @@ const Tabla = ({ data, handleEdit, handleDelete }: { data: Product[], handleEdit
                         >
                             Edit
                         </Button>
+                        
+                        {value.isTrashed?
                         <Button
-                            onClick={() => handleDelete(value)}
-                            bg="red.500"
-                            color="white"
-                        >
-                            Delete
-                        </Button>
+                        onClick={() => handleDelete(value)}
+                        bg="green.500"
+                        color="white"
+                    >
+                        Restaurar
+                    </Button>
+                        :<Button
+                        onClick={() => handleDelete(value)}
+                        bg="red.500"
+                        color="white"
+                    >
+                        Borrar
+                    </Button>}
+                        
                     </Flex>
                 ),
             },

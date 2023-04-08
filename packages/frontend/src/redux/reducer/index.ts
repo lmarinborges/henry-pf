@@ -8,6 +8,7 @@ import {
   CREATE_REVIEW,
   GET_PRODUCT_REVIEWS,
   ADD_USER,
+  GET_ALL_PRODUCTS_ADMIN,
 } from "../actions/index";
 
 interface sliceState {
@@ -42,11 +43,17 @@ const rootReducer = (state = initialState, action: any) => {
     case GET_ALL_PRODUCTS:
       return {
         ...state,
-        products: action.payload.products.filter((e: any) => !e.isTrashed),
+        products: action.payload.products,
         totalItems: action.payload.totalItems,
         cardsForPages: action.payload.pageSize,
-        adminProducts: action.payload.products,
       };
+    case GET_ALL_PRODUCTS_ADMIN:
+      return {
+        ...state,
+        adminProducts: action.payload.products,
+        totalItems: action.payload.totalItems,
+        cardsForPages: action.payload.pageSize,
+      }
 
     case GET_ALL_CATEGORIES:
       return { ...state, categories: action.payload };
