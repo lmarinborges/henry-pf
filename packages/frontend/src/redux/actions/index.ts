@@ -13,6 +13,7 @@ export const DELETE_PRODUCT = "DELETE_PRODUCT";
 export const CREATE_REVIEW = "CREATE_REVIEW";
 export const GET_PRODUCT_REVIEWS = "GET_PRODUCT_REVIEWS";
 export const ADD_USER = "ADD_USER";
+export const GET_USERS_REVIEWS = "GET_USERS_REVIEWS";
 
 export const getAllProducts =
   (
@@ -166,6 +167,7 @@ export const getProductReviews =
     const res = await axios.get(`reviews/${productId}`);
     dispatch({ type: GET_PRODUCT_REVIEWS, payload: res.data });
   };
+
 export const addUserFromFb = () => async (dispatch: AppDispatch) => {
   const width = 600;
   const height = 400;
@@ -239,7 +241,6 @@ export const registerUser = (data: any) => async (dispatch: AppDispatch) => {
       dispatch(addUserFromLocal(data));
     }
   } catch (error: any) {
-    console.error(error.response?.data);
     alert(
       error.response?.data?.message ??
         "Ocurrió un error al procesar la solicitud"
@@ -267,3 +268,15 @@ export const verifyUser = () => async (dispatch: AppDispatch) => {
     dispatch({ type: ADD_USER, payload: {} });
   }
 };
+
+export const getUsersReviews =
+  (usersIds: any) => async (dispatch: AppDispatch) => {
+    console.log(usersIds);
+    const data = usersIds.map(async (id: any) => {
+      const res = await axios
+        .get(`http://localhost:4000/users/${id}`)
+        .then((data) => data.data);
+      return res;
+    });
+    dispatch({ type: GET_USERS_REVIEWS, payload: data });
+  };

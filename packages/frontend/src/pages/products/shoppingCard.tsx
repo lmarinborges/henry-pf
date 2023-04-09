@@ -55,7 +55,7 @@ export default function ShoppingCard(props: any) {
           colorScheme="red"
           size={"sm"}
           w={"1"}
-          onClick={() => props.onClose(props.product.name)}
+          onClick={() => props.onClose(props.product.name,totalProduct)}
         >
           X
         </Button>
@@ -90,9 +90,6 @@ export default function ShoppingCard(props: any) {
         centerContent
       >
         <Text>Total: ${Number(totalProduct).toFixed(2)}</Text>
-        <Button size={"md"} variant="solid" colorScheme="red">
-          Comprar
-        </Button>
       </Container>
     </Stack>
   );
