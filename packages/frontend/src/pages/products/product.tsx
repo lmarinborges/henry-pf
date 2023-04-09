@@ -27,24 +27,20 @@ export default function ProductPage() {
 
   const dispatch: AppDispatch = useDispatch();
 
-  const onClickComent = () => {
-    let rev = { comment: text, score: num, productId: productId };
+  const reviews = useSelector((state: RootState) => state.productReviews);
+  const prod = useSelector((state: RootState) => state.productDetail);
+  const usersReviews = useSelector((state:RootState) => state.reviewUsers);
 
-    dispatch(actions.createReview(rev));
-  };
+  const [comments, setComments] = useState<any[]>([]);
+  const [text, setText] = useState("");
+  const [num, setNum] = useState(0);
 
   useEffect(() => {
     if (productId) {
       dispatch(actions.getProductDetail(productId));
       dispatch(actions.getProductReviews(productId));
     }
-  }, [dispatch, productId]);
-
-  const reviews = useSelector((state: RootState) => state.productReviews);
-  const prod = useSelector((state: RootState) => state.productDetail);
-
-  const [text, setText] = useState("");
-  const [num, setNum] = useState(0);
+  },[dispatch,productId]);
 
   const handleTextChange = (e: any) => {
     let inputValue = e.target.value;
@@ -60,6 +56,13 @@ export default function ProductPage() {
     localStorage.setItem(prod.name, JSON.stringify(prod));
   };
 
+  const onClickComent = () => {
+    let rev = { comment: text, score: num, productId: productId };
+    setComments([rev])
+    dispatch(actions.createReview(rev));
+
+  };
+
   const comentarios = reviews ? (
     reviews.map((element: any, i: number) => {
       return (
@@ -72,22 +75,27 @@ export default function ProductPage() {
           borderRadius="10px"
           marginInlineStart="20px"
         >
-          {element.comments}
+        {element.comments}
         </Text>
       );
     })
-  ) : (
+    ) : (
     <Text key={1} color="white">
       No hay comentarios que mostrar
     </Text>
   );
 
-  const reviewCount = reviews ? reviews.length : 0;
+
+
+  const reviewCount = reviews ? reviews.length + comments?.length : 0;
 
   var votation = 0;
 
   for (var i = 0; i < reviews?.length; i++) {
     votation += Number(reviews[i]?.score);
+  }
+  if(comments?.length){
+    votation+=comments[0]?.score;
   }
 
   var rating = votation / reviewCount;
@@ -168,7 +176,22 @@ export default function ProductPage() {
         <Text color="white" mt="20px" mb="20px" fontStyle="bold">
           Comentarios:
         </Text>
-        {comentarios}
+        { comentarios}
+        {comments && comments.map((element: any, i: number) => {
+          return (
+            <Text
+              key={i}
+              color="white"
+              bg={"gray"}
+              m="2"
+              p="2"
+              borderRadius="10px"
+              marginInlineStart="20px"
+            >
+              {element.comment}
+            </Text>
+          );
+        })}
       </Box>
       <Box mt="10">
         <Textarea
