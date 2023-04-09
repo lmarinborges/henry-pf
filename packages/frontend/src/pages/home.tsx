@@ -12,7 +12,10 @@ import {
   SimpleGrid,
   Image,
   StackDivider,
+  Divider,
+  HStack
 } from "@chakra-ui/react";
+
 //NUESTRA HISTORIA
 import { ReactElement } from "react";
 
@@ -151,7 +154,7 @@ export default function HomePage() {
               </Text>
               <br />
               <Text as={"span"} color={"red.400"}>
-                El Mejor Gymnasio del Universo
+                El Mejor Gimnasio del Universo
               </Text>
             </Heading>
             <Text color={"gray.500"}>
@@ -195,6 +198,10 @@ export default function HomePage() {
         </Stack>
       </Container>
 
+      <Divider mt={20} />
+
+      
+
       <Container maxW={"5xl"} py={12}>
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10}>
           <Flex>
@@ -202,24 +209,76 @@ export default function HomePage() {
               rounded={"md"}
               alt={"feature image"}
               src={
-                "https://images.unsplash.com/photo-1554200876-56c2f25224fa?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+                "https://images.pexels.com/photos/3076509/pexels-photo-3076509.jpeg"
               }
               objectFit={"cover"}
             />
           </Flex>
           <Stack spacing={4}>
+          <HStack spacing={4}>
             <Text
               textTransform={"uppercase"}
-              color={"red.400"}
+              color={"gray.200"}
               fontWeight={600}
               fontSize={"sm"}
-              bg={useColorModeValue("red.50", "red.900")}
+              bg={useColorModeValue("red.500", "red.900")}
               p={2}
               alignSelf={"flex-start"}
               rounded={"md"}
             >
-              Our Story
+              Salud
             </Text>
+            <Text
+              textTransform={"uppercase"}
+              color={"gray.200"}
+              fontWeight={600}
+              fontSize={"sm"}
+              bg={useColorModeValue("red.500", "red.900")}
+              p={2}
+              alignSelf={"flex-start"}
+              rounded={"md"}
+            >
+            Bienestar
+            </Text>
+            <Text
+              textTransform={"uppercase"}
+              color={"gray.200"}
+              fontWeight={600}
+              fontSize={"sm"}
+              bg={useColorModeValue("red.500", "red.900")}
+              p={2}
+              alignSelf={"flex-start"}
+              rounded={"md"}
+            >
+            Fitness
+            </Text>
+            <Text
+              textTransform={"uppercase"}
+              color={"gray.200"}
+              fontWeight={600}
+              fontSize={"sm"}
+              bg={useColorModeValue("red.500", "red.900")}
+              p={2}
+              alignSelf={"flex-start"}
+              rounded={"md"}
+            >
+            Nutrición
+            </Text>
+            <Text
+              textTransform={"uppercase"}
+              color={"gray.200"}
+              fontWeight={600}
+              fontSize={"sm"}
+              bg={useColorModeValue("red.500", "red.900")}
+              p={2}
+              alignSelf={"flex-start"}
+              rounded={"md"}
+            >
+            Ejercicio
+            </Text>
+          </HStack>
+
+
             <Heading>
               Consigue el cuerpo que siempre has querido con nuestro gimnasio.
             </Heading>
@@ -244,7 +303,7 @@ export default function HomePage() {
       <Box bg={useColorModeValue("gray.100", "gray.700")}>
         <Container maxW={"7xl"} py={16} as={Stack} spacing={12}>
           <Stack spacing={0} align={"center"}>
-            <Heading>Our Clients Speak</Heading>
+            <Heading>"Esto es lo que dicen algunos de nuestros clientes satisfechos."</Heading>
             <Text>
               Nuestros clientes han experimentado una transformación en su vida
               gracias a nuestro gimnasio. Aquí algunos testimonios:
@@ -256,23 +315,22 @@ export default function HomePage() {
           >
             <Testimonial>
               <TestimonialContent>
-                <TestimonialHeading>Efficient Collaborating</TestimonialHeading>
+                <TestimonialHeading>Predispuestos a ayudarte</TestimonialHeading>
                 <TestimonialText>
-                  "El equipo del gimnasio es excepcional. Siempre están
-                  limpiando y asegurándose de que todo funcione correctamente"
+                  "El equipo del gimnasio es excepcional, siempre estan predispuestos a ayudarte. Encuentro el gym siempre limpio y funcionando correctamente"
                 </TestimonialText>
               </TestimonialContent>
               <TestimonialAvatar
                 src={
-                  "https://images.unsplash.com/photo-1586297135537-94bc9ba060aa?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80"
+                  'https://images.unsplash.com/photo-1520810627419-35e362c5dc07?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&ixid=eyJhcHBfaWQiOjE3Nzg0fQ'
                 }
-                name={"Jane Cooper"}
-                title={"CEO at ABC Corporation"}
+                name={"Moni Drexler"}
+                title={"Cliente de hace 2 años"}
               />
             </Testimonial>
             <Testimonial>
               <TestimonialContent>
-                <TestimonialHeading>Intuitive Design</TestimonialHeading>
+                <TestimonialHeading>Amplia variedad de equipos</TestimonialHeading>
                 <TestimonialText>
                   "El gimnasio ofrece una amplia variedad de equipos y servicios
                   que me permiten personalizar mi entrenamiento según mis
@@ -281,15 +339,15 @@ export default function HomePage() {
               </TestimonialContent>
               <TestimonialAvatar
                 src={
-                  "https://images.unsplash.com/photo-1586297135537-94bc9ba060aa?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80"
+                  "https://www.dzoom.org.es/wp-content/uploads/2020/02/portada-foto-perfil-redes-sociales-consejos-1024x682.jpg"
                 }
-                name={"Jane Cooper"}
-                title={"CEO at ABC Corporation"}
+                name={"Juana Perez"}
+                title={"Nuevo cliente"}
               />
             </Testimonial>
             <Testimonial>
               <TestimonialContent>
-                <TestimonialHeading>Mindblowing Service</TestimonialHeading>
+                <TestimonialHeading>Siempre me siento bienvenido</TestimonialHeading>
                 <TestimonialText>
                   "El ambiente del gimnasio es increíble. Todos son amables y
                   serviciales, y siempre me siento bienvenido. No puedo imaginar
@@ -298,10 +356,10 @@ export default function HomePage() {
               </TestimonialContent>
               <TestimonialAvatar
                 src={
-                  "https://images.unsplash.com/photo-1586297135537-94bc9ba060aa?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80"
+                  "https://modayjoyas.com/wp-content/uploads/2022/11/que-es-una-cara-hegemonica.jpg"
                 }
-                name={"Jane Cooper"}
-                title={"CEO at ABC Corporation"}
+                name={"Leandro Chilo"}
+                title={"Cliente de hace 3 años"}
               />
             </Testimonial>
           </Stack>
