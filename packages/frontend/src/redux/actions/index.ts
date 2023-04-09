@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../../libs/axios";
 import { AppDispatch } from "../store/index";
 
 // Aca deben declarar las variables donde tengan el action types.
@@ -12,7 +12,7 @@ export const DELETE_PRODUCT = "DELETE_PRODUCT";
 export const CREATE_REVIEW = "CREATE_REVIEW";
 export const GET_PRODUCT_REVIEWS = "GET_PRODUCT_REVIEWS";
 export const ADD_USER = "ADD_USER";
-export const GET_USERS_REVIEWS = "GET_USERS_REVIEWS"
+export const GET_USERS_REVIEWS = "GET_USERS_REVIEWS";
 
 export const getAllProducts =
   (
@@ -48,8 +48,7 @@ export const getAllProducts =
       )
         .then((res) => res.json())
         .then((data) => dispatch({ type: GET_ALL_PRODUCTS, payload: data }));
-    }
-    else if (categoryFilter === 0 && brandFilter === 0 && search !== "") {
+    } else if (categoryFilter === 0 && brandFilter === 0 && search !== "") {
       await fetch(
         `http://localhost:4000/products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&&search=${search}`
       )
@@ -76,23 +75,21 @@ export const getAllProducts =
     }
   };
 
-export const getSearch = (name: string) => async (dispatch:AppDispatch)=>{
+export const getSearch = (name: string) => async (dispatch: AppDispatch) => {
   const search: string = name;
-  
-  dispatch({type:SEARCH_PRODUCT, payload:search})
-}
+
+  dispatch({ type: SEARCH_PRODUCT, payload: search });
+};
 
 export const getProductDetail =
   (id: string) => async (dispatch: AppDispatch) => {
-    const data = await fetch(`http://localhost:4000/products/${id}`).then(
-      (res) => res.json()
-    );
-    dispatch({ type: GET_PRODUCT_DETAILS, payload: data });
+    const res = await axios.get(`products/${id}`);
+    dispatch({ type: GET_PRODUCT_DETAILS, payload: res.data });
   };
 
 export const createProduct = (data: any) => async (dispatch: AppDispatch) => {
   const res = await axios
-    .post(`http://localhost:4000/products/`, {
+    .post(`products`, {
       name: data.name,
       description: data.description,
       imageUrl: data.imageUrl,
@@ -106,17 +103,13 @@ export const createProduct = (data: any) => async (dispatch: AppDispatch) => {
 };
 
 export const getAllBrands = () => async (dispatch: AppDispatch) => {
-  const res = await fetch("http://localhost:4000/brands").then((data) =>
-    data.json()
-  );
-  dispatch({ type: GET_ALL_BRANDS, payload: res });
+  const res = await axios.get("brands");
+  dispatch({ type: GET_ALL_BRANDS, payload: res.data });
 };
 
 export const getAllCategories = () => async (dispatch: AppDispatch) => {
-  const res = await fetch("http://localhost:4000/categories").then((data) =>
-    data.json()
-  );
-  dispatch({ type: GET_ALL_CATEGORIES, payload: res });
+  const res = await axios.get("categories");
+  dispatch({ type: GET_ALL_CATEGORIES, payload: res.data });
 };
 
 export const getProductsPerPage =
@@ -127,7 +120,7 @@ export const getProductsPerPage =
   };
 
 export const deleteProduct = (data: any) => async (dispatch: AppDispatch) => {
-  const res = await axios.patch(`http://localhost:4000/products/${data.id}`, {
+  const res = await axios.patch(`products/${data.id}`, {
     ...data,
     isTrashed: true,
   });
@@ -142,21 +135,24 @@ export const patchProduct = async (data: any) => {
     price: data.price,
     stock: data.stock ? Number.parseInt(data.stock) : "",
     brandId: data.brandId,
-    categoryId: data.categoryId
-  }
+    categoryId: data.categoryId,
+  };
 
-  var propsData: any
+  var propsData: any;
   for (const key in res) {
-    if (res[key] !== "") propsData = {...propsData, [key]:res[key]}
+    if (res[key] !== "") propsData = { ...propsData, [key]: res[key] };
   }
 
-  let result = await axios.patch(`http://localhost:4000/products/${data.id}`, propsData)
+  let result = await axios.patch(
+    `http://localhost:4000/products/${data.id}`,
+    propsData
+  );
   console.log(result.data);
-}
+};
 
 export const createReview = (data: any) => async (dispatch: AppDispatch) => {
   const res = await axios
-    .post(`http://localhost:4000/reviews/`, {
+    .post(`reviews`, {
       comments: data.comment,
       score: Number(data.score),
       productId: Number(data.productId),
@@ -168,10 +164,8 @@ export const createReview = (data: any) => async (dispatch: AppDispatch) => {
 
 export const getProductReviews =
   (productId: string) => async (dispatch: AppDispatch) => {
-    const data = await fetch(`http://localhost:4000/reviews/${productId}`).then(
-      (res) => res.json()
-    );
-    dispatch({ type: GET_PRODUCT_REVIEWS, payload: data });
+    const res = await axios.get(`reviews/${productId}`);
+    dispatch({ type: GET_PRODUCT_REVIEWS, payload: res.data });
   };
 
 export const addUserFromFb = () => async (dispatch: AppDispatch) => {
@@ -255,17 +249,34 @@ export const registerUser = (data: any) => async (dispatch: AppDispatch) => {
 };
 
 export const logoutUser = () => async (dispatch: AppDispatch) => {
-  const res = await axios.get(`http://localhost:4000/logout`);
+  const res = await axios.get(`http://localhost:4000/logout`, {
+    withCredentials: true,
+  });
   // verificamos si se deslogueo correctamente
   dispatch({ type: ADD_USER, payload: {} });
 };
 
-export const getUsersReviews=(usersIds:any)=>async(dispatch:AppDispatch)=>{
-  console.log(usersIds)
-  const data = usersIds.map(async (id:any)=>{
-    const res = await axios.get(`http://localhost:4000/users/${id}`)
-    .then(data=>data.data)
-    return res 
-  })
-  dispatch({ type:GET_USERS_REVIEWS, payload:data})
-}
+export const verifyUser = () => async (dispatch: AppDispatch) => {
+  try {
+    const res = await axios.get("http://localhost:4000/privateUsers", {
+      withCredentials: true,
+    });
+    //consulta si esta logueado para obtener el usuario
+    dispatch({ type: ADD_USER, payload: res.data.user });
+  } catch (error) {
+    console.log(error);
+    dispatch({ type: ADD_USER, payload: {} });
+  }
+};
+
+export const getUsersReviews =
+  (usersIds: any) => async (dispatch: AppDispatch) => {
+    console.log(usersIds);
+    const data = usersIds.map(async (id: any) => {
+      const res = await axios
+        .get(`http://localhost:4000/users/${id}`)
+        .then((data) => data.data);
+      return res;
+    });
+    dispatch({ type: GET_USERS_REVIEWS, payload: data });
+  };

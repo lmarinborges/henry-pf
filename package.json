@@ -5,10 +5,7 @@
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
-    "start": "turbo start",
     "lint": "turbo lint",
-    "format:check": "prettier --check .",
-    "format:write": "prettier --write .",
     "prepare": "husky install"
   },
   "private": true,
