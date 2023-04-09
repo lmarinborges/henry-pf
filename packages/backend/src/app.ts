@@ -14,6 +14,7 @@ import facebookRouter from "./modules/users/facebook.routes";
 import passport from "passport";
 import session from "express-session";
 import localRouter from "./modules/users/local.routes";
+import googleRouter from "./modules/users/google.routes";
 const app = express();
 
 // Middleware
@@ -44,6 +45,7 @@ app.use(categoriesRouter);
 app.use(usersRouter);
 app.use(reviewsRouter);
 app.use(facebookRouter);
+app.use(googleRouter);
 app.use(localRouter);
 
 // 404 Handler
