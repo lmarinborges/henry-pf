@@ -77,7 +77,11 @@ googleRouter.get(
   "/auth/google/callback",
   passport.authenticate("google", { failureRedirect: "/failed" }),
   function (req, res) {
-    res.send(JSON.stringify(req.user));
+    res.send(
+      "<script>window.opener.postMessage({ isAuthenticated: true, user: " +
+        JSON.stringify(req.user) +
+        ' }, "http://localhost:5173"); window.close();</script>'
+    );
   }
 );
 
