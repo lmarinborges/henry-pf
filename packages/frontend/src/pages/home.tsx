@@ -160,7 +160,7 @@ export default function HomePage() {
             <Text color={"gray.500"}>
               ¡Únete a nuestro gimnasio y comienza a transformar tu vida hoy
               mismo! Inscríbete ahora y recibe una sesión gratis de
-              entrenamiento personalizado
+              entrenamiento personalizado!
             </Text>
             <Stack
               spacing={{ base: 4, sm: 6 }}

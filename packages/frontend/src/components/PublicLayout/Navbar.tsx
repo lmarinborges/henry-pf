@@ -52,6 +52,7 @@ export default function Navbar(props: NavbarProps) {
         px="2"
         backdropFilter="blur(8px)"
         boxShadow="sm"
+        zIndex="999"
       >
         <IconButton
           _hover={{ backgroundColor: "rgba(0, 0, 0, 0.03)" }}
@@ -66,8 +67,7 @@ export default function Navbar(props: NavbarProps) {
           <Link href="/products/shoppingcart">
             <IconButton
               _hover={{ backgroundColor: "rgba(0, 0, 0, 0.03)" }}
-              _active={{ backgroundColor: "rgba(0, 0, 0, 0.05)" }}
-              color="rgba(0, 0, 0, 0.68)"
+              _active={{ backgroundColor: "rgba(0, 0, 0, 0.05)" }}            
               variant="ghost"
               borderRadius="full"
               aria-label="Ver carrito de compras"
