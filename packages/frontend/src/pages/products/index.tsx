@@ -107,35 +107,35 @@ export default function ProductsPage() {
   });
 
   return (
-    <Container bg={"black"}>
-      <Box bgColor="black" pt="10px" pb="0px" mb="-20px">
+    <Container bg={"white"}>
+      <Box bgColor="white" pt="10px" pb="0px" mb="-20px">
         <SearchBar />
       </Box>
 
-      <Text color={"white"} fontSize="18px" m="5px">
+      <Text color="black" fontSize="18px" m="5px">
         Ordenar por Nombre o Precio :
       </Text>
       <RadioGroup onChange={setOrder} value={orderBy} defaultValue="name">
         <Stack direction={"row"} justifyContent="center" spacing={"3"}>
-          <Radio colorScheme={"red"} textColor={"white"} value="name">
-            <Text color={"white"}>Nombre</Text>
+          <Radio colorScheme={"red"} textColor={"Black"} value="name">
+            <Text color={"black"}>Nombre</Text>
           </Radio>
           <Radio colorScheme={"red"} value="price">
-            <Text color={"white"}>Precio</Text>
+            <Text color={"Black"}>Precio</Text>
           </Radio>
         </Stack>
       </RadioGroup>
 
-      <Text color={"white"} fontSize="18px" m="5px">
+      <Text color={"black"} fontSize="18px" m="5px">
         Orden ascendente o descendente :
       </Text>
       <RadioGroup onChange={setAlpha} value={alphaOrder} defaultValue="asc">
         <Stack direction={"row"} justifyContent="center" spacing={"3"}>
           <Radio colorScheme={"red"} value="asc">
-            <Text color={"white"}>A-Z Min{"<"} Max</Text>
+            <Text color={"black"}>A-Z Min{"<"} Max</Text>
           </Radio>
           <Radio colorScheme={"red"} value="desc">
-            <Text color={"white"}>Z-A Max{">"}Min</Text>
+            <Text color={"black"}>Z-A Max{">"}Min</Text>
           </Radio>
         </Stack>
       </RadioGroup>
@@ -170,7 +170,7 @@ export default function ProductsPage() {
         {brandsOptions}
       </Select>
 
-      <Text m="10px" fontSize="20px" color="white">
+      <Text m="10px" fontSize="20px" color="black">
         Productos:{" "}
       </Text>
 
