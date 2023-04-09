@@ -1,18 +1,16 @@
 import {
-  Alert,
-  AlertIcon,
   Button,
   FormControl,
   FormLabel,
   Input,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
   ModalOverlay,
   Select,
+  Text,
   VStack,
 } from "@chakra-ui/react";
 import { AppDispatch, RootState } from "../../../redux/store";
@@ -22,21 +20,27 @@ import { RxCross2 } from "react-icons/rx";
 import { useForm } from "react-hook-form";
 import * as actions from "../../../redux/actions/index";
 
-export const EditTable = ({ isOpen, onClose, idProduct }: any) => {
+export const EditTable = ({
+  isOpen,
+  onClose,
+  idProduct,
+  oldProduct,
+  allProducts,
+}: any) => {
   let dispatch: AppDispatch = useDispatch();
   let brands = useSelector((state: RootState) => state.brands);
   let categories = useSelector((state: RootState) => state.categories);
 
-  interface Form {
+  type Form = {
     id: number;
     name: string;
     description: string;
     imageUrl: string;
     price: string;
-    stock: number;
-    brandId: number;
-    categoryId: number;
-  }
+    stock: any;
+    brandId: any;
+    categoryId: any;
+  };
 
   const {
     register,
@@ -51,8 +55,9 @@ export const EditTable = ({ isOpen, onClose, idProduct }: any) => {
     reset();
   };
 
-  let onSubmit = (data: Form) => {
-    forReset()
+  let onSubmit = (data: any) => {
+    forReset();
+
     var category: any = "";
     if (data.categoryId) {
       categories.forEach((cat: any) => {
@@ -70,14 +75,39 @@ export const EditTable = ({ isOpen, onClose, idProduct }: any) => {
         }
       });
     }
-    // console.log({...data, brandId: brand.id, categoryId: category.id});
-    dispatch(
-      actions.patchProduct({
-        ...data,
-        brandId: brand.id ? brand.id : "",
-        categoryId: category.id ? category.id : "",
-      })
+
+    let res: any = {
+      name: data.name,
+      description: data.description,
+      imageUrl: data.imageUrl,
+      price: data.price,
+      stock: data.stock ? Number.parseInt(data.stock) : "",
+      brandId: data.brandId ? brand.id : "",
+      categoryId: data.categoryId ? category.id : "",
+    };
+
+    var newData: any;
+    for (const key in res) {
+      if (res[key] !== "") newData = { ...newData, [key]: res[key] };
+    }
+
+    let filBrad: any = brands.filter((br: any) => br.id == newData.brandId);
+
+    let filCat: any = categories.filter(
+      (cat: any) => cat.id == newData.categoryId
     );
+
+    let newProdcut = [
+      { ...newData, brand: filBrad[0], category: filCat[0], id: idProduct },
+    ];
+
+    let deleteOldProduct = allProducts.filter((pr: any) => pr.id !== idProduct);
+
+    let newAndOthers = newProdcut
+      .concat(deleteOldProduct)
+      .sort((a, b) => (a.id > b.id ? 1 : a.id < b.id ? -1 : 0));
+
+    dispatch(actions.patchProduct(newData, idProduct, newAndOthers));
   };
 
   useEffect(() => {
@@ -127,22 +157,24 @@ export const EditTable = ({ isOpen, onClose, idProduct }: any) => {
                 <FormControl>
                   <FormLabel>Nombre:</FormLabel>
                   <Input
-                    {...register("name")}
+                    {...register("name", { required: true })}
                     focusBorderColor="#00000059"
                     bg="#dfdfdf"
                     type="text"
                     size="md"
-                    placeholder="nombre"
+                    placeholder={"nombre"}
                     _hover={{ borderColor: "gray.400" }}
                     _focusVisible={{ borderColor: "gray.400" }}
                     color="black"
+                    defaultValue={oldProduct.length ? oldProduct[0].name : ""}
+                    // {errors.name?.type === "required" && <Text color="red">Campo requerido</Text>}
                   />
                 </FormControl>
 
                 <FormControl>
                   <FormLabel>Descripcion:</FormLabel>
                   <Input
-                    {...register("description")}
+                    {...register("description", { required: true })}
                     focusBorderColor="#00000059"
                     bg="#dfdfdf"
                     type="text"
@@ -151,13 +183,16 @@ export const EditTable = ({ isOpen, onClose, idProduct }: any) => {
                     _hover={{ borderColor: "gray.400" }}
                     _focusVisible={{ borderColor: "gray.400" }}
                     color="black"
+                    defaultValue={
+                      oldProduct.length ? oldProduct[0].description : ""
+                    }
                   />
                 </FormControl>
 
                 <FormControl>
                   <FormLabel>Imagen:</FormLabel>
                   <Input
-                    {...register("imageUrl")}
+                    {...register("imageUrl", { required: true })}
                     focusBorderColor="#00000059"
                     bg="#dfdfdf"
                     type="text"
@@ -166,13 +201,16 @@ export const EditTable = ({ isOpen, onClose, idProduct }: any) => {
                     _hover={{ borderColor: "gray.400" }}
                     _focusVisible={{ borderColor: "gray.400" }}
                     color="black"
+                    defaultValue={
+                      oldProduct.length ? oldProduct[0].imageUrl : ""
+                    }
                   />
                 </FormControl>
 
                 <FormControl>
                   <FormLabel>Precio:</FormLabel>
                   <Input
-                    {...register("price")}
+                    {...register("price", { required: true, min: 0 })}
                     focusBorderColor="#00000059"
                     bg="#dfdfdf"
                     type="number"
@@ -181,13 +219,14 @@ export const EditTable = ({ isOpen, onClose, idProduct }: any) => {
                     _hover={{ borderColor: "gray.400" }}
                     _focusVisible={{ borderColor: "gray.400" }}
                     color="black"
+                    defaultValue={oldProduct.length ? oldProduct[0].price : ""}
                   />
                 </FormControl>
 
                 <FormControl>
                   <FormLabel>Stock:</FormLabel>
                   <Input
-                    {...register("stock")}
+                    {...register("stock", { required: true, min: 0 })}
                     focusBorderColor="#00000059"
                     bg="#dfdfdf"
                     type="number"
@@ -196,27 +235,35 @@ export const EditTable = ({ isOpen, onClose, idProduct }: any) => {
                     _hover={{ borderColor: "gray.400" }}
                     _focusVisible={{ borderColor: "gray.400" }}
                     color="black"
+                    defaultValue={oldProduct.length ? oldProduct[0].stock : ""}
                   />
                 </FormControl>
 
                 <FormLabel>Categorias:</FormLabel>
                 <Select
-                  {...register("categoryId")}
+                  {...register("categoryId", { required: true })}
                   placeholder="Seleccionar categoria"
                   bg="#dfdfdf"
+                  defaultValue={
+                    oldProduct.length ? oldProduct[0].category.name : ""
+                  }
                 >
                   {categories &&
-                    categories.map((b: any, i: any) => {
-                      return <option key={i}>{b.name}</option>;
+                    categories.map((c: any, i: any) => {
+                      return <option key={i}>{c.name}</option>;
                     })}
                 </Select>
 
                 <FormLabel>Marcas:</FormLabel>
                 <Select
-                  {...register("brandId")}
+                  {...register("brandId", { required: true })}
                   placeholder="Seleccionar marca"
                   bg="#dfdfdf"
+                  defaultValue={
+                    oldProduct.length ? oldProduct[0].brand.name : ""
+                  }
                 >
+                  {errors.brandId?.type === "required" && <p>is required</p>}
                   {brands &&
                     brands.map((b: any, i: any) => (
                       <option key={i}>{b.name}</option>
@@ -229,7 +276,7 @@ export const EditTable = ({ isOpen, onClose, idProduct }: any) => {
                 colorScheme="blue"
                 mr={3}
                 type="submit"
-                isDisabled={!formState.isDirty /*|| !formState.isValid*/}
+                isDisabled={!formState.isDirty}
               >
                 Guardar
               </Button>

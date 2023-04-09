@@ -12,6 +12,7 @@ export const DELETE_PRODUCT = "DELETE_PRODUCT";
 export const CREATE_REVIEW = "CREATE_REVIEW";
 export const GET_PRODUCT_REVIEWS = "GET_PRODUCT_REVIEWS";
 export const ADD_USER = "ADD_USER";
+export const EDITED_PRODUCT = "EDITED_PRODUCT";
 
 export const getAllProducts =
   (
@@ -133,24 +134,10 @@ export const deleteProduct = (data: any) => async (dispatch: AppDispatch) => {
   dispatch({ type: DELETE_PRODUCT, payload: res.data.id });
 };
 
-export const patchProduct = async (data: any) => {
-  let res: any = {
-    name: data.name,
-    description: data.description,
-    imageUrl: data.imageUrl,
-    price: data.price,
-    stock: data.stock ? Number.parseInt(data.stock) : "",
-    brandId: data.brandId,
-    categoryId: data.categoryId
-  }
-
-  var propsData: any
-  for (const key in res) {
-    if (res[key] !== "") propsData = {...propsData, [key]:res[key]}
-  }
-
-  let result = await axios.patch(`http://localhost:4000/products/${data.id}`, propsData)
-  console.log(result.data);
+export const patchProduct = (data: any, idProduct: number, newAndOthers: any) => async (dispatch: AppDispatch) => {
+  let result = await axios.patch(`http://localhost:4000/products/${idProduct}`, data)
+  dispatch({ type: EDITED_PRODUCT, payload: newAndOthers})
+  // console.log("NEW DATA",result.data);
 }
 
 export const createReview = (data: any) => async (dispatch: AppDispatch) => {
