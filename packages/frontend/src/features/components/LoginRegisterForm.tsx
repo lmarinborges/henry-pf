@@ -11,6 +11,7 @@ import { FaFacebook, FaGoogle } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import {
   addUserFromFb,
+  addUserFromGoogle,
   addUserFromLocal,
   registerUser,
 } from "../../redux/actions";
@@ -37,6 +38,9 @@ const LoginPage = ({ SuddenCLose }: { SuddenCLose: () => void }) => {
   }, [user]);
   function loginWithFacebook() {
     dispatch(addUserFromFb());
+  }
+  function loginWithGoogle() {
+    dispatch(addUserFromGoogle());
   }
 
   return (
@@ -102,6 +106,7 @@ const LoginPage = ({ SuddenCLose }: { SuddenCLose: () => void }) => {
           </Box>
           <Box flex="1" w={"100%"}>
             <Button
+              onClick={loginWithGoogle}
               w="100%"
               my={"3%"}
               colorScheme="red"
@@ -135,6 +140,9 @@ const RegisterPage = ({ SuddenCLose }: { SuddenCLose: () => void }) => {
   }, [user]);
   function loginWithFacebook() {
     dispatch(addUserFromFb());
+  }
+  function loginWithGoogle() {
+    dispatch(addUserFromGoogle());
   }
 
   return (
@@ -213,6 +221,7 @@ const RegisterPage = ({ SuddenCLose }: { SuddenCLose: () => void }) => {
           </Box>
           <Box flex="1" w={"100%"}>
             <Button
+              onClick={loginWithGoogle}
               w="100%"
               my={"3%"}
               colorScheme="red"

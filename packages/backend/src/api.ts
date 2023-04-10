@@ -13,6 +13,7 @@ import categoriesRouter from "./modules/categories";
 import productsRouter from "./modules/products";
 import reviewsRouter from "./modules/reviews";
 import facebookRouter from "./modules/users/facebook.routes";
+import googleRouter from "./modules/users/google.routes";
 import localRouter from "./modules/users/local.routes";
 import usersRouter from "./modules/users/users.router";
 
@@ -30,6 +31,7 @@ const apiRouter = Router()
   .use(usersRouter)
   .use(reviewsRouter)
   .use(facebookRouter)
+  .use(googleRouter)
   .use(localRouter)
 
   // Error handling

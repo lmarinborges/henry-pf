@@ -197,6 +197,35 @@ export const addUserFromFb = () => async (dispatch: AppDispatch) => {
   }, 1000);
 };
 
+export const addUserFromGoogle = () => async (dispatch: AppDispatch) => {
+  const width = 600;
+  const height = 400;
+  const left = window.screenX + (window.innerWidth - width) / 2;
+  const top = window.screenY + (window.innerHeight - height) / 2;
+  const authWindow = window.open(
+    "http://localhost:4000/auth/google",
+    "google-login",
+    `width=${width},height=${height},left=${left},top=${top}`
+  );
+  if (authWindow == null) {
+    throw Error("no se puede llamar al login");
+  }
+  const handleAuthResponse = (event: any) => {
+    if (event.origin !== "http://localhost:4000") return;
+    if (event.data.isAuthenticated) {
+      console.log(event.data);
+      dispatch({ type: ADD_USER, payload: event.data.user });
+    }
+  };
+  window.addEventListener("message", handleAuthResponse);
+  const intervalId = setInterval(() => {
+    if (authWindow.closed) {
+      clearInterval(intervalId);
+      window.removeEventListener("message", handleAuthResponse);
+    }
+  }, 1000);
+};
+
 export const addUserFromLocal =
   (data: any) => async (dispatch: AppDispatch) => {
     try {
