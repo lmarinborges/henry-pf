@@ -5,6 +5,7 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { z } from "zod";
 import prisma from "../../db";
 import { encryptPassword } from "./encrypt";
+import { googleConfig } from "../../config";
 
 const googleRouter = Router();
 
@@ -18,33 +19,30 @@ const idSchema = z.object({
 });
 
 passport.use(
-  new GoogleStrategy(
-    {
-      clientID:
-        "197744883747-1ojne05mp2a2m56kp9mg0bd5mm38p96k.apps.googleusercontent.com",
-      clientSecret: "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",
-      callbackURL: "http://localhost:4000/auth/google/callback",
-    },
-    async function (accessToken, refreshToken, profile, cb) {
-      const { email, name } = await googleSchema.parseAsync(profile._json);
-      const { id } = await idSchema.parseAsync(profile);
-      const useremail = email;
-      const hashedPassword: string = await encryptPassword(id);
+  new GoogleStrategy(googleConfig(), async function (
+    accessToken,
+    refreshToken,
+    profile,
+    cb
+  ) {
+    const { email, name } = await googleSchema.parseAsync(profile._json);
+    const { id } = await idSchema.parseAsync(profile);
+    const useremail = email;
+    const hashedPassword: string = await encryptPassword(id);
 
-      const user_created = await prisma.user.upsert({
-        where: { email: useremail },
-        create: {
-          email: useremail,
-          name: name,
-          password: hashedPassword,
-          role: "USER",
-          state: "Active",
-        },
-        update: {},
-      });
-      return cb(null, user_created);
-    }
-  )
+    const user_created = await prisma.user.upsert({
+      where: { email: useremail },
+      create: {
+        email: useremail,
+        name: name,
+        password: hashedPassword,
+        role: "USER",
+        state: "Active",
+      },
+      update: {},
+    });
+    return cb(null, user_created);
+  })
 );
 
 passport.serializeUser(function (user: any, done) {

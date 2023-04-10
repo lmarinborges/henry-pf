@@ -1,6 +1,10 @@
 import { SessionOptions } from "express-session";
 import parseDuration from "parse-duration";
 import { StrategyOption as FacebookStrategyOptions } from "passport-facebook";
+import { StrategyOptions as GoogleStrategyOptions } from "passport-google-oauth20";
+
+export const appOrigin = () =>
+  process.env.APP_ORIGIN || "http://localhost:8080";
 
 export const expressPort = () => {
   const value = parseInt(process.env.EXPRESS_PORT || "8080");
@@ -29,17 +33,29 @@ export const sessionConfig = (): SessionOptions => {
 };
 
 export const facebookConfig = (): FacebookStrategyOptions => {
-  const appOrigin = process.env.APP_ORIGIN || "http://localhost:8080";
+  const clientID = process.env.FACEBOOK_ID;
+  if (!clientID) throw new Error("FACEBOOK_ID is unset");
 
-  const facebookId = process.env.FACEBOOK_ID;
-  if (!facebookId) throw new Error("FACEBOOK_ID is unset");
-
-  const facebookSecret = process.env.FACEBOOK_SECRET;
-  if (!facebookSecret) throw new Error("FACEBOOK_SECRET is unset");
+  const clientSecret = process.env.FACEBOOK_SECRET;
+  if (!clientSecret) throw new Error("FACEBOOK_SECRET is unset");
 
   return {
-    callbackURL: new URL("/api/auth/facebook/callback", appOrigin).toString(),
-    clientID: facebookId,
-    clientSecret: facebookSecret,
+    callbackURL: new URL("/api/auth/facebook/callback", appOrigin()).toString(),
+    clientID,
+    clientSecret,
+  };
+};
+
+export const googleConfig = (): GoogleStrategyOptions => {
+  const clientID = process.env.GOOGLE_ID;
+  if (!clientID) throw new Error("GOOGLE_ID is unset");
+
+  const clientSecret = process.env.GOOGLE_SECRET;
+  if (!clientSecret) throw new Error("GOOGLE_SECRET is unset");
+
+  return {
+    callbackURL: new URL("/api/auth/google/callback", appOrigin()).toString(),
+    clientID,
+    clientSecret,
   };
 };
