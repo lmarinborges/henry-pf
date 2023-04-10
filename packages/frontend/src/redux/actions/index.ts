@@ -161,7 +161,7 @@ export const addUserFromFb = () => async (dispatch: AppDispatch) => {
   const left = window.screenX + (window.innerWidth - width) / 2;
   const top = window.screenY + (window.innerHeight - height) / 2;
   const authWindow = window.open(
-    new URL("auth/facebook", apiUrl),
+    new URL("/api/auth/facebook", appUrl),
     "facebook-login",
     `width=${width},height=${height},left=${left},top=${top}`
   );
@@ -190,7 +190,7 @@ export const addUserFromGoogle = () => async (dispatch: AppDispatch) => {
   const left = window.screenX + (window.innerWidth - width) / 2;
   const top = window.screenY + (window.innerHeight - height) / 2;
   const authWindow = window.open(
-    new URL("auth/google", apiUrl),
+    new URL("/api/auth/google", appUrl),
     "google-login",
     `width=${width},height=${height},left=${left},top=${top}`
   );
