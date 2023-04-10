@@ -41,7 +41,6 @@ const ProductsAdminPage = () => {
 
     const handleEdit = (id: number) => {
       // Implementar lógica de edición aquí
-      onOpen();
       setIdProduct(id);
     };
 
