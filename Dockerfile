@@ -3,7 +3,7 @@ FROM node:alpine AS frontend-builder
 WORKDIR /app
 COPY . .
 RUN yarn --frozen-lockfile
-ARG VITE_API_URL
+ARG VITE_APP_URL
 RUN yarn turbo run build --filter=@henry-pf/frontend
 
 # Prune backend (for reduced image size)
