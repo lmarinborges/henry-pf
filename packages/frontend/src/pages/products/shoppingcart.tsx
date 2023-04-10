@@ -1,12 +1,19 @@
-import { Box, Heading, Text } from "@chakra-ui/react";
+import { Box, Heading, Text,Button } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 
 import ShoppingCard from "./shoppingCard";
 
 export default function ShoppingCart() {
   const [totalPrice, setTotalPrice] = useState(0);
+  const [totalProducts,setTotalProducts]=useState<any[]>([])
 
   var storage: Array<any> = [];
+
+  const onClose = (name: string, price:number) => {
+    localStorage.removeItem(name);
+    setTotalPrice(totalPrice-price)
+
+  };
 
   for (var i = 0; i < localStorage.length; i++) {
     if (localStorage.key(i)?.includes("chakra") !== true) {
@@ -21,16 +28,6 @@ export default function ShoppingCart() {
     } else return null;
   });
 
-  useEffect(() => {
-    if (totalPrice === 0) {
-      var init: number = 0;
-      products.forEach((e) => {
-        init += Number(e.price);
-      });
-      setTotalPrice(init);
-    }
-  }, [totalPrice, products]);
-
   const totalValue = (val: number, rest: boolean) => {
     let result = 0;
     if (rest === true) {
@@ -42,10 +39,6 @@ export default function ShoppingCart() {
     }
   };
 
-  const onClose = (name: string) => {
-    localStorage.removeItem(name);
-    window.location.reload();
-  };
 
   var totalCards = products.map((e, i) => {
     return (
@@ -58,11 +51,25 @@ export default function ShoppingCart() {
     );
   });
 
+  useEffect(() => {
+    setTotalProducts(totalCards)
+    var init: number = 0;
+    if (totalPrice === 0) {
+      products.forEach((e) => {
+        init += Number(e.price);
+      });
+      setTotalPrice(init);
+    }
+  }, [totalPrice, products, totalCards]);
+
   return (
-    <Box bg="black" padding="10px" m="0%">
-      <Heading color="white">Carrito:</Heading>
-      {totalCards}
-      <Text color="white">Total: ${totalPrice.toFixed(2)}</Text>
+    <Box bg="white" p="10px"mt="-10px" >
+      <Heading color="black">Carrito:</Heading>
+      { totalProducts.length!==0? totalProducts : <Text display={"flex"} alignItems="center" justifyContent={"center"} fontStyle="bold"> El Carrito está vacío</Text>}
+      <Text color="black">Total: ${totalPrice.toFixed(2)}</Text>
+      <Button size={"md"} variant="solid" colorScheme="red">
+          Comprar
+        </Button>
     </Box>
   );
 }
