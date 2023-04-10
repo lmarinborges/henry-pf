@@ -7,10 +7,11 @@ import {
   Heading,
   Input,
 } from "@chakra-ui/react";
-import { FaFacebook, FaTwitter } from "react-icons/fa";
+import { FaFacebook, FaGoogle } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import {
   addUserFromFb,
+  addUserFromGoogle,
   addUserFromLocal,
   registerUser,
 } from "../../redux/actions";
@@ -37,6 +38,9 @@ const LoginPage = ({ SuddenCLose }: { SuddenCLose: () => void }) => {
   }, [user]);
   function loginWithFacebook() {
     dispatch(addUserFromFb());
+  }
+  function loginWithGoogle() {
+    dispatch(addUserFromGoogle());
   }
 
   return (
@@ -102,12 +106,13 @@ const LoginPage = ({ SuddenCLose }: { SuddenCLose: () => void }) => {
           </Box>
           <Box flex="1" w={"100%"}>
             <Button
+              onClick={loginWithGoogle}
               w="100%"
               my={"3%"}
-              colorScheme="twitter"
-              leftIcon={<FaTwitter />}
+              colorScheme="red"
+              leftIcon={<FaGoogle />}
             >
-              Inicia sesion con Twitter
+              Inicia sesión con Google
             </Button>
           </Box>
         </HStack>
@@ -135,6 +140,9 @@ const RegisterPage = ({ SuddenCLose }: { SuddenCLose: () => void }) => {
   }, [user]);
   function loginWithFacebook() {
     dispatch(addUserFromFb());
+  }
+  function loginWithGoogle() {
+    dispatch(addUserFromGoogle());
   }
 
   return (
@@ -213,12 +221,13 @@ const RegisterPage = ({ SuddenCLose }: { SuddenCLose: () => void }) => {
           </Box>
           <Box flex="1" w={"100%"}>
             <Button
+              onClick={loginWithGoogle}
               w="100%"
               my={"3%"}
-              colorScheme="twitter"
-              leftIcon={<FaTwitter />}
+              colorScheme="red"
+              leftIcon={<FaGoogle />}
             >
-              Inicia sesion con Twitter
+              Inicia sesión con Google
             </Button>
           </Box>
         </HStack>

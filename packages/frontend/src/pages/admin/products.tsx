@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../redux/store/index";
 import { useEffect, useState } from "react";
 import * as actions from "../../redux/actions/index";
+
+import axios from "axios";
 import { EditTable } from "./editTable/EditTable";
 
 const ProductsAdminPage = () => {

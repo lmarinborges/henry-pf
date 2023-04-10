@@ -10,11 +10,11 @@ import {
 
 import { ReactNode } from "react";
 
-import { BsInstagram } from 'react-icons/bs';
+import { BsInstagram } from "react-icons/bs";
 
-import { BsYoutube } from 'react-icons/bs';
+import { BsYoutube } from "react-icons/bs";
 
-import {AiFillTwitterCircle} from 'react-icons/ai';
+import { AiFillTwitterCircle } from "react-icons/ai";
 
 const SocialButton = ({
   children,
@@ -64,16 +64,16 @@ export default function Footer() {
           justify={{ base: "center", md: "space-between" }}
           align={{ base: "center", md: "center" }}
         >
-          <Text>© 2022 XSport Club. All rights reserved</Text>
+          <Text>© 2022 XSport Club. Todos los derechos reservados</Text>
           <Stack direction={"row"} spacing={6}>
             <SocialButton label={"Twitter"} href={"#"}>
-            <AiFillTwitterCircle/>
+              <AiFillTwitterCircle />
             </SocialButton>
             <SocialButton label={"YouTube"} href={"#"}>
-            <BsYoutube/>
+              <BsYoutube />
             </SocialButton>
             <SocialButton label={"Instagram"} href={"#"}>
-            <BsInstagram />
+              <BsInstagram />
             </SocialButton>
           </Stack>
         </Container>
