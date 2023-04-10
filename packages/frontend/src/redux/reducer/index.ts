@@ -11,6 +11,7 @@ import {
   ADD_USER,
   GET_USERS_REVIEWS,
   GET_ALL_PRODUCTS_ADMIN,
+  EDITED_PRODUCT,
 } from "../actions/index";
 
 interface sliceState {
@@ -83,6 +84,9 @@ const rootReducer = (state = initialState, action: any) => {
       return { ...state, productDetail: action.payload };
     default:
       return state;
+
+    case EDITED_PRODUCT:
+      return { ...state, adminProducts: action.payload };
 
     case CREATE_REVIEW:
       return { ...state, reviews: [...state.products, action.payload] };
