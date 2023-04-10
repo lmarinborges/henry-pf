@@ -3,6 +3,7 @@ import { AppDispatch } from "../store/index";
 
 // Aca deben declarar las variables donde tengan el action types.
 export const GET_ALL_PRODUCTS = "GET_ALL_PRODUCTS";
+export const GET_ALL_PRODUCTS_ADMIN = "GET_ALL_PRODUCTS_ADMIN";
 export const GET_ALL_BRANDS = "GET_ALL_BRANDS";
 export const GET_ALL_CATEGORIES = "GET_ALL_CATEGORIES";
 export const GET_PRODUCT_DETAILS = "GET_PRODUCT_DETAILS";
@@ -26,25 +27,25 @@ export const getAllProducts =
   async (dispatch: AppDispatch) => {
     if (categoryFilter === 0 && brandFilter === 0 && search === "") {
       await fetch(
-        `http://localhost:4000/products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}`
+        `http://localhost:4000/products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&isTrashed=false`
       )
         .then((res) => res.json())
         .then((data) => dispatch({ type: GET_ALL_PRODUCTS, payload: data }));
     } else if (categoryFilter !== 0 && brandFilter !== 0 && search === "") {
       await fetch(
-        `http://localhost:4000/products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&categoryId=${categoryFilter}&brandId=${brandFilter}`
+        `http://localhost:4000/products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&categoryId=${categoryFilter}&brandId=${brandFilter}&isTrashed=false`
       )
         .then((res) => res.json())
         .then((data) => dispatch({ type: GET_ALL_PRODUCTS, payload: data }));
     } else if (categoryFilter === 0 && brandFilter !== 0 && search === "") {
       await fetch(
-        `http://localhost:4000/products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&brandId=${brandFilter}`
+        `http://localhost:4000/products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&brandId=${brandFilter}&isTrashed=false`
       )
         .then((res) => res.json())
         .then((data) => dispatch({ type: GET_ALL_PRODUCTS, payload: data }));
     } else if (categoryFilter !== 0 && brandFilter === 0 && search === "") {
       await fetch(
-        `http://localhost:4000/products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&categoryId=${categoryFilter}`
+        `http://localhost:4000/products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&categoryId=${categoryFilter}&isTrashed=false`
       )
         .then((res) => res.json())
         .then((data) => dispatch({ type: GET_ALL_PRODUCTS, payload: data }));
@@ -115,8 +116,7 @@ export const getAllCategories = () => async (dispatch: AppDispatch) => {
 export const getProductsPerPage =
   (page: number) => async (dispatch: AppDispatch) => {
     const res = await axios.get(`http://localhost:4000/products?page=${page}`);
-    // console.log(res.data);
-    dispatch({ type: GET_ALL_PRODUCTS, payload: res.data });
+    dispatch({ type: GET_ALL_PRODUCTS_ADMIN, payload: res.data });
   };
 
 export const deleteProduct = (data: any) => async (dispatch: AppDispatch) => {

@@ -10,6 +10,7 @@ import {
   GET_PRODUCT_REVIEWS,
   ADD_USER,
   GET_USERS_REVIEWS,
+  GET_ALL_PRODUCTS_ADMIN,
 } from "../actions/index";
 
 interface sliceState {
@@ -39,7 +40,7 @@ const initialState: sliceState = {
   search: "",
   reviews: [],
   productReviews: [],
-  reviewUsers:[]
+  reviewUsers: [],
 };
 
 const rootReducer = (state = initialState, action: any) => {
@@ -48,10 +49,16 @@ const rootReducer = (state = initialState, action: any) => {
     case GET_ALL_PRODUCTS:
       return {
         ...state,
-        products: action.payload.products.filter((e: any) => !e.isTrashed),
+        products: action.payload.products,
         totalItems: action.payload.totalItems,
         cardsForPages: action.payload.pageSize,
+      };
+    case GET_ALL_PRODUCTS_ADMIN:
+      return {
+        ...state,
         adminProducts: action.payload.products,
+        totalItems: action.payload.totalItems,
+        cardsForPages: action.payload.pageSize,
       };
 
     case SEARCH_PRODUCT:
@@ -82,14 +89,13 @@ const rootReducer = (state = initialState, action: any) => {
 
     case GET_PRODUCT_REVIEWS:
       return { ...state, productReviews: action.payload };
-    
+
     case GET_USERS_REVIEWS:
-      return{...state, reviewUsers:action.payload}
-      
+      return { ...state, reviewUsers: action.payload };
+
     case ADD_USER:
       return { ...state, user: action.payload };
-    
-  } 
+  }
 };
 
 export default rootReducer;
