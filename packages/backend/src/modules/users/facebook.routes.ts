@@ -7,7 +7,7 @@ import prisma from "../../db";
 import crypto from "crypto";
 import { z } from "zod";
 import { encryptPassword } from "./encrypt";
-import { facebookConfig } from "../../config";
+import { appOrigin, facebookConfig } from "../../config";
 
 const facebookRouter = Router();
 
@@ -90,9 +90,9 @@ facebookRouter.get(
   function (req, res) {
     // Emitimos un mensaje al cliente indicando que se ha autenticado correctamente
     res.send(
-      "<script>window.opener.postMessage({ isAuthenticated: true, user: " +
-        JSON.stringify(req.user) +
-        ' }, "http://localhost:5173"); window.close();</script>'
+      `<script>window.opener.postMessage({ isAuthenticated: true, user: "${JSON.stringify(
+        req.user
+      )}" }, "${appOrigin()}"); window.close();</script>`
     );
   }
 );

@@ -12,7 +12,7 @@ processes = []
   APP_ORIGIN = "https://grupo04-henry-pf.fly.dev"
 
 [build.args]
-  VITE_API_URL = "https://grupo04-henry-pf.fly.dev/api"
+  VITE_APP_URL = "https://grupo04-henry-pf.fly.dev"
 
 [experimental]
   auto_rollback = true

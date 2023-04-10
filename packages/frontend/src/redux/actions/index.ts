@@ -1,3 +1,4 @@
+import { apiUrl, appUrl } from "../../config";
 import axios from "../../libs/axios";
 import { AppDispatch } from "../store/index";
 
@@ -27,53 +28,53 @@ export const getAllProducts =
   ) =>
   async (dispatch: AppDispatch) => {
     if (categoryFilter === 0 && brandFilter === 0 && search === "") {
-      await fetch(
-        `http://localhost:4000/products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&isTrashed=false`
-      )
-        .then((res) => res.json())
-        .then((data) => dispatch({ type: GET_ALL_PRODUCTS, payload: data }));
+      await axios
+        .get(
+          `products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&isTrashed=false`
+        )
+        .then((res) => dispatch({ type: GET_ALL_PRODUCTS, payload: res.data }));
     } else if (categoryFilter !== 0 && brandFilter !== 0 && search === "") {
-      await fetch(
-        `http://localhost:4000/products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&categoryId=${categoryFilter}&brandId=${brandFilter}&isTrashed=false`
-      )
-        .then((res) => res.json())
-        .then((data) => dispatch({ type: GET_ALL_PRODUCTS, payload: data }));
+      await axios
+        .get(
+          `products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&categoryId=${categoryFilter}&brandId=${brandFilter}&isTrashed=false`
+        )
+        .then((res) => dispatch({ type: GET_ALL_PRODUCTS, payload: res.data }));
     } else if (categoryFilter === 0 && brandFilter !== 0 && search === "") {
-      await fetch(
-        `http://localhost:4000/products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&brandId=${brandFilter}&isTrashed=false`
-      )
-        .then((res) => res.json())
-        .then((data) => dispatch({ type: GET_ALL_PRODUCTS, payload: data }));
+      await axios
+        .get(
+          `products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&brandId=${brandFilter}&isTrashed=false`
+        )
+        .then((res) => dispatch({ type: GET_ALL_PRODUCTS, payload: res.data }));
     } else if (categoryFilter !== 0 && brandFilter === 0 && search === "") {
-      await fetch(
-        `http://localhost:4000/products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&categoryId=${categoryFilter}&isTrashed=false`
-      )
-        .then((res) => res.json())
-        .then((data) => dispatch({ type: GET_ALL_PRODUCTS, payload: data }));
+      await axios
+        .get(
+          `products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&categoryId=${categoryFilter}&isTrashed=false`
+        )
+        .then((res) => dispatch({ type: GET_ALL_PRODUCTS, payload: res.data }));
     } else if (categoryFilter === 0 && brandFilter === 0 && search !== "") {
-      await fetch(
-        `http://localhost:4000/products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&&search=${search}`
-      )
-        .then((res) => res.json())
-        .then((data) => dispatch({ type: GET_ALL_PRODUCTS, payload: data }));
+      await axios
+        .get(
+          `products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&&search=${search}`
+        )
+        .then((res) => dispatch({ type: GET_ALL_PRODUCTS, payload: res.data }));
     } else if (categoryFilter !== 0 && brandFilter !== 0 && search !== "") {
-      await fetch(
-        `http://localhost:4000/products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&categoryId=${categoryFilter}&brandId=${brandFilter}&&search=${search}`
-      )
-        .then((res) => res.json())
-        .then((data) => dispatch({ type: GET_ALL_PRODUCTS, payload: data }));
+      await axios
+        .get(
+          `products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&categoryId=${categoryFilter}&brandId=${brandFilter}&&search=${search}`
+        )
+        .then((res) => dispatch({ type: GET_ALL_PRODUCTS, payload: res.data }));
     } else if (categoryFilter === 0 && brandFilter !== 0 && search !== "") {
-      await fetch(
-        `http://localhost:4000/products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&brandId=${brandFilter}&&search=${search}`
-      )
-        .then((res) => res.json())
-        .then((data) => dispatch({ type: GET_ALL_PRODUCTS, payload: data }));
+      await axios
+        .get(
+          `products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&brandId=${brandFilter}&&search=${search}`
+        )
+        .then((res) => dispatch({ type: GET_ALL_PRODUCTS, payload: res.data }));
     } else if (categoryFilter !== 0 && brandFilter === 0 && search !== "") {
-      await fetch(
-        `http://localhost:4000/products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&categoryId=${categoryFilter}&&search=${search}`
-      )
-        .then((res) => res.json())
-        .then((data) => dispatch({ type: GET_ALL_PRODUCTS, payload: data }));
+      await axios
+        .get(
+          `products?column=${orderBy}&order=${alphaOrder}&page=${currentPage}&categoryId=${categoryFilter}&&search=${search}`
+        )
+        .then((res) => dispatch({ type: GET_ALL_PRODUCTS, payload: res.data }));
     }
   };
 
@@ -116,7 +117,7 @@ export const getAllCategories = () => async (dispatch: AppDispatch) => {
 
 export const getProductsPerPage =
   (page: number) => async (dispatch: AppDispatch) => {
-    const res = await axios.get(`http://localhost:4000/products?page=${page}`);
+    const res = await axios.get(`products?page=${page}`);
     dispatch({ type: GET_ALL_PRODUCTS_ADMIN, payload: res.data });
   };
 
@@ -131,10 +132,7 @@ export const deleteProduct = (data: any) => async (dispatch: AppDispatch) => {
 export const patchProduct =
   (data: any, idProduct: number, newAndOthers: any) =>
   async (dispatch: AppDispatch) => {
-    let result = await axios.patch(
-      `http://localhost:4000/products/${idProduct}`,
-      data
-    );
+    let result = await axios.patch(`products/${idProduct}`, data);
     dispatch({ type: EDITED_PRODUCT, payload: newAndOthers });
     // console.log("NEW DATA",result.data);
   };
@@ -163,7 +161,7 @@ export const addUserFromFb = () => async (dispatch: AppDispatch) => {
   const left = window.screenX + (window.innerWidth - width) / 2;
   const top = window.screenY + (window.innerHeight - height) / 2;
   const authWindow = window.open(
-    "http://localhost:4000/auth/facebook",
+    new URL("auth/facebook", apiUrl),
     "facebook-login",
     `width=${width},height=${height},left=${left},top=${top}`
   );
@@ -171,7 +169,7 @@ export const addUserFromFb = () => async (dispatch: AppDispatch) => {
     throw Error("no se puede llamar al login");
   }
   const handleAuthResponse = (event: any) => {
-    if (event.origin !== "http://localhost:4000") return;
+    if (event.origin !== appUrl) return;
     if (event.data.isAuthenticated) {
       console.log(event.data);
       dispatch({ type: ADD_USER, payload: event.data.user });
@@ -192,7 +190,7 @@ export const addUserFromGoogle = () => async (dispatch: AppDispatch) => {
   const left = window.screenX + (window.innerWidth - width) / 2;
   const top = window.screenY + (window.innerHeight - height) / 2;
   const authWindow = window.open(
-    "http://localhost:4000/auth/google",
+    new URL("auth/google", apiUrl),
     "google-login",
     `width=${width},height=${height},left=${left},top=${top}`
   );
@@ -200,7 +198,7 @@ export const addUserFromGoogle = () => async (dispatch: AppDispatch) => {
     throw Error("no se puede llamar al login");
   }
   const handleAuthResponse = (event: any) => {
-    if (event.origin !== "http://localhost:4000") return;
+    if (event.origin !== appUrl) return;
     if (event.data.isAuthenticated) {
       console.log(event.data);
       dispatch({ type: ADD_USER, payload: event.data.user });
@@ -219,7 +217,7 @@ export const addUserFromLocal =
   (data: any) => async (dispatch: AppDispatch) => {
     try {
       const response = await axios.post(
-        "http://localhost:4000/localLogin",
+        "localLogin",
         {
           email: data.email,
           password: data.password,
@@ -253,7 +251,7 @@ export const registerUser = (data: any) => async (dispatch: AppDispatch) => {
     state: "active", // por defecto por ahora
   };
   try {
-    const response = await axios.post("http://localhost:4000/users", userData);
+    const response = await axios.post("users", userData);
     if (response.data.state === "success") {
       alert("Bienvenido, revisa tu correo e inicia session");
       dispatch(addUserFromLocal(data));
@@ -267,7 +265,7 @@ export const registerUser = (data: any) => async (dispatch: AppDispatch) => {
 };
 
 export const logoutUser = () => async (dispatch: AppDispatch) => {
-  const res = await axios.get(`http://localhost:4000/logout`, {
+  const res = await axios.get(`logout`, {
     withCredentials: true,
   });
   // verificamos si se deslogueo correctamente
@@ -276,7 +274,7 @@ export const logoutUser = () => async (dispatch: AppDispatch) => {
 
 export const verifyUser = () => async (dispatch: AppDispatch) => {
   try {
-    const res = await axios.get("http://localhost:4000/privateUsers", {
+    const res = await axios.get("privateUsers", {
       withCredentials: true,
     });
     //consulta si esta logueado para obtener el usuario
@@ -291,9 +289,7 @@ export const getUsersReviews =
   (usersIds: any) => async (dispatch: AppDispatch) => {
     console.log(usersIds);
     const data = usersIds.map(async (id: any) => {
-      const res = await axios
-        .get(`http://localhost:4000/users/${id}`)
-        .then((data) => data.data);
+      const res = await axios.get(`users/${id}`).then((data) => data.data);
       return res;
     });
     dispatch({ type: GET_USERS_REVIEWS, payload: data });

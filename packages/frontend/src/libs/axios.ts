@@ -1,7 +1,8 @@
 import axiosLib from "axios";
+import { apiUrl } from "../config";
 
 const axios = axiosLib.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:8080/api",
+  baseURL: apiUrl,
 });
 
 export default axios;
