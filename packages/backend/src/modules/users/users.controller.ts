@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import unimplemented from "../../utils/unimplemented";
 import { z } from "zod";
 import { encryptPassword } from "./encrypt";
+import { Prisma } from "@prisma/client";
 
 const paramsSchema = z.object({
   userId: z.coerce.number().int(),
@@ -43,9 +44,62 @@ const updateSchema = z.object({
   body: bodySchema.partial(),
 });
 
+const ignoreIfShorterThanThree = (value: any) => {
+  if (value.length < 3) {
+    return undefined;
+  }
+  return value;
+};
+const getAllSchema = z.object({
+  query: z
+    .object({
+      id: z.coerce.number().int(),
+      search: z.string().transform(ignoreIfShorterThanThree),
+      email: z.string().transform(ignoreIfShorterThanThree),
+      name: z.string().transform(ignoreIfShorterThanThree),
+      role: z.string().transform(ignoreIfShorterThanThree),
+      state: z.string().transform(ignoreIfShorterThanThree),
+      page: z.coerce.number(),
+      order: z.enum(["asc", "desc"]),
+      column: z.string().transform(ignoreIfShorterThanThree),
+      size: z.coerce.number(),
+    })
+    .partial(),
+});
+
 export async function getAllUsers(req: Request, res: Response) {
-  const users = await prisma.user.findMany();
-  return res.status(200).send(users);
+  const { query } = await getAllSchema.parseAsync(req);
+  console.log(typeof query.email);
+  console.log(query.role);
+  const where: Prisma.UserWhereInput = {
+    name: { contains: query.search, mode: "insensitive" },
+    email: query.email,
+    role: query.role,
+    state: query.state,
+  };
+
+  const select = {
+    id: true,
+    name: true,
+    email: true,
+    // Aquí excluimos la columna password por seguridad
+    role: true,
+    state: true,
+  };
+
+  const totalItems = await prisma.user.count({ where });
+  //tamaño por defecto de la página 5
+  const page_size = query.size ? query.size : 5;
+  const users = await prisma.user.findMany({
+    take: page_size,
+    skip: query.page ? (query.page - 1) * page_size : undefined,
+    where,
+    orderBy: { ...(query.column ? { [query.column]: query.order } : {}) },
+    select: select,
+  });
+  res.status(200).json({ totalItems, pageSize: page_size, users });
+  /*const users = await prisma.user.findMany();
+  return res.status(200).send(users);*/
 }
 
 export async function getUser(req: Request, res: Response) {
