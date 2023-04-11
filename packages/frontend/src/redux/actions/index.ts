@@ -107,6 +107,8 @@ export const createProduct = (data: any) => async (dispatch: AppDispatch) => {
 
 export const getAllBrands = () => async (dispatch: AppDispatch) => {
   const res = await axios.get("brands");
+  console.log(res.data);
+  
   dispatch({ type: GET_ALL_BRANDS, payload: res.data });
 };
 
