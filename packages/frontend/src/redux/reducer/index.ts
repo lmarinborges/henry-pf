@@ -12,6 +12,7 @@ import {
   GET_USERS_REVIEWS,
   GET_ALL_PRODUCTS_ADMIN,
   EDITED_PRODUCT,
+  GET_ALL_USERS,
 } from "../actions/index";
 
 interface sliceState {
@@ -27,6 +28,7 @@ interface sliceState {
   reviews: Array<any>;
   productReviews: Array<any>;
   reviewUsers: Array<any>;
+  users: Array<any>;
 }
 
 const initialState: sliceState = {
@@ -42,6 +44,7 @@ const initialState: sliceState = {
   reviews: [],
   productReviews: [],
   reviewUsers: [],
+  users: [],
 };
 
 const rootReducer = (state = initialState, action: any) => {
@@ -99,6 +102,8 @@ const rootReducer = (state = initialState, action: any) => {
 
     case ADD_USER:
       return { ...state, user: action.payload };
+    case GET_ALL_USERS:
+      return { ...state, users: action.payload };
   }
 };
 

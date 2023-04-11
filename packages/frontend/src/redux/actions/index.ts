@@ -16,6 +16,7 @@ export const GET_PRODUCT_REVIEWS = "GET_PRODUCT_REVIEWS";
 export const ADD_USER = "ADD_USER";
 export const EDITED_PRODUCT = "EDITED_PRODUCT";
 export const GET_USERS_REVIEWS = "GET_USERS_REVIEWS";
+export const GET_ALL_USERS = "GET_ALL_USERS"
 
 export const getAllProducts =
   (
@@ -295,4 +296,28 @@ export const getUsersReviews =
       return res;
     });
     dispatch({ type: GET_USERS_REVIEWS, payload: data });
+  };
+
+  export const getAllUsers = (data: any) => async (dispatch: AppDispatch) => {
+    console.log("hola we");
+    
+    try {
+      const name = data?.name ?? "";
+      const email = data?.email ?? "";
+      const role = data?.role ?? "";
+      const search = data?.search ?? "";
+      const state = data?.state ?? "";
+      const page = data?.page ?? "";
+      const order = data?.order ?? "asc";
+      const column = data?.column ?? "";
+      const size = data?.size ?? "";
+  
+      const res = await axios.get(
+        `users?name=${name}&email=${email}&role=${role}&search=${search}&state=${state}&page=${page}&order=${order}&column=${column}&size=${size}`
+      );
+      console.log(res.data);
+      dispatch({ type: GET_ALL_USERS, payload: res.data.users });
+    } catch (error) {
+      console.log(error);
+    }
   };

@@ -99,7 +99,7 @@ export async function getAllUsers(req: Request, res: Response) {
   });
   res.status(200).json({ totalItems, pageSize: page_size, users });
   /*const users = await prisma.user.findMany();
-  return res.status(200).send(users);*/
+  return res.status(200).send(users)*/
 }
 
 export async function getUser(req: Request, res: Response) {
