@@ -1,4 +1,4 @@
-import { Button, Flex, Input } from "@chakra-ui/react";
+import { Button, Flex, Input, useColorModeValue } from "@chakra-ui/react";
 import { GoSearch } from "react-icons/go";
 import { AppDispatch } from "../../redux/store/index";
 import { useDispatch } from "react-redux";
@@ -23,7 +23,7 @@ export const SearchBar = () => {
 
   return (
     <>
-      <Flex justifyContent="center" mb={50}>
+      <Flex justifyContent="center" mb={50} bg={useColorModeValue("gray.50", "gray.800")}>
         <form onSubmit={handleSubmit}>
           <Flex
             align="center"
@@ -34,7 +34,7 @@ export const SearchBar = () => {
             pl={4}
             pr={2}
             bg="white"
-          >
+            >
             <Input
               type="text"
               value={searchProduct}
@@ -44,10 +44,10 @@ export const SearchBar = () => {
               bgColor="transparent"
               p="0px"
               placeholder="¿Que deseas buscar?"
+              _placeholder={{ opacity: 1, color: 'gray.500' }}
               _hover={{ borderColor: "none" }}
               size={{ base: "lg" }}
               width={{ lg: "333px" }}
-              color="black"
             />
             <Button
               type="submit"
