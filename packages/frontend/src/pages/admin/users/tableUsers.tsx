@@ -3,22 +3,33 @@ import { RootState, AppDispatch } from "../../../redux/store/";
 import { getAllUsers } from "../../../redux/actions";
 import { useEffect, useState } from "react";
 import TablaDinamica from "./DinamicTable";
-import { Box, Button, Text } from "@chakra-ui/react";
+import { Box, Button, Icon, Text } from "@chakra-ui/react";
 import { FiTrash2 } from "react-icons/fi";
-import { AiOutlineCloudDownload } from "react-icons/ai";
+import { AiFillEdit } from "react-icons/ai";
 
-function Descargando(valor: any) {
-  console.log("descargando");
+function Editando(valor: any) {
+  console.log("Editando",valor);
+}
+function Borrando(valor: any) {
+  console.log("borrendo",valor);
 }
 
 const acciones = [
   {
-    onclick: Descargando,
-    icon: <AiOutlineCloudDownload />,
+    onclick: Editando,
+    icon: (
+      <Button colorScheme="yellow" p={0}>
+        <Icon as={AiFillEdit} w={6} h={6} color="black" />
+      </Button>
+    ),
   },
   {
-    onclick: (value: any) => console.log("Borrando", value),
-    icon: <FiTrash2 />,
+    onclick: Borrando,
+    icon: (
+      <Button colorScheme="blue" p={0}>
+        <Icon as={FiTrash2} w={6} h={6} color="black" />
+      </Button>
+    ),
   },
 ];
 
@@ -66,10 +77,9 @@ export default function TableUsers() {
   useEffect(() => {
     dispatch(getAllUsers(conditions));
   }, [conditions]);
-useEffect(()=>{
+  useEffect(() => {
     console.log(data);
-    
-},[data])
+  }, [data]);
   const handleEdit = () => {
     console.log("editando");
   };
@@ -92,7 +102,7 @@ useEffect(()=>{
   const renderizado = (data: any) => {
     if (data && data.length > 1) {
       return (
-        <Box maxW="80%" mx={"auto"}>
+        <Box m={"auto"}>
           <TablaDinamica data={data} acciones={acciones} />
           <Box
             display="flex"
@@ -112,9 +122,9 @@ useEffect(()=>{
             </Button>
           </Box>
         </Box>
-      )
-    }else{
-        return (<div>no hay nada</div>)
+      );
+    } else {
+      return <div>no hay nada</div>;
     }
   };
   return renderizado(data);

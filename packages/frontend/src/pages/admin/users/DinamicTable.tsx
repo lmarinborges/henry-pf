@@ -1,4 +1,4 @@
-import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { Table, Tbody, Td, Th, Thead, Tr ,Button,Flex, Box} from "@chakra-ui/react";
 import React, { useMemo } from "react";
 import { useTable } from "react-table";
 import { Column } from "react-table";
@@ -18,6 +18,10 @@ interface Props {
   acciones: Accion[];
 }
 
+const tipicalActions = [{
+    accion:"crear",
+    color : ""
+}]
 export default function TablaDinamica ({ data, columnas, acciones }: Props) {
   const tableData = useMemo(() => data, [data]);
     let columnasTabla:any;
@@ -40,18 +44,19 @@ export default function TablaDinamica ({ data, columnas, acciones }: Props) {
       accessor: "actions",
       id: "actions",
       Cell: ({ row }: { row: any }) => (
-        <div className="flex items-center ">
+        <Flex>
           {acciones.map(({ icon, onclick }, index) => {
             return(
-            <button
+            <Box 
+            p={0}
+            m={2}
               key={index}
               onClick={() => onclick(row.original)}
-              className="mx-auto bg-blue-500 hover:bg-blue-700 text-white font-bold p-2  rounded inline-flex items-center "
             >
               {icon}
-            </button>
+            </Box>
           )})}
-        </div>
+        </Flex>
       ),
     };
     return [
