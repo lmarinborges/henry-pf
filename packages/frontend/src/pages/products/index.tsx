@@ -8,6 +8,7 @@ import {
   Button,
   Select,
   Box,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import Card from "./card";
 import { useDispatch, useSelector } from "react-redux";
@@ -107,35 +108,42 @@ export default function ProductsPage() {
   });
 
   return (
-    <Container bg={"white"}>
-      <Box bgColor="white" pt="10px" pb="0px" mb="-20px">
+    <Container 
+      bg={useColorModeValue("gray.50", "gray.800")}
+    >
+      <Box 
+        bg={useColorModeValue("gray.50", "gray.800")}
+        pt="10px" 
+        pb="0px" 
+        mb="-20px"
+      >
         <SearchBar />
       </Box>
 
-      <Text color="black" fontSize="18px" m="5px">
-        Ordenar por Nombre o Precio :
+      <Text fontSize="18px" m="5px">
+        Ordenar por Nombre o Precio:
       </Text>
       <RadioGroup onChange={setOrder} value={orderBy} defaultValue="name">
         <Stack direction={"row"} justifyContent="center" spacing={"3"}>
           <Radio colorScheme={"red"} textColor={"Black"} value="name">
-            <Text color={"black"}>Nombre</Text>
+            <Text>Nombre</Text>
           </Radio>
           <Radio colorScheme={"red"} value="price">
-            <Text color={"Black"}>Precio</Text>
+            <Text>Precio</Text>
           </Radio>
         </Stack>
       </RadioGroup>
 
-      <Text color={"black"} fontSize="18px" m="5px">
-        Orden ascendente o descendente :
+      <Text fontSize="18px" m="5px">
+        Orden ascendente o descendente:
       </Text>
       <RadioGroup onChange={setAlpha} value={alphaOrder} defaultValue="asc">
         <Stack direction={"row"} justifyContent="center" spacing={"3"}>
-          <Radio colorScheme={"red"} value="asc">
-            <Text color={"black"}>A-Z Min{"<"} Max</Text>
+          <Radio colorScheme={"red.300"} value="asc">
+            <Text>A-Z Min{"<"} Max</Text>
           </Radio>
-          <Radio colorScheme={"red"} value="desc">
-            <Text color={"black"}>Z-A Max{">"}Min</Text>
+          <Radio colorScheme={"red.300"} value="desc">
+            <Text>Z-A Max{">"}Min</Text>
           </Radio>
         </Stack>
       </RadioGroup>
@@ -145,8 +153,9 @@ export default function ProductsPage() {
         variant="filled"
         color="black"
         bg="white"
-        colorScheme="blackAlpha"
         borderColor="red"
+        _hover={{ bg: "red.300", color:"white" }}
+        focusBorderColor="gray.50"
         mb="2"
       >
         <option value={Number(0)} key="0">
@@ -160,8 +169,9 @@ export default function ProductsPage() {
         variant="filled"
         color="black"
         bg="white"
-        colorScheme="blackAlpha"
         borderColor="red"
+        _hover={{ bg: "red.300", color:"white" }}
+        focusBorderColor="gray.50"
         mb="2"
       >
         <option value={Number(0)} key="0">
@@ -170,7 +180,7 @@ export default function ProductsPage() {
         {brandsOptions}
       </Select>
 
-      <Text m="10px" fontSize="20px" color="black">
+      <Text m="10px" fontSize="20px">
         Productos:{" "}
       </Text>
 
