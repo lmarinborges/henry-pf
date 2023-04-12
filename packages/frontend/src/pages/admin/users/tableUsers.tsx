@@ -8,37 +8,8 @@ import { FiTrash2 } from "react-icons/fi";
 import { AiFillEdit } from "react-icons/ai";
 import ModalEdit from "./modalEdit";
 
-/*const CompVerCertificado = (props: any) => {
-    console.log(props);
-  
-    return <Link to={"/user/certificado/" + props.id}>Ver Mass </Link>;
-  };
-  
-  const columnas = [
-    {
-      nombre: "certificados",
-      componente: ({ id }: { id: any }) => <CompVerCertificado id={id} />,
-    },
-  ];*/
 
-const dato = [
-  {
-    "Numero de item": 1,
-    titulo: "titulo1",
-    autor: "autor1",
-    categoria: "categoria 1",
-    precio: "10.00",
-    fecha_de_compra: "20 march 2020",
-  },
-  {
-    "Numero de item": 2,
-    titulo: "titulo2",
-    autor: "autor2",
-    categoria: "categoria 2",
-    precio: "15.00",
-    fecha_de_compra: "10 april 2020",
-  },
-];
+
 export default function TableUsers() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [valorModal, setValorModal] = useState(null);
@@ -47,14 +18,6 @@ export default function TableUsers() {
     setValorModal(valor);
     onOpen();
   }
-  function Editando(valor: any) {
-    console.log("Editando", valor);
-  }
-
-  function Borrando(valor: any) {
-    console.log("borrendo", valor);
-  }
-
   const acciones = [
     {
       onclick: abrirModal,
@@ -64,14 +27,7 @@ export default function TableUsers() {
         </Button>
       ),
     },
-    {
-      onclick: Borrando,
-      icon: (
-        <Button colorScheme="blue" p={0}>
-          <Icon as={FiTrash2} w={6} h={6} color="black" />
-        </Button>
-      ),
-    },
+
   ];
 
   const dispatch: AppDispatch = useDispatch();
