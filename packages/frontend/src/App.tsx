@@ -18,6 +18,7 @@ import NotFoundPage from "./pages/notfound";
 import ProductsPage from "./pages/products";
 import ProductPage from "./pages/products/product";
 import ShoppingCart from "./pages/products/shoppingcart";
+import TableUsers from "./pages/admin/users/tableUsers";
 
 const routes = createBrowserRouter(
   createRoutesFromElements([
@@ -36,6 +37,7 @@ const routes = createBrowserRouter(
         <Route index element={<Navigate to="products" />} />
         <Route path="products" element={<ProductsAdminPage />} />
         <Route path="createProduct" element={<CreateProductForm />} />
+        <Route path="users" element={<TableUsers />} />
       </Route>
       <Route path="*" element={<NotFoundPage />} />
     </Route>,
