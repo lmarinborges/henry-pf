@@ -16,6 +16,7 @@ export const GET_PRODUCT_REVIEWS = "GET_PRODUCT_REVIEWS";
 export const ADD_USER = "ADD_USER";
 export const EDITED_PRODUCT = "EDITED_PRODUCT";
 export const GET_USERS_REVIEWS = "GET_USERS_REVIEWS";
+export const CREATE_BRAND = "CREATE_BRAND";
 
 export const getAllProducts =
   (
@@ -294,3 +295,11 @@ export const getUsersReviews =
     });
     dispatch({ type: GET_USERS_REVIEWS, payload: data });
   };
+
+export const createBrands = (data: any) => async (dispatch: AppDispatch) => {
+  console.log(data);
+  let res = await axios.post("brands", data);
+  dispatch({ type: CREATE_BRAND, payload: res.data });
+  console.log(res.data);
+  
+};

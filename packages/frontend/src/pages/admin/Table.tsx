@@ -81,7 +81,7 @@ const Tabla = ({
                 Cell: ({ value }: { value: { id: number, isTrashed: boolean } }) => (
                     <Flex>
                         <Button
-                            onClick={() => handleEdit(value)}
+                            onClick={() => handleEdit(value.id)}
                             bg="yellow.300"
                             mr="5px"
                         >
