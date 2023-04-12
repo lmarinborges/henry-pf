@@ -5,13 +5,16 @@ import {
   DrawerContent,
   DrawerHeader,
   DrawerOverlay,
+  DrawerFooter,
   Flex,
   Icon,
   IconButton,
+  Button,
+  Box,
   LayoutProps,
   Link,
   Text,
-  useDisclosure
+  useDisclosure,
 } from "@chakra-ui/react";
 import {
   MdAlternateEmail,
@@ -21,6 +24,8 @@ import {
   MdShoppingCart,
 } from "react-icons/md";
 import { Link as RouterLink } from "react-router-dom";
+import ToggleColorMode from "../../feature/ToggleColorMode";
+import UserMenu from "../../features/components/loginButton";
 
 export interface NavbarProps {
   height: LayoutProps["height"];
@@ -47,6 +52,7 @@ export default function Navbar(props: NavbarProps) {
         px="2"
         backdropFilter="blur(8px)"
         boxShadow="sm"
+        zIndex="999"
       >
         <IconButton
           _hover={{ backgroundColor: "rgba(0, 0, 0, 0.03)" }}
@@ -57,15 +63,21 @@ export default function Navbar(props: NavbarProps) {
           icon={<HamburgerIcon />}
           onClick={onOpen}
         />
-        <Link href="/products/shoppingcart"><IconButton
-          _hover={{ backgroundColor: "rgba(0, 0, 0, 0.03)" }}
-          _active={{ backgroundColor: "rgba(0, 0, 0, 0.05)" }}
-          color="rgba(0, 0, 0, 0.68)"
-          variant="ghost"
-          borderRadius="full"
-          aria-label="Ver carrito de compras"
-          icon={<MdShoppingCart />}
-        /></Link>
+        <Flex alignItems="center" justifyContent="flex-end">
+          <Link href="/products/shoppingcart">
+            <IconButton
+              _hover={{ backgroundColor: "rgba(0, 0, 0, 0.03)" }}
+              _active={{ backgroundColor: "rgba(0, 0, 0, 0.05)" }}            
+              variant="ghost"
+              borderRadius="full"
+              aria-label="Ver carrito de compras"
+              icon={<MdShoppingCart />}
+            />
+          </Link>
+          <Flex justifyContent="flex-end" marginLeft="auto">
+            <UserMenu />
+          </Flex>
+        </Flex>
       </Flex>
       <Drawer size="xs" placement="left" isOpen={isOpen} onClose={onClose}>
         <DrawerOverlay />
@@ -84,7 +96,7 @@ export default function Navbar(props: NavbarProps) {
           <Flex flexDirection="column">
             {DRAWER_ITEMS.map((value, index) => (
               <Link
-                paddingX="6"
+                paddingX="8"
                 paddingY="3"
                 display="flex"
                 alignItems="center"
@@ -100,6 +112,16 @@ export default function Navbar(props: NavbarProps) {
               </Link>
             ))}
           </Flex>
+          <DrawerFooter>
+            <Button
+              marginRight="auto"
+              backgroundColor="transparent"
+              variant="unstyled"
+              my="-3"
+            >
+              <ToggleColorMode />
+            </Button>
+          </DrawerFooter>
         </DrawerContent>
       </Drawer>
     </>

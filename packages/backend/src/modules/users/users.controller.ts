@@ -57,12 +57,23 @@ export async function getUser(req: Request, res: Response) {
 }
 
 export async function createUser(req: Request, res: Response) {
-  const { body: data } = await createSchema.parseAsync(req);
-  const hashedPassword: string = await encryptPassword(data.password);
-  const user = await prisma.user.create({
-    data: { ...data, password: hashedPassword },
-  });
-  return res.status(200).json(user);
+  try {
+    const { body: data } = await createSchema.parseAsync(req);
+    const hashedPassword: string = await encryptPassword(data.password);
+    const user = await prisma.user.create({
+      data: { ...data, password: hashedPassword },
+    });
+    return res.status(200).json({ state: "success", user: user });
+  } catch (error: any) {
+    if (error.code === "P2002") {
+      res.status(400).json({ state: "error", message: "El email ya existe" });
+    } else {
+      console.error(error);
+      res
+        .status(500)
+        .json({ state: "error", message: "Error al crear el usuario" });
+    }
+  }
 }
 export async function updateUser(req: Request, res: Response) {
   // TODO check password and catch

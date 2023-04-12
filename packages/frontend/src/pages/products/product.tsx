@@ -1,91 +1,135 @@
-import {Card,CardBody,CardFooter,Image,Stack,Heading,Text,Divider,ButtonGroup,Button,Container,Box,Textarea,Select,Flex,} from "@chakra-ui/react";
+import {
+  Card,
+  CardBody,
+  CardFooter,
+  Image,
+  Stack,
+  Heading,
+  Text,
+  Divider,
+  ButtonGroup,
+  Button,
+  Container,
+  Box,
+  Textarea,
+  Select,
+  Flex,
+} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { useDispatch,useSelector } from "react-redux";
-import { BsStar, BsStarFill, BsStarHalf } from 'react-icons/bs';
+import { useDispatch, useSelector } from "react-redux";
+import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 import { useParams } from "react-router-dom";
-import {RootState,AppDispatch} from '../../redux/store/index'
+import { RootState, AppDispatch } from "../../redux/store/index";
 import * as actions from "../../redux/actions/index";
 
-export default function ProductPage(props: any) {
+export default function ProductPage() {
+  const { productId } = useParams();
 
-  const {productId}=useParams() ;
-  
-  const dispatch:AppDispatch= useDispatch();
-  
-  useEffect(()=>{
-    if (productId) dispatch(actions.getProductDetail(productId));
+  const dispatch: AppDispatch = useDispatch();
+
+  const reviews = useSelector((state: RootState) => state.productReviews);
+  const prod = useSelector((state: RootState) => state.productDetail);
+  const usersReviews = useSelector((state:RootState) => state.reviewUsers);
+
+  const [comments, setComments] = useState<any[]>([]);
+  const [text, setText] = useState("");
+  const [num, setNum] = useState(0);
+
+  useEffect(() => {
+    if (productId) {
+      dispatch(actions.getProductDetail(productId));
+      dispatch(actions.getProductReviews(productId));
+    }
   },[dispatch,productId]);
-  
-  const prod=useSelector((state:RootState)=>state.productDetail);
 
-  const [text, setText] = useState("")
-  const [num, setNum] = useState(0)
-  const [review, setReview] = useState({coment:"",stars:-1})
-
-  const  handleTextChange = (e: any) => {
-    let inputValue = e.target.value
-    setText(inputValue)
+  const handleTextChange = (e: any) => {
+    let inputValue = e.target.value;
+    setText(inputValue);
   };
 
   const handleNumChange = (e: any) => {
-    let inputValue = e.target.value
-    setNum(inputValue)
+    let inputValue = e.target.value;
+    setNum(inputValue);
   };
 
-  const onClickComent=()=>{
-      let rev={coment:text,stars:num}
-    setReview(rev)
+  const onClickCart = () => {
+    localStorage.setItem(prod.name, JSON.stringify(prod));
   };
 
-  const onClickCart=()=>{
-    localStorage.setItem(prod.name,JSON.stringify(prod))
-  }
+  const onClickComent = () => {
+    let rev = { comment: text, score: num, productId: productId };
+    setComments([rev])
+    dispatch(actions.createReview(rev));
 
-  const reviews = [
-    { coment: "feo el producto, no me ha servido para nada y no me convence, creo que fue una perdida de tiempo y  plata", stars: 5.0 },
-    { coment: "¡muy buen producto!", stars: 5.5 },
-    { coment: "buen producto", stars: 4.5 },
-  ];
+  };
 
-  const comentarios = reviews.map((element, i) => {
-    return <Text key={i} color="white" bg={"gray"} m="2" p="2" borderRadius="10px" marginInlineStart="20px">{element.coment}</Text>;
-  });
+  const comentarios = reviews ? (
+    reviews.map((element: any, i: number) => {
+      return (
+        <Text
+          key={i}
+          color="white"
+          bg={"gray"}
+          m="2"
+          p="2"
+          borderRadius="10px"
+          marginInlineStart="20px"
+        >
+        {element.comments}
+        </Text>
+      );
+    })
+    ) : (
+    <Text key={1} color="white">
+      No hay comentarios que mostrar
+    </Text>
+  );
 
-  const reviewCount = reviews.length;
+
+
+  const reviewCount = reviews ? reviews.length + comments?.length : 0;
 
   var votation = 0;
 
-  for (var i = 0; i < reviews.length; i++) {
-    votation += reviews[i].stars;
+  for (var i = 0; i < reviews?.length; i++) {
+    votation += Number(reviews[i]?.score);
+  }
+  if(comments?.length){
+    votation+=comments[0]?.score;
   }
 
-  var rating = votation/reviewCount;
+  var rating = votation / reviewCount;
 
   interface RatingProps {
     ratinge: number;
-    numReviews: number;
   }
-  
-  function Rating({ ratinge, numReviews }: RatingProps) {
+
+  function Rating({ ratinge }: RatingProps) {
     return (
       <Box display="flex" alignItems="center">
         {Array(5)
-          .fill('')
+          .fill("")
           .map((_, i) => {
-            const roundedRating = Math.round(ratinge*2)/2;
+            const roundedRating = Math.round(ratinge * 2) / 2;
             if (roundedRating - i >= 1) {
               return (
                 <BsStarFill
                   key={i}
-                  style={{ marginLeft: '1' }}
-                  color={i < rating ? 'yellow' : 'gray.300'}
+                  style={{ marginLeft: "1" }}
+                  color={i < rating ? "yellow" : "gray.300"}
                 />
               );
             }
             if (roundedRating - i === 0.5) {
-              return <BsStarHalf key={i} style={{ marginLeft: '1' }}color='yellow' />
+              return (
+                <BsStarHalf
+                  key={i}
+                  style={{ marginLeft: "1" }}
+                  color="yellow"
+                />
+              );
             }
-            return <BsStar key={i} style={{ marginLeft: '1' }}color="gray" />;
+            return <BsStar key={i} style={{ marginLeft: "1" }} color="gray" />;
           })}
       </Box>
     );
@@ -96,17 +140,12 @@ export default function ProductPage(props: any) {
       <Card marginBottom="20px">
         <CardBody>
           <Container boxSize="70%" centerContent>
-            <Image
-              src={prod.imageUrl}
-              borderRadius="lg"
-            />
+            <Image src={prod.imageUrl} borderRadius="lg" />
           </Container>
 
           <Stack mt="6" spacing="3">
             <Heading size="md">{prod.name}</Heading>
-            <Text>
-              {prod.description}
-            </Text>
+            <Text>{prod.description}</Text>
             <Text>Stock: {prod.stock}</Text>
             <Text color="red" fontSize="2xl">
               ${prod.price}
@@ -126,30 +165,67 @@ export default function ProductPage(props: any) {
         </CardFooter>
       </Card>
       <Box display="flex" mt="2" alignItems="center">
-      <Flex justifyContent="space-between" alignContent="center">
-        <Rating ratinge={rating} numReviews={reviewCount} />
-      </Flex>
+        <Flex justifyContent="space-between" alignContent="center">
+          <Rating ratinge={rating} />
+        </Flex>
         <Box as="span" ml="10%" color="white" fontSize="sm">
           <Text fontSize="15px">{reviewCount} reviews</Text>
         </Box>
       </Box>
-        <Box >
-          <Text color="white" mt="20px" mb="20px" fontStyle="bold">Comentarios:</Text>
-          {comentarios}
-        </Box>
-        <Box mt="10">
-          <Textarea  value={text} onChange={handleTextChange} color="white" placeholder="Escriba su reseña aquí." mb="2" />
-          <Select placeholder='Seleccione Puntuacion' onChange={handleNumChange} variant="filled" color="black" bg="white" colorScheme="blackAlpha" borderColor="red" mb="2" >
-            <option value={0}>0</option>
-            <option value={1}>1</option>
-            <option value={2}>2</option>
-            <option value={3}>3</option>
-            <option value={4}>4</option>
-            <option value={5}>5</option>     
-          </Select>
-          <Button variant="solid" colorScheme="red" width="100%" onClick={onClickComent}>
-            Comentar
-          </Button>
+      <Box>
+        <Text color="white" mt="20px" mb="20px" fontStyle="bold">
+          Comentarios:
+        </Text>
+        { comentarios}
+        {comments && comments.map((element: any, i: number) => {
+          return (
+            <Text
+              key={i}
+              color="white"
+              bg={"gray"}
+              m="2"
+              p="2"
+              borderRadius="10px"
+              marginInlineStart="20px"
+            >
+              {element.comment}
+            </Text>
+          );
+        })}
+      </Box>
+      <Box mt="10">
+        <Textarea
+          value={text}
+          onChange={handleTextChange}
+          color="white"
+          placeholder="Escriba su reseña aquí."
+          mb="2"
+        />
+        <Select
+          placeholder="Seleccione Puntuacion"
+          onChange={handleNumChange}
+          variant="filled"
+          color="black"
+          bg="white"
+          colorScheme="blackAlpha"
+          borderColor="red"
+          mb="2"
+        >
+          <option value={0}>0</option>
+          <option value={1}>1</option>
+          <option value={2}>2</option>
+          <option value={3}>3</option>
+          <option value={4}>4</option>
+          <option value={5}>5</option>
+        </Select>
+        <Button
+          variant="solid"
+          colorScheme="red"
+          width="100%"
+          onClick={onClickComent}
+        >
+          Comentar
+        </Button>
       </Box>
     </Box>
   );
