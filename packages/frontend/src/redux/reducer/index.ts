@@ -12,6 +12,7 @@ import {
   GET_USERS_REVIEWS,
   GET_ALL_PRODUCTS_ADMIN,
   EDITED_PRODUCT,
+  CREATE_BRAND,
   GET_ALL_USERS,
   EDITED_USER
 } from "../actions/index";
@@ -105,6 +106,8 @@ const rootReducer = (state = initialState, action: any) => {
 
     case ADD_USER:
       return { ...state, user: action.payload };
+    case CREATE_BRAND:
+      return { ...state, brands: [...state.brands, action.payload] };
     case GET_ALL_USERS:
       return { ...state, users: action.payload };
       case EDITED_USER:

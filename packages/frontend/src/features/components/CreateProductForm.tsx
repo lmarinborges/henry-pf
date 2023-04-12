@@ -23,6 +23,7 @@ import { RootState, AppDispatch } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { CreateBrands } from "../../pages/admin/createBrands/CreateBrands";
 
 interface CreateProductFormData {
   name: string;
@@ -264,6 +265,7 @@ export default function CreateProductForm() {
                     cree
                   </FormHelperText>
                 )}
+                <CreateBrands/>
               </FormControl>
 
               <FormControl id="categoryId">
