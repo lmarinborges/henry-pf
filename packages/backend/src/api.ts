@@ -16,6 +16,8 @@ import facebookRouter from "./modules/users/facebook.routes";
 import googleRouter from "./modules/users/google.routes";
 import localRouter from "./modules/users/local.routes";
 import usersRouter from "./modules/users/users.router";
+import mailerRouter from "./modules/mailer/mailer.router";
+import ordersRouter from "./modules/orders/orders.router";
 
 const apiRouter = Router()
   // Middleware
@@ -33,6 +35,8 @@ const apiRouter = Router()
   .use(facebookRouter)
   .use(googleRouter)
   .use(localRouter)
+  .use(mailerRouter)
+  .use(ordersRouter)
 
   // Error handling
   .use(notFoundHandler)
