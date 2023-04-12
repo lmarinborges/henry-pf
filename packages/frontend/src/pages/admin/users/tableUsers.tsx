@@ -3,35 +3,10 @@ import { RootState, AppDispatch } from "../../../redux/store/";
 import { getAllUsers } from "../../../redux/actions";
 import { useEffect, useState } from "react";
 import TablaDinamica from "./DinamicTable";
-import { Box, Button, Icon, Text } from "@chakra-ui/react";
+import { Box, Button, Icon, Text, useDisclosure } from "@chakra-ui/react";
 import { FiTrash2 } from "react-icons/fi";
 import { AiFillEdit } from "react-icons/ai";
-
-function Editando(valor: any) {
-  console.log("Editando",valor);
-}
-function Borrando(valor: any) {
-  console.log("borrendo",valor);
-}
-
-const acciones = [
-  {
-    onclick: Editando,
-    icon: (
-      <Button colorScheme="yellow" p={0}>
-        <Icon as={AiFillEdit} w={6} h={6} color="black" />
-      </Button>
-    ),
-  },
-  {
-    onclick: Borrando,
-    icon: (
-      <Button colorScheme="blue" p={0}>
-        <Icon as={FiTrash2} w={6} h={6} color="black" />
-      </Button>
-    ),
-  },
-];
+import ModalEdit from "./modalEdit";
 
 /*const CompVerCertificado = (props: any) => {
     console.log(props);
@@ -65,9 +40,44 @@ const dato = [
   },
 ];
 export default function TableUsers() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [valorModal, setValorModal] = useState(null);
+
+  function abrirModal(valor: any) {
+    setValorModal(valor);
+    onOpen();
+  }
+  function Editando(valor: any) {
+    console.log("Editando", valor);
+  }
+
+  function Borrando(valor: any) {
+    console.log("borrendo", valor);
+  }
+
+  const acciones = [
+    {
+      onclick: abrirModal,
+      icon: (
+        <Button colorScheme="yellow" p={0}>
+          <Icon as={AiFillEdit} w={6} h={6} color="black" />
+        </Button>
+      ),
+    },
+    {
+      onclick: Borrando,
+      icon: (
+        <Button colorScheme="blue" p={0}>
+          <Icon as={FiTrash2} w={6} h={6} color="black" />
+        </Button>
+      ),
+    },
+  ];
+
   const dispatch: AppDispatch = useDispatch();
   //const data = useSelector((state: RootState) => [...state.adminProducts]);
   const data = useSelector((state: RootState) => [...state.users]);
+  const edited = useSelector((state: RootState) => state.userEdited);
   //condiciones de filtrado size es 5 por defecto pero mejor le pongo 7
   const [conditions, setConditions] = useState({
     page: 1,
@@ -77,16 +87,10 @@ export default function TableUsers() {
   useEffect(() => {
     dispatch(getAllUsers(conditions));
   }, [conditions]);
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-  const handleEdit = () => {
-    console.log("editando");
-  };
-  const handleDelete = () => {
-    console.log("borrando");
-  };
 
+  useEffect(() => {
+    dispatch(getAllUsers(conditions));
+  }, [edited]);
   const backPage = () => {
     if (conditions.page > 1) {
       setConditions({ ...conditions, page: conditions.page - 1 });
@@ -102,7 +106,12 @@ export default function TableUsers() {
   const renderizado = (data: any) => {
     if (data && data.length > 1) {
       return (
-        <Box m={"auto"}>
+        <Box mx={"auto"} w={"80vw"}>
+          <ModalEdit
+            isOpen={isOpen}
+            onClose={onClose}
+            valorModal={valorModal}
+          />
           <TablaDinamica data={data} acciones={acciones} />
           <Box
             display="flex"

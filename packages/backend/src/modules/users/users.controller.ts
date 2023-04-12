@@ -131,6 +131,8 @@ export async function createUser(req: Request, res: Response) {
 }
 export async function updateUser(req: Request, res: Response) {
   // TODO check password and catch
+  console.log(req.body);
+  
   const { body: data, params } = await updateSchema.parseAsync(req);
   const user = await prisma.user.update({
     where: { id: params.userId },

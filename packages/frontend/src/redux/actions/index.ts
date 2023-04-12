@@ -17,6 +17,8 @@ export const ADD_USER = "ADD_USER";
 export const EDITED_PRODUCT = "EDITED_PRODUCT";
 export const GET_USERS_REVIEWS = "GET_USERS_REVIEWS";
 export const GET_ALL_USERS = "GET_ALL_USERS"
+export const EDITED_USER = "EDITED_USER"
+
 
 export const getAllProducts =
   (
@@ -299,7 +301,6 @@ export const getUsersReviews =
   };
 
   export const getAllUsers = (data: any) => async (dispatch: AppDispatch) => {
-    console.log("hola we");
     
     try {
       const name = data?.name ?? "";
@@ -320,4 +321,11 @@ export const getUsersReviews =
     } catch (error) {
       console.log(error);
     }
+  };
+
+  export const patchUser = (data: any) =>
+  async (dispatch: AppDispatch) => {
+    let result = await axios.patch(`users/${data.id}`, data);
+    dispatch({ type: EDITED_USER, payload: result.data});
+     console.log("NEW DATA",result.data);
   };
