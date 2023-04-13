@@ -139,10 +139,10 @@ export default function ProductsPage() {
       </Text>
       <RadioGroup onChange={setAlpha} value={alphaOrder} defaultValue="asc">
         <Stack direction={"row"} justifyContent="center" spacing={"3"}>
-          <Radio colorScheme={"red.300"} value="asc">
+          <Radio colorScheme={"red"} value="asc">
             <Text>A-Z Min{"<"} Max</Text>
           </Radio>
-          <Radio colorScheme={"red.300"} value="desc">
+          <Radio colorScheme={"red"} value="desc">
             <Text>Z-A Max{">"}Min</Text>
           </Radio>
         </Stack>
@@ -151,11 +151,11 @@ export default function ProductsPage() {
       <Select
         onChange={categoriesSelectChange}
         variant="filled"
-        color="black"
-        bg="white"
-        borderColor="red"
-        _hover={{ bg: "red.300", color:"white" }}
-        focusBorderColor="gray.50"
+        color={useColorModeValue("black", "white")}
+        bg={useColorModeValue("gray.50", "gray.800")}
+        borderColor="red.400"
+        _hover={{ bg: "red.400", color:useColorModeValue("black", "white") }}
+        focusBorderColor="red.400"
         mb="2"
       >
         <option value={Number(0)} key="0">
@@ -167,11 +167,11 @@ export default function ProductsPage() {
       <Select
         onChange={brandSelectChange}
         variant="filled"
-        color="black"
-        bg="white"
-        borderColor="red"
-        _hover={{ bg: "red.300", color:"white" }}
-        focusBorderColor="gray.50"
+        color={useColorModeValue("black", "white")}
+        bg={useColorModeValue("gray.50", "gray.800")}
+        borderColor="red.400"
+        _hover={{ bg: "red.400", color:useColorModeValue("black", "white") }}
+        focusBorderColor="red.400"
         mb="2"
       >
         <option value={Number(0)} key="0">
