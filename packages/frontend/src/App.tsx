@@ -10,6 +10,7 @@ import AdminLayout from "./components/AdminLayout";
 import PublicLayout from "./components/PublicLayout";
 import CreateProductForm from "./features/components/CreateProductForm";
 import AboutPage from "./pages/about";
+import { Orders } from "./pages/admin/orders";
 import ProductsAdminPage from "./pages/admin/products";
 import ContactPage from "./pages/contact";
 import ErrorPage from "./pages/error";
@@ -36,6 +37,7 @@ const routes = createBrowserRouter(
         <Route index element={<Navigate to="products" />} />
         <Route path="products" element={<ProductsAdminPage />} />
         <Route path="createProduct" element={<CreateProductForm />} />
+        <Route path="orders" element={<Orders />} />
       </Route>
       <Route path="*" element={<NotFoundPage />} />
     </Route>,
