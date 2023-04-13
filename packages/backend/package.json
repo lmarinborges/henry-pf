@@ -1,12 +1,15 @@
 {
   "name": "@henry-pf/backend",
-  "private": true,
   "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "dev": "nodemon -r dotenv/config src/index.ts",
     "build": "tsc",
-    "start": "NODE_ENV=production node dist/index.js",
-    "lint": "eslint"
+    "dev": "nodemon -r dotenv/config src/index.ts",
+    "lint": "eslint",
+    "start": "NODE_ENV=production node dist/index.js"
+  },
+  "lint-staged": {
+    "*.{ts,js}": "eslint --cache --fix"
   },
   "dependencies": {
     "@prisma/client": "^4.12.0",
@@ -41,8 +44,5 @@
     "nodemon": "^2.0.22",
     "prisma": "^4.12.0",
     "ts-node": "^10.9.1"
-  },
-  "lint-staged": {
-    "*.{ts,js}": "eslint --cache --fix"
   }
 }
