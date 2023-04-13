@@ -14,6 +14,6 @@ usersRouter
   .get("/users/:userId", getUser)
   .post("/users", createUser)
   .patch("/users/:userId", updateUser)
-  .delete("/users", deleteUser);
+  .delete("/users/:userId", deleteUser);
 
 export default usersRouter;

@@ -25,6 +25,7 @@ export interface NavbarProps {
 const DRAWER_ITEMS = [
   { label: "Productos", icon: MdConveyorBelt, to: "/admin/products" },
   { label: "Crear Producto", icon: MdConveyorBelt, to: "/admin/createProduct" },
+  { label: "Administrar usuarios", icon: MdConveyorBelt, to: "/admin/users" },
 ];
 
 export default function Navbar(props: NavbarProps) {

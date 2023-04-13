@@ -142,7 +142,11 @@ export async function updateUser(req: Request, res: Response) {
 }
 
 export async function deleteUser(req: Request, res: Response) {
-  unimplemented(req, res);
+  const { params } = await getSchema.parseAsync(req);
+  const user = await prisma.user.delete({
+    where: { id: params.userId },
+  });
+  return res.status(200).json(user);
 }
 
 // verificar autenticacion

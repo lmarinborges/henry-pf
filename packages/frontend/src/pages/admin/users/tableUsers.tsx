@@ -1,23 +1,28 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../../redux/store/";
-import { getAllUsers } from "../../../redux/actions";
+import { deleteUser, getAllUsers } from "../../../redux/actions";
 import { useEffect, useState } from "react";
 import TablaDinamica from "./DinamicTable";
 import { Box, Button, Icon, Text, useDisclosure } from "@chakra-ui/react";
 import { FiTrash2 } from "react-icons/fi";
 import { AiFillEdit } from "react-icons/ai";
 import ModalEdit from "./modalEdit";
-
-
+import ConfirmDialog from "./confirmationDialog";
 
 export default function TableUsers() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [valorModal, setValorModal] = useState(null);
+  const [valorModal, setValorModal] = useState<any| null>(null);
+  const [isDialogOpen, setDialogOpen] = useState(false);
 
   function abrirModal(valor: any) {
     setValorModal(valor);
     onOpen();
   }
+  function borrarUsuario(valor: any) {
+    setValorModal(valor);
+    setDialogOpen(true);
+  }
+
   const acciones = [
     {
       onclick: abrirModal,
@@ -27,7 +32,14 @@ export default function TableUsers() {
         </Button>
       ),
     },
-
+    {
+      onclick: borrarUsuario,
+      icon: (
+        <Button colorScheme="red" p={0}>
+          <Icon as={FiTrash2} w={6} h={6} color="black" />
+        </Button>
+      ),
+    },
   ];
 
   const dispatch: AppDispatch = useDispatch();
@@ -47,11 +59,13 @@ export default function TableUsers() {
   useEffect(() => {
     dispatch(getAllUsers(conditions));
   }, [edited]);
+
   const backPage = () => {
     if (conditions.page > 1) {
       setConditions({ ...conditions, page: conditions.page - 1 });
     }
   };
+
   //por ahora le puse una condicion temporal siempre y cuando los usuarios no sean multiplos de size
   const nextPage = () => {
     if (data.length < conditions.size) {
@@ -59,6 +73,20 @@ export default function TableUsers() {
       setConditions({ ...conditions, page: conditions.page + 1 });
     }
   };
+
+  function handleConfirm() {
+
+  dispatch(deleteUser(valorModal))
+  console.log("Borrando", valorModal);
+
+    setDialogOpen(false);
+  }
+
+  function handleCancel() {
+    // hacer algo cuando se cancela la acción
+    setDialogOpen(false);
+  }
+
   const renderizado = (data: any) => {
     if (data && data.length > 1) {
       return (
@@ -67,6 +95,13 @@ export default function TableUsers() {
             isOpen={isOpen}
             onClose={onClose}
             valorModal={valorModal}
+          />
+          <ConfirmDialog
+            isOpen={isDialogOpen}
+            title="Confirmar acción"
+            message={"¿Está seguro de que desea borrar a "+ (valorModal && (valorModal.name ? valorModal.name : valorModal.email) ) +" ?" }
+            onConfirm={handleConfirm}
+            onCancel={handleCancel}
           />
           <TablaDinamica data={data} acciones={acciones} />
           <Box
@@ -88,9 +123,9 @@ export default function TableUsers() {
           </Box>
         </Box>
       );
-    } else {
-      return <div>no hay nada</div>;
+    }else{
+      return (<div></div>)
     }
   };
-  return renderizado(data);
+  return( renderizado(data));
 }
