@@ -18,8 +18,8 @@ export const EDITED_PRODUCT = "EDITED_PRODUCT";
 export const GET_USERS_REVIEWS = "GET_USERS_REVIEWS";
 export const CREATE_BRAND = "CREATE_BRAND";
 export const CREATE_CATEGORIES = "CREATE_CATEGORIES";
-export const GET_ALL_USERS = "GET_ALL_USERS"
-export const EDITED_USER = "EDITED_USER"
+export const GET_ALL_USERS = "GET_ALL_USERS";
+export const EDITED_USER = "EDITED_USER";
 
 export const getAllProducts =
   (
@@ -112,7 +112,7 @@ export const createProduct = (data: any) => async (dispatch: AppDispatch) => {
 export const getAllBrands = () => async (dispatch: AppDispatch) => {
   const res = await axios.get("brands");
   console.log(res.data);
-  
+
   dispatch({ type: GET_ALL_BRANDS, payload: res.data });
 };
 
@@ -315,32 +315,36 @@ export const createCategories = (data: any) => async (dispatch: AppDispatch) => 
   console.log(res.data);
 };
 
-  export const getAllUsers = (data: any) => async (dispatch: AppDispatch) => {
-    
-    try {
-      const name = data?.name ?? "";
-      const email = data?.email ?? "";
-      const role = data?.role ?? "";
-      const search = data?.search ?? "";
-      const state = data?.state ?? "";
-      const page = data?.page ?? "";
-      const order = data?.order ?? "asc";
-      const column = data?.column ?? "";
-      const size = data?.size ?? "";
-  
-      const res = await axios.get(
-        `users?name=${name}&email=${email}&role=${role}&search=${search}&state=${state}&page=${page}&order=${order}&column=${column}&size=${size}`
-      );
-      console.log(res.data);
-      dispatch({ type: GET_ALL_USERS, payload: res.data.users });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+export const getAllUsers = (data: any) => async (dispatch: AppDispatch) => {
+  try {
+    const name = data?.name ?? "";
+    const email = data?.email ?? "";
+    const role = data?.role ?? "";
+    const search = data?.search ?? "";
+    const state = data?.state ?? "";
+    const page = data?.page ?? "";
+    const order = data?.order ?? "asc";
+    const column = data?.column ?? "";
+    const size = data?.size ?? "";
 
-  export const patchUser = (data: any) =>
-  async (dispatch: AppDispatch) => {
-    let result = await axios.patch(`users/${data.id}`, data);
-    dispatch({ type: EDITED_USER, payload: result.data});
-     console.log("NEW DATA",result.data);
-  };
+    const res = await axios.get(
+      `users?name=${name}&email=${email}&role=${role}&search=${search}&state=${state}&page=${page}&order=${order}&column=${column}&size=${size}`
+    );
+    console.log(res.data);
+    dispatch({ type: GET_ALL_USERS, payload: res.data.users });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const patchUser = (data: any) => async (dispatch: AppDispatch) => {
+  let result = await axios.patch(`users/${data.id}`, data);
+  dispatch({ type: EDITED_USER, payload: result.data });
+  console.log("NEW DATA", result.data);
+};
+
+//solo uso a edited_user como una forma de verificar que se borró el usuario
+export const deleteUser = (data: any) => async (dispatch: AppDispatch) => {
+  const res = await axios.delete(`users/${data.id}`);
+  dispatch({ type: EDITED_USER, payload: res.data });
+};
