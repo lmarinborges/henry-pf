@@ -78,21 +78,9 @@ passport.deserializeUser(async (id: number, done) => {
 
 function validateUserData(req: Request, res: Response, next: any) {
   const { email, password } = req.body;
-  try {
     validEmail.parse(email);
     passwordSchema.parse(password);
     next();
-  } catch (error: any) {
-    if (error.issues) {
-      let mensaje = "";
-      error.issues.forEach((el:any) => {
-        mensaje = mensaje + "*" + el.message + "\n";
-      });
-      res.status(400).json({ state: "error", message: mensaje });
-    } else {
-      res.status(500).json({ state: "error", message: "Error de validación" });
-    }
-  }
 }
 
 localRouter.post(
