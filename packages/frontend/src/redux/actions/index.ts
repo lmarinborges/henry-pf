@@ -242,10 +242,14 @@ export const addUserFromLocal =
         dispatch({ type: ADD_USER, payload: user });
       } else {
         // La autenticación falló, hacer algo en consecuencia
-        alert("la autenticacion falló");
+        alert("la autenticacion falló , datos incorrectos");
         console.log("La autenticación falló");
       }
-    } catch (error) {
+    } catch (error:any) {
+      alert(
+        error.response?.data?.message ??
+          "Ocurrió un error al procesar la solicitud"
+      );
       console.log(error);
     }
   };
@@ -261,7 +265,7 @@ export const registerUser = (data: any) => async (dispatch: AppDispatch) => {
   try {
     const response = await axios.post("users", userData);
     if (response.data.state === "success") {
-      alert("Bienvenido, revisa tu correo e inicia session");
+      alert("Bienvenido, nuevo usuario");
       dispatch(addUserFromLocal(data));
     }
   } catch (error: any) {
@@ -288,7 +292,7 @@ export const verifyUser = () => async (dispatch: AppDispatch) => {
     //consulta si esta logueado para obtener el usuario
     dispatch({ type: ADD_USER, payload: res.data.user });
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     dispatch({ type: ADD_USER, payload: {} });
   }
 };
