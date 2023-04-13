@@ -7,7 +7,6 @@ import { Box, Button, Icon, Text, useDisclosure } from "@chakra-ui/react";
 import { FiTrash2 } from "react-icons/fi";
 import { AiFillEdit } from "react-icons/ai";
 import ModalEdit from "./modalEdit";
-import LaunchConfirmationDialog from "./confirmationDialog";
 import ConfirmDialog from "./confirmationDialog";
 
 export default function TableUsers() {
@@ -124,7 +123,9 @@ export default function TableUsers() {
           </Box>
         </Box>
       );
-    } 
+    }else{
+      return (<div></div>)
+    }
   };
-  return renderizado(data);
+  return( renderizado(data));
 }
