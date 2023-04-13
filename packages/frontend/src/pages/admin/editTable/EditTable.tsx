@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { RxCross2 } from "react-icons/rx";
 import { useForm } from "react-hook-form";
 import * as actions from "../../../redux/actions/index";
@@ -30,6 +30,7 @@ export const EditTable = ({
   let dispatch: AppDispatch = useDispatch();
   let brands = useSelector((state: RootState) => state.brands);
   let categories = useSelector((state: RootState) => state.categories);
+  let [image, setImage] = useState("")
 
   type Form = {
     id: number;
@@ -46,7 +47,6 @@ export const EditTable = ({
     register,
     handleSubmit,
     reset,
-    formState,
     formState: { errors },
   } = useForm<Form>();
 
@@ -54,6 +54,10 @@ export const EditTable = ({
     onClose();
     reset();
   };
+
+  let handleImage = (e:any) => {
+    setImage(e.target.value)
+  }
 
   let onSubmit = (data: any) => {
     forReset();
@@ -79,7 +83,7 @@ export const EditTable = ({
     let res: any = {
       name: data.name,
       description: data.description,
-      imageUrl: data.imageUrl,
+      imageUrl: image,
       price: data.price,
       stock: data.stock ? Number.parseInt(data.stock) : "",
       brandId: data.brandId ? brand.id : "",
@@ -167,8 +171,8 @@ export const EditTable = ({
                     _focusVisible={{ borderColor: "gray.400" }}
                     color="black"
                     defaultValue={oldProduct.length ? oldProduct[0].name : ""}
-                    // {errors.name?.type === "required" && <Text color="red">Campo requerido</Text>}
                   />
+                  {errors.name && <Text color="tomato">nombre requerido</Text>}
                 </FormControl>
 
                 <FormControl>
@@ -192,25 +196,26 @@ export const EditTable = ({
                 <FormControl>
                   <FormLabel>Imagen:</FormLabel>
                   <Input
-                    {...register("imageUrl", { required: true })}
+                    {...register("imageUrl")}
                     focusBorderColor="#00000059"
                     bg="#dfdfdf"
-                    type="text"
+                    type="file"
                     size="md"
                     placeholder="url de la imagen"
                     _hover={{ borderColor: "gray.400" }}
                     _focusVisible={{ borderColor: "gray.400" }}
                     color="black"
-                    defaultValue={
-                      oldProduct.length ? oldProduct[0].imageUrl : ""
-                    }
+                    onChange={handleImage}
+                    // defaultValue={
+                    //   oldProduct.length ? oldProduct[0].imageUrl : ""
+                    // }
                   />
                 </FormControl>
 
                 <FormControl>
                   <FormLabel>Precio:</FormLabel>
                   <Input
-                    {...register("price", { required: true, min: 0 })}
+                    {...register("price", { required: true, min: 1 })}
                     focusBorderColor="#00000059"
                     bg="#dfdfdf"
                     type="number"
@@ -221,6 +226,12 @@ export const EditTable = ({
                     color="black"
                     defaultValue={oldProduct.length ? oldProduct[0].price : ""}
                   />
+                  {errors.price?.type === "min" && (
+                    <Text color="tomato">El pecio debe ser mayor que 0</Text>
+                  )}
+                  {errors.price?.type === "required" && (
+                    <Text color="tomato">Precio requerido</Text>
+                  )}
                 </FormControl>
 
                 <FormControl>
@@ -237,6 +248,14 @@ export const EditTable = ({
                     color="black"
                     defaultValue={oldProduct.length ? oldProduct[0].stock : ""}
                   />
+                  {errors.stock?.type === "required" && (
+                    <Text color="tomato">Stock requerido</Text>
+                  )}
+                  {errors.stock?.type === "min" && (
+                    <Text color="tomato">
+                      El stock no puede ser menor que 0
+                    </Text>
+                  )}
                 </FormControl>
 
                 <FormLabel>Categorias:</FormLabel>
@@ -253,6 +272,9 @@ export const EditTable = ({
                       return <option key={i}>{c.name}</option>;
                     })}
                 </Select>
+                {errors.categoryId && (
+                  <Text color="tomato">Categoria requerida</Text>
+                )}
 
                 <FormLabel>Marcas:</FormLabel>
                 <Select
@@ -263,12 +285,12 @@ export const EditTable = ({
                     oldProduct.length ? oldProduct[0].brand.name : ""
                   }
                 >
-                  {errors.brandId?.type === "required" && <p>is required</p>}
                   {brands &&
                     brands.map((b: any, i: any) => (
                       <option key={i}>{b.name}</option>
                     ))}
                 </Select>
+                {errors.brandId && <Text color="tomato">Marca requerida</Text>}
               </VStack>
             </ModalBody>
             <ModalFooter>
@@ -276,7 +298,7 @@ export const EditTable = ({
                 colorScheme="blue"
                 mr={3}
                 type="submit"
-                isDisabled={!formState.isDirty}
+                // isDisabled={!formState.isDirty}
               >
                 Guardar
               </Button>

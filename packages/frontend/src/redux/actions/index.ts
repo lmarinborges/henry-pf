@@ -17,6 +17,7 @@ export const ADD_USER = "ADD_USER";
 export const EDITED_PRODUCT = "EDITED_PRODUCT";
 export const GET_USERS_REVIEWS = "GET_USERS_REVIEWS";
 export const CREATE_BRAND = "CREATE_BRAND";
+export const CREATE_CATEGORIES = "CREATE_CATEGORIES";
 export const GET_ALL_USERS = "GET_ALL_USERS";
 export const EDITED_USER = "EDITED_USER";
 
@@ -137,6 +138,8 @@ export const deleteProduct = (data: any) => async (dispatch: AppDispatch) => {
 export const patchProduct =
   (data: any, idProduct: number, newAndOthers: any) =>
   async (dispatch: AppDispatch) => {
+    console.log("cddddddddd", data);
+
     let result = await axios.patch(`products/${idProduct}`, data);
     dispatch({ type: EDITED_PRODUCT, payload: newAndOthers });
     // console.log("NEW DATA",result.data);
@@ -301,9 +304,14 @@ export const getUsersReviews =
   };
 
 export const createBrands = (data: any) => async (dispatch: AppDispatch) => {
-  console.log(data);
   let res = await axios.post("brands", data);
   dispatch({ type: CREATE_BRAND, payload: res.data });
+  console.log(res.data);
+};
+
+export const createCategories = (data: any) => async (dispatch: AppDispatch) => {
+  let res = await axios.post("categories", data);
+  dispatch({ type: CREATE_CATEGORIES, payload: res.data });
   console.log(res.data);
 };
 
