@@ -8,6 +8,7 @@ import * as actions from "../../redux/actions/index";
 
 import axios from "axios";
 import { EditTable } from "./editTable/EditTable";
+import { apiUrl } from "../../config";
 
 const ProductsAdminPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -47,14 +48,25 @@ const ProductsAdminPage = () => {
     setIdProduct(id);
     setOldProduct(oldData);
   };
+  const handleRestore = async (id: number, data: any) => {
+    await axios.patch(`${apiUrl}/products/${id}`, {
+      ...data,
+      isTrashed: false,
+    });
+  };
 
-  const handleDelete = (id: number) => {
-    if (window.confirm("¿Está seguro de que desea realizar esta acción?")) {
-      // La acción se ejecutará si el usuario hace clic en "Aceptar"
-      // Coloca aquí la lógica para ejecutar la acción que desea confirmar
-      const found = data.find((e: any) => e.id === id);
-      dispatch(actions.deleteProduct(found));
+  const handleDelete = (value: any) => {
+    const found = data.find((e: any) => e.id === value.id);
+    if (value.isTrashed) {
+      handleRestore(value.id, found);
       dispatch(actions.getProductsPerPage(currentPage));
+    } else {
+      if (window.confirm("¿Está seguro de que desea realizar esta acción?")) {
+        // La acción se ejecutará si el usuario hace clic en "Aceptar"
+        // Coloca aquí la lógica para ejecutar la acción que desea confirmar
+        dispatch(actions.deleteProduct(found));
+        dispatch(actions.getProductsPerPage(currentPage));
+      }
     }
   };
 

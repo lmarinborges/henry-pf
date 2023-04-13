@@ -59,6 +59,13 @@ export const clientErrorHandler: ErrorRequestHandler = (
           message: "An invalid ID was provided.",
         });
       }
+      case "P2002": {
+        console.log("mal consulta");
+        return res.status(400).json({ 
+          status: 400,
+          message: "Unique constraint was provided" 
+        });
+      }
     }
   }
 

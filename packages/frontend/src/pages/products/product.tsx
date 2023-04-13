@@ -29,7 +29,7 @@ export default function ProductPage() {
 
   const reviews = useSelector((state: RootState) => state.productReviews);
   const prod = useSelector((state: RootState) => state.productDetail);
-  const usersReviews = useSelector((state:RootState) => state.reviewUsers);
+  const usersReviews = useSelector((state: RootState) => state.reviewUsers);
 
   const [comments, setComments] = useState<any[]>([]);
   const [text, setText] = useState("");
@@ -40,7 +40,7 @@ export default function ProductPage() {
       dispatch(actions.getProductDetail(productId));
       dispatch(actions.getProductReviews(productId));
     }
-  },[dispatch,productId]);
+  }, [dispatch, productId]);
 
   const handleTextChange = (e: any) => {
     let inputValue = e.target.value;
@@ -58,9 +58,8 @@ export default function ProductPage() {
 
   const onClickComent = () => {
     let rev = { comment: text, score: num, productId: productId };
-    setComments([rev])
+    setComments([rev]);
     dispatch(actions.createReview(rev));
-
   };
 
   const comentarios = reviews ? (
@@ -75,17 +74,15 @@ export default function ProductPage() {
           borderRadius="10px"
           marginInlineStart="20px"
         >
-        {element.comments}
+          {element.comments}
         </Text>
       );
     })
-    ) : (
+  ) : (
     <Text key={1} color="white">
       No hay comentarios que mostrar
     </Text>
   );
-
-
 
   const reviewCount = reviews ? reviews.length + comments?.length : 0;
 
@@ -94,8 +91,8 @@ export default function ProductPage() {
   for (var i = 0; i < reviews?.length; i++) {
     votation += Number(reviews[i]?.score);
   }
-  if(comments?.length){
-    votation+=comments[0]?.score;
+  if (comments?.length) {
+    votation += comments[0]?.score;
   }
 
   var rating = votation / reviewCount;
@@ -176,22 +173,23 @@ export default function ProductPage() {
         <Text color="white" mt="20px" mb="20px" fontStyle="bold">
           Comentarios:
         </Text>
-        { comentarios}
-        {comments && comments.map((element: any, i: number) => {
-          return (
-            <Text
-              key={i}
-              color="white"
-              bg={"gray"}
-              m="2"
-              p="2"
-              borderRadius="10px"
-              marginInlineStart="20px"
-            >
-              {element.comment}
-            </Text>
-          );
-        })}
+        {comentarios}
+        {comments &&
+          comments.map((element: any, i: number) => {
+            return (
+              <Text
+                key={i}
+                color="white"
+                bg={"gray"}
+                m="2"
+                p="2"
+                borderRadius="10px"
+                marginInlineStart="20px"
+              >
+                {element.comment}
+              </Text>
+            );
+          })}
       </Box>
       <Box mt="10">
         <Textarea

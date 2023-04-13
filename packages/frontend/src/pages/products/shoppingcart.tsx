@@ -1,18 +1,17 @@
-import { Box, Heading, Text,Button } from "@chakra-ui/react";
+import { Box, Heading, Text, Button } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 
 import ShoppingCard from "./shoppingCard";
 
 export default function ShoppingCart() {
   const [totalPrice, setTotalPrice] = useState(0);
-  const [totalProducts,setTotalProducts]=useState<any[]>([])
+  const [totalProducts, setTotalProducts] = useState<any[]>([]);
 
   var storage: Array<any> = [];
 
-  const onClose = (name: string, price:number) => {
+  const onClose = (name: string, price: number) => {
     localStorage.removeItem(name);
-    setTotalPrice(totalPrice-price)
-
+    setTotalPrice(totalPrice - price);
   };
 
   for (var i = 0; i < localStorage.length; i++) {
@@ -39,7 +38,6 @@ export default function ShoppingCart() {
     }
   };
 
-
   var totalCards = products.map((e, i) => {
     return (
       <ShoppingCard
@@ -52,7 +50,7 @@ export default function ShoppingCart() {
   });
 
   useEffect(() => {
-    setTotalProducts(totalCards)
+    setTotalProducts(totalCards);
     var init: number = 0;
     if (totalPrice === 0) {
       products.forEach((e) => {
@@ -63,13 +61,25 @@ export default function ShoppingCart() {
   }, [totalPrice, products, totalCards]);
 
   return (
-    <Box bg="white" p="10px"mt="-10px" >
+    <Box bg="white" p="10px" mt="-10px">
       <Heading color="black">Carrito:</Heading>
-      { totalProducts.length!==0? totalProducts : <Text display={"flex"} alignItems="center" justifyContent={"center"} fontStyle="bold"> El Carrito está vacío</Text>}
+      {totalProducts.length !== 0 ? (
+        totalProducts
+      ) : (
+        <Text
+          display={"flex"}
+          alignItems="center"
+          justifyContent={"center"}
+          fontStyle="bold"
+        >
+          {" "}
+          El Carrito está vacío
+        </Text>
+      )}
       <Text color="black">Total: ${totalPrice.toFixed(2)}</Text>
       <Button size={"md"} variant="solid" colorScheme="red">
-          Comprar
-        </Button>
+        Comprar
+      </Button>
     </Box>
   );
 }

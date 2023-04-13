@@ -9,6 +9,7 @@ import {
   Wrap,
   WrapItem,
 } from "@chakra-ui/layout";
+import { useColorModeValue } from "@chakra-ui/react";
 import { MdEmail, MdFacebook, MdLocationOn, MdPhone } from "react-icons/md";
 import { AiFillInstagram } from "react-icons/ai";
 import { BsTwitter } from "react-icons/bs";
@@ -20,10 +21,17 @@ import { Textarea } from "@chakra-ui/textarea";
 export default function ContactPage() {
   return (
     <>
-      <Container bg="#22223b" maxW="full" mt={5} mb={5} centerContent>
+      <Container
+        bg={useColorModeValue("gray.50", "gray.800")}
+        maxW="full"
+        mt={5}
+        mb={5}
+        centerContent
+      >
         <Flex pt="25px" pb="25px">
           <Box
-            bg="#cfcfcf"
+            bg={useColorModeValue("gray.50", "gray.800")}
+            borderColor="black"
             borderRadius="lg"
             m={{ sm: 4, md: 16, lg: 10 }}
             p={{ sm: 5, md: 5, lg: 16 }}
@@ -88,8 +96,13 @@ export default function ContactPage() {
                 </WrapItem>
 
                 <WrapItem mt={{ ms: 0 }}>
-                  <Box width="19rem" bg="white" borderRadius="lg">
-                    <Box m={8} color="#0B0E3F">
+                  <Box
+                    width="19rem"
+                    bg={useColorModeValue("gray.800", "gray.50")}
+                    color={useColorModeValue("gray.50", "gray.800")}
+                    borderRadius="lg"
+                  >
+                    <Box m={8}>
                       <VStack spacing={5}>
                         <FormControl isRequired>
                           <FormLabel>Nombre</FormLabel>
@@ -100,6 +113,10 @@ export default function ContactPage() {
                             type="text"
                             size="md"
                             placeholder="nombre"
+                            _placeholder={{
+                              color: useColorModeValue("gray.800", "gray.800"),
+                            }}
+                            color={useColorModeValue("gray.800", "gray.800")}
                           />
                         </FormControl>
 
@@ -112,6 +129,10 @@ export default function ContactPage() {
                             type="text"
                             size="md"
                             placeholder="apellido"
+                            _placeholder={{
+                              color: useColorModeValue("gray.800", "gray.800"),
+                            }}
+                            color={useColorModeValue("gray.800", "gray.800")}
                           />
                         </FormControl>
 
@@ -124,6 +145,10 @@ export default function ContactPage() {
                             type="text"
                             size="md"
                             placeholder="localidad"
+                            _placeholder={{
+                              color: useColorModeValue("gray.800", "gray.800"),
+                            }}
+                            color={useColorModeValue("gray.800", "gray.800")}
                           />
                         </FormControl>
 
@@ -137,6 +162,10 @@ export default function ContactPage() {
                               borderRadius: "gray.300",
                             }}
                             placeholder="mensaje"
+                            _placeholder={{
+                              color: useColorModeValue("gray.800", "gray.800"),
+                            }}
+                            color={useColorModeValue("gray.800", "gray.800")}
                           />
                         </FormControl>
 

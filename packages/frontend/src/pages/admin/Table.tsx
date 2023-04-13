@@ -55,64 +55,64 @@ const Tabla = ({
         accessor: "description",
       },
 
-            {
-                Header: "Price",
-                accessor: "price",
-            },
-            {
-                Header: "Stock",
-                accessor: "stock",
-            },
-            {
-                Header: "Borrado",
-                accessor: (row: Product) => row.isTrashed?'Borrado':'Activo',
-            },
-            {
-                Header: "Brand",
-                accessor: (row: Product) => row.brand.name,
-            },
-            {
-                Header: "Category",
-                accessor: (row: Product) => row.category.name,
-            },
-            {
-                Header: "Actions",
-                accessor: (row: Product) => {return {id:row.id ,isTrashed:row.isTrashed}},
-                Cell: ({ value }: { value: { id: number, isTrashed: boolean } }) => (
-                    <Flex>
-                        <Button
-                            onClick={() => handleEdit(value)}
-                            bg="yellow.300"
-                            mr="5px"
-                        >
-                            Edit
-                        </Button>
-                        
-                        {value.isTrashed?
-                        <Button
-                        onClick={() => handleDelete(value)}
-                        bg="green.500"
-                        color="white"
-                    >
-                        Restaurar
-                    </Button>
-                        :<Button
-                        onClick={() => handleDelete(value)}
-                        bg="red.500"
-                        color="white"
-                    >
-                        Borrar
-                    </Button>}
-                        
-                    </Flex>
-                ),
-            },
-        ],
-        [handleEdit, handleDelete ]
-    );
+      {
+        Header: "Price",
+        accessor: "price",
+      },
+      {
+        Header: "Stock",
+        accessor: "stock",
+      },
+      {
+        Header: "Borrado",
+        accessor: (row: Product) => (row.isTrashed ? "Borrado" : "Activo"),
+      },
+      {
+        Header: "Brand",
+        accessor: (row: Product) => row.brand.name,
+      },
+      {
+        Header: "Category",
+        accessor: (row: Product) => row.category.name,
+      },
+      {
+        Header: "Actions",
+        accessor: (row: Product) => {
+          return { id: row.id, isTrashed: row.isTrashed };
+        },
+        Cell: ({ value }: { value: { id: number; isTrashed: boolean } }) => (
+          <Flex>
+            <Button
+              onClick={() => handleEdit(value.id)}
+              bg="yellow.300"
+              mr="5px"
+            >
+              Edit
+            </Button>
 
-
-
+            {value.isTrashed ? (
+              <Button
+                onClick={() => handleDelete(value)}
+                bg="green.500"
+                color="white"
+              >
+                Restaurar
+              </Button>
+            ) : (
+              <Button
+                onClick={() => handleDelete(value)}
+                bg="red.500"
+                color="white"
+              >
+                Borrar
+              </Button>
+            )}
+          </Flex>
+        ),
+      },
+    ],
+    [handleEdit, handleDelete]
+  );
 
   const tableData = useMemo(() => data, [data]);
 
