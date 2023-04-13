@@ -245,12 +245,17 @@ export const addUserFromLocal =
         alert("la autenticacion falló , datos incorrectos");
         console.log("La autenticación falló");
       }
-    } catch (error:any) {
-      alert(
-        error.response?.data?.message ??
-          "Ocurrió un error al procesar la solicitud"
-      );
-      console.log(error);
+    } catch (error: any) {
+      let problema = error.response?.data;
+      if (error.response?.data?.errors) {
+        let mensaje = "";
+        problema.errors.forEach((el: any) => {
+          mensaje = mensaje + "*" + el.message + "\n";
+        });
+        alert(mensaje);
+      } else {
+        alert(" Ocurrió un error al procesar la solicitud");
+      }
     }
   };
 
@@ -269,10 +274,21 @@ export const registerUser = (data: any) => async (dispatch: AppDispatch) => {
       dispatch(addUserFromLocal(data));
     }
   } catch (error: any) {
-    alert(
-      error.response?.data?.message ??
-        "Ocurrió un error al procesar la solicitud"
-    );
+    let problema = error.response?.data;
+    if (problema.message === "Unique constraint was provided") {
+      alert(" Este email ya está registrado");
+    } else {
+      if (error.response?.data?.errors) {
+        let lista = error.response?.data?.errors;
+        let mensaje = "";
+        lista.forEach((el: any) => {
+          mensaje = mensaje + "*" + el.message + "\n";
+        });
+        alert(mensaje);
+      } else {
+        alert(" Ocurrió un error al procesar la solicitud");
+      }
+    }
   }
 };
 
@@ -321,25 +337,21 @@ export const createCategories =
   };
 
 export const getAllUsers = (data: any) => async (dispatch: AppDispatch) => {
-  try {
-    const name = data?.name ?? "";
-    const email = data?.email ?? "";
-    const role = data?.role ?? "";
-    const search = data?.search ?? "";
-    const state = data?.state ?? "";
-    const page = data?.page ?? "";
-    const order = data?.order ?? "asc";
-    const column = data?.column ?? "";
-    const size = data?.size ?? "";
+  const name = data?.name ?? "";
+  const email = data?.email ?? "";
+  const role = data?.role ?? "";
+  const search = data?.search ?? "";
+  const state = data?.state ?? "";
+  const page = data?.page ?? "";
+  const order = data?.order ?? "asc";
+  const column = data?.column ?? "";
+  const size = data?.size ?? "";
 
-    const res = await axios.get(
-      `users?name=${name}&email=${email}&role=${role}&search=${search}&state=${state}&page=${page}&order=${order}&column=${column}&size=${size}`
-    );
-    console.log(res.data);
-    dispatch({ type: GET_ALL_USERS, payload: res.data.users });
-  } catch (error) {
-    console.log(error);
-  }
+  const res = await axios.get(
+    `users?name=${name}&email=${email}&role=${role}&search=${search}&state=${state}&page=${page}&order=${order}&column=${column}&size=${size}`
+  );
+  //console.log(res.data);
+  dispatch({ type: GET_ALL_USERS, payload: res.data.users });
 };
 
 export const patchUser = (data: any) => async (dispatch: AppDispatch) => {
