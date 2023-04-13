@@ -62,10 +62,9 @@ export default function ModalEdit({
   //console.log(getValues());
 
   const onSubmit = (data: any) => {
-   
     console.log(data);
-    onClose()
-    dispatch(patchUser(data))
+    onClose();
+    dispatch(patchUser(data));
   };
   const forReset = () => {
     reset();

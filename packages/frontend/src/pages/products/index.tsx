@@ -108,13 +108,11 @@ export default function ProductsPage() {
   });
 
   return (
-    <Container 
-      bg={useColorModeValue("gray.50", "gray.800")}
-    >
-      <Box 
+    <Container bg={useColorModeValue("gray.50", "gray.800")}>
+      <Box
         bg={useColorModeValue("gray.50", "gray.800")}
-        pt="10px" 
-        pb="0px" 
+        pt="10px"
+        pb="0px"
         mb="-20px"
       >
         <SearchBar />
@@ -154,7 +152,7 @@ export default function ProductsPage() {
         color={useColorModeValue("black", "white")}
         bg={useColorModeValue("gray.50", "gray.800")}
         borderColor="red.400"
-        _hover={{ bg: "red.400", color:useColorModeValue("black", "white") }}
+        _hover={{ bg: "red.400", color: useColorModeValue("black", "white") }}
         focusBorderColor="red.400"
         mb="2"
       >
@@ -170,7 +168,7 @@ export default function ProductsPage() {
         color={useColorModeValue("black", "white")}
         bg={useColorModeValue("gray.50", "gray.800")}
         borderColor="red.400"
-        _hover={{ bg: "red.400", color:useColorModeValue("black", "white") }}
+        _hover={{ bg: "red.400", color: useColorModeValue("black", "white") }}
         focusBorderColor="red.400"
         mb="2"
       >

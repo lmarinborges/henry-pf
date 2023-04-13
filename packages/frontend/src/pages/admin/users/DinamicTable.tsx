@@ -1,4 +1,14 @@
-import { Table, Tbody, Td, Th, Thead, Tr ,Button,Flex, Box} from "@chakra-ui/react";
+import {
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+  Button,
+  Flex,
+  Box,
+} from "@chakra-ui/react";
 import React, { useMemo } from "react";
 import { useTable } from "react-table";
 import { Column } from "react-table";
@@ -18,26 +28,30 @@ interface Props {
   acciones: Accion[];
 }
 
-const tipicalActions = [{
-    accion:"crear",
-    color : ""
-}]
-export default function TablaDinamica ({ data, columnas, acciones }: Props) {
+const tipicalActions = [
+  {
+    accion: "crear",
+    color: "",
+  },
+];
+export default function TablaDinamica({ data, columnas, acciones }: Props) {
   const tableData = useMemo(() => data, [data]);
-    let columnasTabla:any;
+  let columnasTabla: any;
   const columns: any = useMemo(() => {
     const keys = Object.keys(data[0]);
     if (columnas) {
-        columnasTabla = columnas.map((columna) => ({
-            Header: columna.nombre,
-            accessor: columna.nombre,
-            id: columna.nombre,
-            Cell: columna.componente ? ({ row }: { row: any }) => columna.componente({ id: row.original.item }) : undefined,
-          }));
-    }else{
-        columnasTabla=[]
+      columnasTabla = columnas.map((columna) => ({
+        Header: columna.nombre,
+        accessor: columna.nombre,
+        id: columna.nombre,
+        Cell: columna.componente
+          ? ({ row }: { row: any }) =>
+              columna.componente({ id: row.original.item })
+          : undefined,
+      }));
+    } else {
+      columnasTabla = [];
     }
-
 
     const actionsColumn = {
       Header: "Actions",
@@ -46,16 +60,17 @@ export default function TablaDinamica ({ data, columnas, acciones }: Props) {
       Cell: ({ row }: { row: any }) => (
         <Flex>
           {acciones.map(({ icon, onclick }, index) => {
-            return(
-            <Box 
-            p={0}
-            m={2}
-              key={index}
-              onClick={() => onclick(row.original)}
-            >
-              {icon}
-            </Box>
-          )})}
+            return (
+              <Box
+                p={0}
+                m={2}
+                key={index}
+                onClick={() => onclick(row.original)}
+              >
+                {icon}
+              </Box>
+            );
+          })}
         </Flex>
       ),
     };
@@ -65,15 +80,13 @@ export default function TablaDinamica ({ data, columnas, acciones }: Props) {
         accessor: key,
         id: key,
       })),
-      ...columnasTabla, actionsColumn
+      ...columnasTabla,
+      actionsColumn,
     ];
-    
   }, [data, columnas, acciones]);
-
 
   const tableInstance = useTable({ columns: columns, data: tableData });
 
-  
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     tableInstance;
 
@@ -102,5 +115,4 @@ export default function TablaDinamica ({ data, columnas, acciones }: Props) {
       </Tbody>
     </Table>
   );
-};
-
+}

@@ -12,7 +12,7 @@ import {
   Link,
   Text,
   useDisclosure,
-  Box
+  Box,
 } from "@chakra-ui/react";
 import { MdConveyorBelt } from "react-icons/md";
 import { Link as RouterLink } from "react-router-dom";
@@ -57,10 +57,9 @@ export default function Navbar(props: NavbarProps) {
           Panel de Administrador
         </Text>
         <Box>
-        <Flex height={props.height} justifyContent="flex-end">
-          <UserMenu />
-        </Flex>
-
+          <Flex height={props.height} justifyContent="flex-end">
+            <UserMenu />
+          </Flex>
         </Box>
       </Flex>
       <Drawer size="xs" placement="left" isOpen={isOpen} onClose={onClose}>

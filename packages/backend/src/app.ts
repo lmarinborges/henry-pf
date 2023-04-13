@@ -3,7 +3,7 @@ import "express-async-errors";
 import path from "path";
 import apiRouter from "./api";
 import morgan from "./middleware/morgan";
-import cors from 'cors'
+import cors from "cors";
 const app = express();
 
 // Middleware

@@ -55,7 +55,7 @@ export default function ShoppingCard(props: any) {
           colorScheme="red"
           size={"sm"}
           w={"1"}
-          onClick={() => props.onClose(props.product.name,totalProduct)}
+          onClick={() => props.onClose(props.product.name, totalProduct)}
         >
           X
         </Button>

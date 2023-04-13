@@ -266,7 +266,7 @@ export default function CreateProductForm() {
                     cree
                   </FormHelperText>
                 )}
-                <CreateBrands/>
+                <CreateBrands />
               </FormControl>
 
               <FormControl id="categoryId">
@@ -293,7 +293,7 @@ export default function CreateProductForm() {
                     cree
                   </FormHelperText>
                 )}
-                <CreateCategories/>
+                <CreateCategories />
               </FormControl>
 
               <Stack spacing={10}>

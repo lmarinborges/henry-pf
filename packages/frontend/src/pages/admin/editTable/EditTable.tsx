@@ -30,7 +30,7 @@ export const EditTable = ({
   let dispatch: AppDispatch = useDispatch();
   let brands = useSelector((state: RootState) => state.brands);
   let categories = useSelector((state: RootState) => state.categories);
-  let [image, setImage] = useState("")
+  let [image, setImage] = useState("");
 
   type Form = {
     id: number;
@@ -55,9 +55,9 @@ export const EditTable = ({
     reset();
   };
 
-  let handleImage = (e:any) => {
-    setImage(e.target.value)
-  }
+  let handleImage = (e: any) => {
+    setImage(e.target.value);
+  };
 
   let onSubmit = (data: any) => {
     forReset();

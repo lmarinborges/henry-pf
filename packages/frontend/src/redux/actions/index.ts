@@ -309,11 +309,12 @@ export const createBrands = (data: any) => async (dispatch: AppDispatch) => {
   console.log(res.data);
 };
 
-export const createCategories = (data: any) => async (dispatch: AppDispatch) => {
-  let res = await axios.post("categories", data);
-  dispatch({ type: CREATE_CATEGORIES, payload: res.data });
-  console.log(res.data);
-};
+export const createCategories =
+  (data: any) => async (dispatch: AppDispatch) => {
+    let res = await axios.post("categories", data);
+    dispatch({ type: CREATE_CATEGORIES, payload: res.data });
+    console.log(res.data);
+  };
 
 export const getAllUsers = (data: any) => async (dispatch: AppDispatch) => {
   try {

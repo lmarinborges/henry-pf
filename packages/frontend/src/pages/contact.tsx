@@ -21,7 +21,13 @@ import { Textarea } from "@chakra-ui/textarea";
 export default function ContactPage() {
   return (
     <>
-      <Container bg={useColorModeValue("gray.50", "gray.800")} maxW="full" mt={5} mb={5} centerContent>
+      <Container
+        bg={useColorModeValue("gray.50", "gray.800")}
+        maxW="full"
+        mt={5}
+        mb={5}
+        centerContent
+      >
         <Flex pt="25px" pb="25px">
           <Box
             bg={useColorModeValue("gray.50", "gray.800")}
@@ -90,8 +96,8 @@ export default function ContactPage() {
                 </WrapItem>
 
                 <WrapItem mt={{ ms: 0 }}>
-                  <Box 
-                    width="19rem" 
+                  <Box
+                    width="19rem"
                     bg={useColorModeValue("gray.800", "gray.50")}
                     color={useColorModeValue("gray.50", "gray.800")}
                     borderRadius="lg"
@@ -107,7 +113,9 @@ export default function ContactPage() {
                             type="text"
                             size="md"
                             placeholder="nombre"
-                            _placeholder={{ color:useColorModeValue("gray.800", "gray.800") }}
+                            _placeholder={{
+                              color: useColorModeValue("gray.800", "gray.800"),
+                            }}
                             color={useColorModeValue("gray.800", "gray.800")}
                           />
                         </FormControl>
@@ -121,7 +129,9 @@ export default function ContactPage() {
                             type="text"
                             size="md"
                             placeholder="apellido"
-                            _placeholder={{ color:useColorModeValue("gray.800", "gray.800") }}
+                            _placeholder={{
+                              color: useColorModeValue("gray.800", "gray.800"),
+                            }}
                             color={useColorModeValue("gray.800", "gray.800")}
                           />
                         </FormControl>
@@ -135,7 +145,9 @@ export default function ContactPage() {
                             type="text"
                             size="md"
                             placeholder="localidad"
-                            _placeholder={{ color:useColorModeValue("gray.800", "gray.800") }}
+                            _placeholder={{
+                              color: useColorModeValue("gray.800", "gray.800"),
+                            }}
                             color={useColorModeValue("gray.800", "gray.800")}
                           />
                         </FormControl>
@@ -150,7 +162,9 @@ export default function ContactPage() {
                               borderRadius: "gray.300",
                             }}
                             placeholder="mensaje"
-                            _placeholder={{ color:useColorModeValue("gray.800", "gray.800") }}
+                            _placeholder={{
+                              color: useColorModeValue("gray.800", "gray.800"),
+                            }}
                             color={useColorModeValue("gray.800", "gray.800")}
                           />
                         </FormControl>

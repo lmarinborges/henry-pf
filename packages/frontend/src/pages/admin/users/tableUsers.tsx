@@ -11,7 +11,7 @@ import ConfirmDialog from "./confirmationDialog";
 
 export default function TableUsers() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [valorModal, setValorModal] = useState<any| null>(null);
+  const [valorModal, setValorModal] = useState<any | null>(null);
   const [isDialogOpen, setDialogOpen] = useState(false);
 
   function abrirModal(valor: any) {
@@ -75,9 +75,8 @@ export default function TableUsers() {
   };
 
   function handleConfirm() {
-
-  dispatch(deleteUser(valorModal))
-  console.log("Borrando", valorModal);
+    dispatch(deleteUser(valorModal));
+    console.log("Borrando", valorModal);
 
     setDialogOpen(false);
   }
@@ -99,7 +98,12 @@ export default function TableUsers() {
           <ConfirmDialog
             isOpen={isDialogOpen}
             title="Confirmar acción"
-            message={"¿Está seguro de que desea borrar a "+ (valorModal && (valorModal.name ? valorModal.name : valorModal.email) ) +" ?" }
+            message={
+              "¿Está seguro de que desea borrar a " +
+              (valorModal &&
+                (valorModal.name ? valorModal.name : valorModal.email)) +
+              " ?"
+            }
             onConfirm={handleConfirm}
             onCancel={handleCancel}
           />
@@ -123,9 +127,9 @@ export default function TableUsers() {
           </Box>
         </Box>
       );
-    }else{
-      return (<div></div>)
+    } else {
+      return <div></div>;
     }
   };
-  return( renderizado(data));
+  return renderizado(data);
 }
