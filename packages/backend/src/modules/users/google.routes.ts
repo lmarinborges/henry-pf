@@ -19,7 +19,7 @@ const idSchema = z.object({
 });
 
 passport.use(
-  new GoogleStrategy(googleConfig(), async function (
+  new GoogleStrategy(googleConfig, async function (
     accessToken,
     refreshToken,
     profile,
@@ -78,7 +78,7 @@ googleRouter.get(
     res.send(
       `<script>window.opener.postMessage({ isAuthenticated: true, user: "${JSON.stringify(
         req.user
-      )}" }, "${appOrigin()}"); window.close();</script>`
+      )}" }, "${appOrigin}"); window.close();</script>`
     );
   }
 );

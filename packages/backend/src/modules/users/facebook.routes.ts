@@ -20,7 +20,7 @@ const facebookSchema = z.object({
 
 // Estrategia de passport-facebook
 passport.use(
-  new FacebookStrategy(facebookConfig(), async function (
+  new FacebookStrategy(facebookConfig, async function (
     accessToken,
     refreshToken,
     profile,
@@ -92,7 +92,7 @@ facebookRouter.get(
     res.send(
       `<script>window.opener.postMessage({ isAuthenticated: true, user: "${JSON.stringify(
         req.user
-      )}" }, "${appOrigin()}"); window.close();</script>`
+      )}" }, "${appOrigin}"); window.close();</script>`
     );
   }
 );
