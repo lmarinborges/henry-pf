@@ -1,7 +1,8 @@
-import { Box, Button, Flex, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, FormControl, Input, Text } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import axios from "../../../libs/axios";
 import OrderTable from "./orderTable";
+import { SearchBar } from "./searchBar";
 
 
 interface Data {
@@ -18,13 +19,13 @@ export const Orders = () => {
   const getOrders = async (page:number) => {
     const res = await axios.get(`/orders?page=${page}`);
     setData(res.data);
+    setPages(Math.ceil(res.data.totalItems / res.data.pageSize));
   };
   useEffect(() => {
     getOrders(currentPage);
-    setPages(Math.round(data.totalItems / data.pageSize) + 1 );
   }, [currentPage]);
 
-  console.log(data);
+  console.log(data,Pages);
 
   const nextPage = () => {
     let num = currentPage + 1;
@@ -36,11 +37,18 @@ export const Orders = () => {
       setCurrentPage(() => num);
     }
   };
+  const onSubmit = async(e:any) => {
+    e.preventDefault();
+    const userName = e.target[0].value
+    const res = await axios.get(`/orders?userName=${userName}`)
+    setData(res.data);
+    setPages(Math.ceil(res.data.totalItems / res.data.pageSize));
+};
   return (
     <>
-      <Flex direction="column" alignItems="center">
+      <Flex direction="column" alignItems="center" mx='10'>
+      <SearchBar onSubmit={onSubmit}/>
         <OrderTable orders={data.orders} />
-
         <Box display="flex" alignItems="baseline" justifyContent="space-around">
           <Button m="5" onClick={backPage}>
             Anterior

@@ -26,6 +26,7 @@ const DRAWER_ITEMS = [
   { label: "Productos", icon: MdConveyorBelt, to: "/admin/products" },
   { label: "Crear Producto", icon: MdConveyorBelt, to: "/admin/createProduct" },
   { label: "Administrar usuarios", icon: MdConveyorBelt, to: "/admin/users" },
+  { label: "Ordenes de compra", icon: MdConveyorBelt, to: "/admin/orders" },
 ];
 
 export default function Navbar(props: NavbarProps) {
@@ -56,11 +57,6 @@ export default function Navbar(props: NavbarProps) {
         <Text fontSize="lg" pt="0.5" flex={1}>
           Panel de Administrador
         </Text>
-        <Box>
-          <Flex height={props.height} justifyContent="flex-end">
-            <UserMenu />
-          </Flex>
-        </Box>
       </Flex>
       <Drawer size="xs" placement="left" isOpen={isOpen} onClose={onClose}>
         <DrawerOverlay />
