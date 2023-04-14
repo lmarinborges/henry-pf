@@ -1,17 +1,12 @@
-import { Button, Flex, FormControl, Input } from "@chakra-ui/react";
+import { Button, Flex, Input } from "@chakra-ui/react";
 
-import { Form } from "react-router-dom";
-import axios from "../../../libs/axios";
-
-
-
-export const SearchBar = ({onSubmit}:any) => {
+export const SearchBar = ({ onSubmit }: any) => {
     return (
-        <Form onSubmit={onSubmit}>
+        <form onSubmit={onSubmit}>
             <Flex>
-                <Input mr="5" name='search'></Input>
+                <Input mr="5" name="search"></Input>
                 <Button type="submit">Buscar</Button>
             </Flex>
-        </Form>
+        </form>
     );
 };
