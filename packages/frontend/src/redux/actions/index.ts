@@ -254,10 +254,19 @@ export const addUserFromLocal =
         });
         alert(mensaje);
       } else {
+        console.log(error);
         alert(" Ocurrió un error al procesar la solicitud");
       }
     }
   };
+
+export const sendEmail = (data: any) => async (dispatch: AppDispatch) => {
+  await axios.post("/mail", {
+    to: data.email,
+    name: data.name,
+  });
+  return console.log("enviado");
+};
 
 export const registerUser = (data: any) => async (dispatch: AppDispatch) => {
   const userData = {
@@ -270,8 +279,9 @@ export const registerUser = (data: any) => async (dispatch: AppDispatch) => {
   try {
     const response = await axios.post("users", userData);
     if (response.data.state === "success") {
-      alert("Bienvenido, nuevo usuario");
+      // alert("Bienvenido, nuevo usuario");
       dispatch(addUserFromLocal(data));
+      dispatch(sendEmail(data));
     }
   } catch (error: any) {
     let problema = error.response?.data;

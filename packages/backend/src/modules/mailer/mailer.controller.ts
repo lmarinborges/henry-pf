@@ -10,12 +10,17 @@ const transport = nodemailer.createTransport({
   },
 });
 
-export async function sendMail(req: Request, res: Response) {
+export async function sendWelcomeMail(req: Request, res: Response) {
+  const name = req.body.name;
+
   const result = await transport.sendMail({
-    from: req.body.from,
+    from: process.env.EMAIL,
     to: req.body.to,
-    subject: req.body.subject,
-    html: req.body.html,
+    subject: "Bienvenido a nuestra pagina",
+    html: `<div> <p> Gracias ${name} haberte registrado en nuestra pagina
+    web. Aqui
+    encontraras
+    lo mejores productos de gimnasio al mejor precio! </p></div>`,
     attachments: [
       /*  {
         filename: req.body.filename, // 'images.jpg',
