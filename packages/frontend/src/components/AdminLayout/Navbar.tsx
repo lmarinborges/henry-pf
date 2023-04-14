@@ -41,7 +41,6 @@ export default function Navbar(props: NavbarProps) {
         width="full"
         px="2"
         boxShadow="sm"
-        backgroundColor="white"
         gap="4"
       >
         <IconButton
@@ -56,11 +55,7 @@ export default function Navbar(props: NavbarProps) {
         <Text fontSize="lg" pt="0.5" flex={1}>
           Panel de Administrador
         </Text>
-        <Box>
-          <Flex height={props.height} justifyContent="flex-end">
-            <UserMenu />
-          </Flex>
-        </Box>
+        
       </Flex>
       <Drawer size="xs" placement="left" isOpen={isOpen} onClose={onClose}>
         <DrawerOverlay />
