@@ -6,6 +6,7 @@ import {
   HStack,
   Heading,
   Input,
+  useToast,
 } from "@chakra-ui/react";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
 import { useForm } from "react-hook-form";
@@ -27,6 +28,7 @@ const LoginPage = ({ SuddenCLose }: { SuddenCLose: () => void }) => {
     formState: { errors },
   } = useForm();
   const user = useSelector((state: RootState) => state.user);
+
   const onSubmit = async (values: any) => {
     dispatch(addUserFromLocal(values));
   };
@@ -129,8 +131,17 @@ const RegisterPage = ({ SuddenCLose }: { SuddenCLose: () => void }) => {
     formState: { errors },
   } = useForm();
   const user = useSelector((state: RootState) => state.user);
+  const toast = useToast();
+
   const onSubmit = async (values: any) => {
-    dispatch(registerUser(values));
+    await dispatch(registerUser(values));
+    toast({
+      title: "Felicidades",
+      description: "Su usuario ha sido creado. Revise su email.",
+      status: "success",
+      duration: 4000,
+      isClosable: true,
+    });
   };
   useEffect(() => {
     console.log(user);
@@ -204,7 +215,7 @@ const RegisterPage = ({ SuddenCLose }: { SuddenCLose: () => void }) => {
             my={4}
             colorScheme="red"
           >
-            Iniciar Sesión
+            Registrarse
           </Button>
         </form>
         <HStack flexDirection={"column"}>
