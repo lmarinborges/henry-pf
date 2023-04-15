@@ -16,13 +16,16 @@ import {
 import { MdConveyorBelt } from "react-icons/md";
 import { Link as RouterLink } from "react-router-dom";
 
-
 export interface NavbarProps {
   height: LayoutProps["height"];
 }
 
 const DRAWER_ITEMS = [
-  { label: "Administrar Productos", icon: MdConveyorBelt, to: "/admin/products" },
+  {
+    label: "Administrar Productos",
+    icon: MdConveyorBelt,
+    to: "/admin/products",
+  },
   { label: "Crear Producto", icon: MdConveyorBelt, to: "/admin/createProduct" },
   { label: "Administrar usuarios", icon: MdConveyorBelt, to: "/admin/users" },
   { label: "Ordenes de compra", icon: MdConveyorBelt, to: "/admin/orders" },
@@ -41,7 +44,6 @@ export default function Navbar(props: NavbarProps) {
         width="full"
         px="2"
         boxShadow="sm"
-        backgroundColor="white"
         gap="4"
       >
         <IconButton
