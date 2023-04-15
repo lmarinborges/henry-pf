@@ -12,20 +12,23 @@ import {
   Link,
   Text,
   useDisclosure,
-  Box,
 } from "@chakra-ui/react";
 import { MdConveyorBelt } from "react-icons/md";
 import { Link as RouterLink } from "react-router-dom";
-import UserMenu from "../../features/components/loginButton";
 
 export interface NavbarProps {
   height: LayoutProps["height"];
 }
 
 const DRAWER_ITEMS = [
-  { label: "Productos", icon: MdConveyorBelt, to: "/admin/products" },
+  {
+    label: "Administrar Productos",
+    icon: MdConveyorBelt,
+    to: "/admin/products",
+  },
   { label: "Crear Producto", icon: MdConveyorBelt, to: "/admin/createProduct" },
   { label: "Administrar usuarios", icon: MdConveyorBelt, to: "/admin/users" },
+  { label: "Ordenes de compra", icon: MdConveyorBelt, to: "/admin/orders" },
 ];
 
 export default function Navbar(props: NavbarProps) {
@@ -55,7 +58,6 @@ export default function Navbar(props: NavbarProps) {
         <Text fontSize="lg" pt="0.5" flex={1}>
           Panel de Administrador
         </Text>
-        
       </Flex>
       <Drawer size="xs" placement="left" isOpen={isOpen} onClose={onClose}>
         <DrawerOverlay />
