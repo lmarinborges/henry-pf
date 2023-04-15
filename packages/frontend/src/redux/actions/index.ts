@@ -179,7 +179,6 @@ export const addUserFromFb = () => async (dispatch: AppDispatch) => {
   const handleAuthResponse = (event: any) => {
     if (event.origin !== appUrl) return;
     if (event.data.isAuthenticated) {
-      console.log(event.data);
       dispatch({ type: ADD_USER, payload: event.data.user });
     }
   };
