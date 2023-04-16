@@ -50,7 +50,7 @@ function Rating({ rating, numReviews }: RatingProps) {
 
 function Card({ product }: any) {
   const onClickCart = () => {
-    localStorage.setItem(product.name, JSON.stringify(product));
+    localStorage.setItem(product.name+"CartProduc", JSON.stringify(product));
   };
 
   return (

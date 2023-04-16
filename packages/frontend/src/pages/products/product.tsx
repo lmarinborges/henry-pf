@@ -53,7 +53,7 @@ export default function ProductPage() {
   };
 
   const onClickCart = () => {
-    localStorage.setItem(prod.name, JSON.stringify(prod));
+    localStorage.setItem(prod.name+"CartProduc", JSON.stringify(prod));
   };
 
   const onClickComent = () => {
@@ -65,6 +65,7 @@ export default function ProductPage() {
 
   const comentarios = reviews ? (
     reviews.map((element: any, i: number) => {
+      console.log(i)
       return (
         <Text
           key={i}

@@ -17,8 +17,9 @@ export const ADD_USER = "ADD_USER";
 export const EDITED_PRODUCT = "EDITED_PRODUCT";
 export const GET_USERS_REVIEWS = "GET_USERS_REVIEWS";
 export const CREATE_BRAND = "CREATE_BRAND";
-export const GET_ALL_USERS = "GET_ALL_USERS"
-export const EDITED_USER = "EDITED_USER"
+export const GET_ALL_USERS = "GET_ALL_USERS";
+export const EDITED_USER = "EDITED_USER";
+export const BUY_CART = "BUY_CART";
 
 export const getAllProducts =
   (
@@ -337,3 +338,21 @@ export const createBrands = (data: any) => async (dispatch: AppDispatch) => {
     dispatch({ type: EDITED_USER, payload: result.data});
      console.log("NEW DATA",result.data);
   };
+
+  export const buyCart=(data:any)=> async (dispatch:AppDispatch)=>{
+    const res = await axios.post(`orders`, {
+      userId: data?.userId,
+      total: data?.total,
+      products: data?.buyedProducts?.map((e: any)=>{
+        return {
+          productId:e?.productId,
+          quantity:e?.quantity,
+          name:e?.name,
+          price:e?.price
+        }
+      })
+    })
+    .then((res) => res.data);
+    console.dir(res)
+    dispatch({ type: BUY_CART, payload: res });
+  }

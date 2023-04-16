@@ -14,7 +14,8 @@ import {
   EDITED_PRODUCT,
   CREATE_BRAND,
   GET_ALL_USERS,
-  EDITED_USER
+  EDITED_USER,
+  BUY_CART
 } from "../actions/index";
 
 interface sliceState {
@@ -31,7 +32,8 @@ interface sliceState {
   productReviews: Array<any>;
   reviewUsers: Array<any>;
   users: Array<any>;
-  userEdited: any  
+  userEdited: any  ;
+  mercadoRes:{global:string};
 }
 
 const initialState: sliceState = {
@@ -48,7 +50,8 @@ const initialState: sliceState = {
   productReviews: [],
   reviewUsers: [],
   users: [],
-  userEdited: {}
+  userEdited: {},
+  mercadoRes:{global:""}
 };
 
 const rootReducer = (state = initialState, action: any) => {
@@ -106,12 +109,18 @@ const rootReducer = (state = initialState, action: any) => {
 
     case ADD_USER:
       return { ...state, user: action.payload };
+
     case CREATE_BRAND:
       return { ...state, brands: [...state.brands, action.payload] };
+
     case GET_ALL_USERS:
       return { ...state, users: action.payload };
-      case EDITED_USER:
-        return {...state, userEdited: action.payload}
+
+    case EDITED_USER:
+      return {...state, userEdited: action.payload};
+
+    case BUY_CART:
+      return {...state, mercadoRes: action.payload}
   }
 };
 
