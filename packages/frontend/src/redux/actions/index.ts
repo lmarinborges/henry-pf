@@ -179,7 +179,6 @@ export const addUserFromFb = () => async (dispatch: AppDispatch) => {
   const handleAuthResponse = (event: any) => {
     if (event.origin !== appUrl) return;
     if (event.data.isAuthenticated) {
-      console.log(event.data);
       dispatch({ type: ADD_USER, payload: event.data.user });
     }
   };
@@ -254,10 +253,29 @@ export const addUserFromLocal =
         });
         alert(mensaje);
       } else {
+        console.log(error);
         alert(" Ocurrió un error al procesar la solicitud");
       }
     }
   };
+
+export const sendEmail = (data: any) => async (dispatch: AppDispatch) => {
+  await axios.post("/mail", {
+    to: data.email,
+    name: data.name,
+  });
+  return console.log("enviado");
+};
+
+export const sendEmailUpdate = (data: any) => async (dispatch: AppDispatch) => {
+  await axios.post("/sendEmailUpdate", {
+    to: data.email,
+    name: data.name,
+    state: data.state,
+    role: data.role,
+  });
+  return console.log("Se envió el MAIL al usuario");
+};
 
 export const registerUser = (data: any) => async (dispatch: AppDispatch) => {
   const userData = {
@@ -270,8 +288,9 @@ export const registerUser = (data: any) => async (dispatch: AppDispatch) => {
   try {
     const response = await axios.post("users", userData);
     if (response.data.state === "success") {
-      alert("Bienvenido, nuevo usuario");
+      // alert("Bienvenido, nuevo usuario");
       dispatch(addUserFromLocal(data));
+      dispatch(sendEmail(data));
     }
   } catch (error: any) {
     let problema = error.response?.data;

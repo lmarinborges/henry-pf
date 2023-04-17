@@ -40,14 +40,15 @@ model Brand {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  email    String   @unique
-  name     String?
-  password String?
-  role     Role     @default(USER)
-  state    String
-  review   Review[]
-  Order    Order[]
+  id              Int               @id @default(autoincrement())
+  email           String            @unique
+  name            String?
+  password        String?
+  role            Role              @default(USER)
+  state           String
+  review          Review[]
+  Order           Order[]
+  BookingsOnUsers BookingsOnUsers[]
 }
 
 enum Role {
@@ -84,4 +85,24 @@ model OrdersOnProducts {
   name      String
 
   @@id([productId, orderId])
+}
+
+model Booking {
+  id              Int               @id @default(autoincrement())
+  day             DateTime          @db.Date
+  time            Int
+  BookingsOnUsers BookingsOnUsers[]
+
+  @@unique([day, time])
+}
+
+model BookingsOnUsers {
+  booking    Booking @relation(fields: [bookingId], references: [id])
+  bookingId  Int
+  user       User    @relation(fields: [userProfId], references: [id])
+  userProfId Int
+  userAlumId Int?
+
+  @@id([bookingId, userProfId])
+  @@unique([bookingId, userAlumId])
 }
