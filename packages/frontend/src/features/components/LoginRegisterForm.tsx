@@ -28,6 +28,7 @@ const LoginPage = ({ SuddenCLose }: { SuddenCLose: () => void }) => {
     formState: { errors },
   } = useForm();
   const user = useSelector((state: RootState) => state.user);
+  const toast = useToast();
 
   const onSubmit = async (values: any) => {
     dispatch(addUserFromLocal(values));
@@ -36,6 +37,13 @@ const LoginPage = ({ SuddenCLose }: { SuddenCLose: () => void }) => {
     console.log(user);
     if (user.name) {
       SuddenCLose();
+      toast({
+        title: "Felicidades",
+        description: "Ha iniciado sesión.",
+        status: "success",
+        duration: 4000,
+        isClosable: true,
+      });
     }
   }, [user]);
   function loginWithFacebook() {
