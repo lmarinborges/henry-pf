@@ -5,7 +5,7 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { z } from "zod";
 import prisma from "../../db";
 import { encryptPassword } from "./encrypt";
-import { appOrigin, googleConfig } from "../../config";
+import { clientOrigin, googleConfig } from "../../config";
 
 const googleRouter = Router();
 
@@ -74,11 +74,13 @@ googleRouter.get(
 googleRouter.get(
   "/auth/google/callback",
   passport.authenticate("google", { failureRedirect: "/failed" }),
+  
   function (req, res) {
+    const respuesta = `<script>window.opener.postMessage({ isAuthenticated: true, user: ${JSON.stringify(
+      req.user
+    )} }, "${clientOrigin}"); window.close();</script>`;
     res.send(
-      `<script>window.opener.postMessage({ isAuthenticated: true, user: "${JSON.stringify(
-        req.user
-      )}" }, "${appOrigin}"); window.close();</script>`
+      respuesta
     );
   }
 );

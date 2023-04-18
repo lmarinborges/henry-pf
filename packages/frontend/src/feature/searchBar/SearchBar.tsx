@@ -26,7 +26,7 @@ export const SearchBar = () => {
       <Flex
         justifyContent="center"
         mb={50}
-        bg={useColorModeValue("gray.50", "gray.800")}
+        
       >
         <form onSubmit={handleSubmit}>
           <Flex

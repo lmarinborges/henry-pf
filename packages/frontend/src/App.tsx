@@ -20,6 +20,9 @@ import ProductsPage from "./pages/products";
 import ProductPage from "./pages/products/product";
 import ShoppingCart from "./pages/products/shoppingcart";
 import TableUsers from "./pages/admin/users/tableUsers";
+import Successful from "./pages/products/urlsBack/Successful";
+import Pending from "./pages/products/urlsBack/Pending";
+import Failed from "./pages/products/urlsBack/Failed";
 
 const routes = createBrowserRouter(
   createRoutesFromElements([
@@ -32,7 +35,9 @@ const routes = createBrowserRouter(
         <Route path="products" element={<ProductsPage />} />
         <Route path="products/:productId" element={<ProductPage />} />
         <Route path="products/shoppingcart" element={<ShoppingCart />} />
-        <Route path="createProduct" element={<CreateProductForm />} />
+        <Route path="products/shoppingcart/successful" element={<Successful />} />
+        <Route path="products/shoppingcart/pending" element={<Pending />} />
+        <Route path="products/shoppingcart/failed" element={<Failed />} />
       </Route>
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<Navigate to="products" />} />
