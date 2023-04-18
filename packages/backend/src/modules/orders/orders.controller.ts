@@ -3,6 +3,11 @@ import { Request, Response } from "express";
 import { z } from "zod";
 import prisma from "../../db";
 import transformDecimal from "../../utils/transformDecimal";
+import mercadopago from "mercadopago";
+
+mercadopago.configure({
+  access_token: process.env.PRUEBA_ACCESS_TOKEN?process.env.PRUEBA_ACCESS_TOKEN:"NO HAY TOQUEN  "
+})
 
 const PAGE_SIZE = 5;
 
@@ -128,7 +133,7 @@ export async function deleteOrder(req: Request, res: Response) {
 export async function createOrder(req: Request, res: Response) {
   const { body: data } = await createSchema.parseAsync(req);
   const orderData = {
-    userId: data.userId,
+    userId: data?.userId,
     total: data.total,
   };
   const order = await prisma.order.create({ data: { ...orderData } });
@@ -141,10 +146,37 @@ export async function createOrder(req: Request, res: Response) {
       price: e.price,
       name: e.name,
     };
+
     const orderProduct = await prisma.ordersOnProducts.create({
       data: { ...orderProd },
     });
-  });
 
-  res.status(200).json(order);
+    const preference ={
+      items: data.products.map((e) => {
+        return{
+          id: e.productId.toString(),
+          quantity: e.quantity,
+          unit_price: Number(e.price),
+          title: e.name,
+        };
+      }),
+      back_urls:{
+        succes:"http://localhost:5173/home",
+        pending:"http://localhost:5173/home",
+        failure:"http://localhost:5173/admin"
+      }
+    }
+    
+    mercadopago.preferences
+      .create(preference)
+      .then(function (response) {
+        // En esta instancia deberás asignar el valor dentro de response.body.id por el ID de preferencia solicitado en el siguiente paso
+        res.json({global:response.body.id})
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  });
 }
+
+
