@@ -225,6 +225,7 @@ export const addUserFromGoogle = () => async (dispatch: AppDispatch) => {
 
 export const addUserFromLocal =
   (data: any) => async (dispatch: AppDispatch) => {
+    let msg = null;
     try {
       const response = await axios.post(
         "localLogin",
@@ -244,20 +245,21 @@ export const addUserFromLocal =
         dispatch({ type: ADD_USER, payload: user });
       } else {
         // La autenticación falló, hacer algo en consecuencia
-        alert("la autenticacion falló , datos incorrectos");
         console.log("La autenticación falló");
+        return (msg = "la autenticacion falló , datos incorrectos");
       }
     } catch (error: any) {
       let problema = error.response?.data;
+
       if (error.response?.data?.errors) {
         let mensaje = "";
         problema.errors.forEach((el: any) => {
           mensaje = mensaje + "*" + el.message + "\n";
         });
-        alert(mensaje);
+        return (msg = mensaje);
       } else {
         console.log(error);
-        alert(" Ocurrió un error al procesar la solicitud");
+        return (msg = " Ocurrió un error al procesar la solicitud");
       }
     }
   };

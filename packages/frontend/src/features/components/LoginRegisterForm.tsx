@@ -32,7 +32,19 @@ const LoginPage = ({ SuddenCLose }: { SuddenCLose: () => void }) => {
   const toast = useToast();
 
   const onSubmit = async (values: any) => {
-    dispatch(addUserFromLocal(values));
+    const res = await dispatch(addUserFromLocal(values));
+    const msg = res.toString();
+    console.log(msg);
+
+    if (res.length > 0) {
+      toast({
+        title: "Error",
+        description: msg,
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
+    }
     dispatch(sendLoginEmail(values));
   };
   useEffect(() => {
