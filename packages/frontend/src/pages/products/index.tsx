@@ -215,7 +215,7 @@ export default function ProductsPage() {
 
             <Flex
                 alignItems="center"
-                justifyContent="center"
+                justifyContent="start"
                 dir="row"
                 wrap="wrap"
                 mb='5%'

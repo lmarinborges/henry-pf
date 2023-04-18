@@ -22,7 +22,6 @@ export default function ContactPage() {
   return (
     <>
       <Container
-        bg={useColorModeValue("gray.50", "gray.800")}
         maxW="full"
         mt={5}
         mb={5}
