@@ -295,18 +295,20 @@ export const registerUser = (data: any) => async (dispatch: AppDispatch) => {
     }
   } catch (error: any) {
     let problema = error.response?.data;
+    let msg = null;
+
     if (problema.message === "Unique constraint was provided") {
-      alert(" Este email ya está registrado");
+      return (msg = " Este email ya está registrado");
     } else {
       if (error.response?.data?.errors) {
         let lista = error.response?.data?.errors;
-        let mensaje = "";
+        let mensaje = "La contraseña debe ";
         lista.forEach((el: any) => {
-          mensaje = mensaje + "*" + el.message + "\n";
+          mensaje = mensaje + el.message + "\n";
         });
-        alert(mensaje);
+        return (msg = mensaje);
       } else {
-        alert(" Ocurrió un error al procesar la solicitud");
+        return (msg = " Ocurrió un error al procesar la solicitud");
       }
     }
   }
