@@ -5,12 +5,15 @@ import { useDispatch, useSelector } from "react-redux";
 import ShoppingCard from "./shoppingCard";
 import * as actions from "../../redux/actions/index";
 import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
-initMercadoPago("TEST-dba7b71f-83c4-4d78-aeac-dea0417525b0");
+import BuyForm from "./BuyForm";
+
+initMercadoPago("TEST-ac56c88a-ddfd-4f33-97b0-5119db05e459");
 
 export default function ShoppingCart() {
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalProducts, setTotalProducts] = useState<any[]>([]);
-  const [buyProducts, setBuyProducts] = useState<any>();
+  const [buyProducts, setBuyProducts] = useState<any>({});
+  const [showForm,setShowForm]=useState(false)
 
   const mercadoRes = useSelector((state: RootState) => state.mercadoRes);
   const user = useSelector((state: RootState) => state.user);
@@ -37,11 +40,15 @@ export default function ShoppingCart() {
     } else return null;
   });
 
-  const onBuy = () => {
-    console.log(buyProducts);
-    dispatch(actions.buyCart(buyProducts));
+  const onBuy = (data:any) => {
+    const aux= {...buyProducts, payer:data}
+    dispatch(actions.buyCart(aux));
+
   };
 
+  const onReady= () =>{
+    setShowForm(true);
+  };
   const totalValue = (val: number, rest: boolean) => {
     let result = 0;
     if (rest === true) {
@@ -55,7 +62,6 @@ export default function ShoppingCart() {
 
   const setQuantity = (i: number, rest: boolean) => {
     let provitional;
-    console.log(i);
     if (rest === true) {
       provitional = buyProducts.buyedProducts[i].quantity--;
       setBuyProducts({
@@ -68,7 +74,6 @@ export default function ShoppingCart() {
     } else {
       if (buyProducts?.buyedProducts[i]) {
         provitional = buyProducts.buyedProducts[i].quantity++;
-        console.log(provitional);
         setBuyProducts({
           ...buyProducts,
           buyedProducts: [
@@ -124,27 +129,32 @@ export default function ShoppingCart() {
 
   return (
     <Box bg="white" p="10px" mt="-10px">
-      <Heading color="black">Carrito:</Heading>
-      {totalProducts.length !== 0 ? (
-        totalProducts
-      ) : (
-        <Text
-          display={"flex"}
-          alignItems="center"
-          justifyContent={"center"}
-          fontStyle="bold"
-        >
-          {" "}
-          El Carrito está vacío
-        </Text>
-      )}
-      <Text color="black">Total: ${totalPrice.toFixed(2)}</Text>
-      <Button size={"md"} variant="solid" onClick={onBuy} colorScheme="red">
-        Comprar
-      </Button>
+      { showForm===false?<>
+        <Heading color="black">Carrito:</Heading>
+          {totalProducts.length !== 0 ? (
+            totalProducts
+          ) : (
+            <Text
+              display={"flex"}
+              alignItems="center"
+              justifyContent={"center"}
+              fontStyle="bold"
+            >
+              {" "}
+              El Carrito está vacío
+            </Text>
+          )}
+          <Text color="black">Total: ${totalPrice.toFixed(2)}</Text>
+          <Button size={"md"} variant="solid" onClick={onReady} colorScheme="red">
+            Comprar
+          </Button>
+      </>:<BuyForm onBuy={onBuy} />}
+
+
+
       {mercadoRes.global !== "" && (
         <Wallet initialization={{ preferenceId: mercadoRes.global }} />
       )}
-    </Box>
+    </ Box>
   );
 }
