@@ -387,6 +387,7 @@ export const deleteUser = (data: any) => async (dispatch: AppDispatch) => {
 };
 
 export const buyCart = (data: any) => async (dispatch: AppDispatch) => {
+  console.log(data)
   const res = await axios
     .post(`orders`, {
       userId: data?.userId,
@@ -399,6 +400,16 @@ export const buyCart = (data: any) => async (dispatch: AppDispatch) => {
           price: e?.price,
         };
       }),
+      payer:{
+        name: data.payer.name,
+        surname: data.payer.surname,
+        adress:{
+          street_name: data.payer.adress.street_name,
+          street_number: Number(data.payer.adress.street_number)  
+        },
+        email: data.payer.email,
+        zip_code: Number(data.payer.zip_code),
+      }
     })
     .then((res) => res.data);
   console.dir(res);

@@ -16,17 +16,16 @@ import {
 import { useForm } from "react-hook-form";
 type Form = {
   name: string;
-  apellidos: string;
-  tel: number;
+  surname: string;
+  adress:{
+    street_number: number;
+    street_name: string;
+  }
   email: string;
-  direction: string;
-  barrio: string;
-  ncasa: number;
-  piso: number;
-  cp: number;
+  zip_code: number;
 };
 
-let BuyForm = () => {
+let BuyForm = (props:any) => {
   const {
     register,
     handleSubmit,
@@ -36,7 +35,7 @@ let BuyForm = () => {
 
 
 let onSubmit = (data: any) => {
-    console.log(data);
+    props.onBuy(data)
     reset()
   };
 
@@ -73,25 +72,38 @@ let onSubmit = (data: any) => {
                               <FormLabel>Apellido:</FormLabel>
                               <Input
                                 borderColor="black"
-                                {...register("apellidos", { required: true })}
+                                {...register("surname", { required: true })}
                               />
-                              {errors.apellidos && (
+                              {errors.surname && (
                                 <Text color="tomato">
                                   Requiere que ingrese apellido
                                 </Text>
                               )}
                             </FormControl>
                           </HStack>
-
+                                         
                           <FormControl>
-                            <FormLabel>Numero de telefono:</FormLabel>
+                            <FormLabel>Direccion</FormLabel>
                             <Input
                               borderColor="black"
-                              {...register("tel", { required: true })}
+                              {...register("adress.street_name", { required: true })}
                             />
-                            {errors.tel && (
+                            {errors.adress?.street_name && (
                               <Text color="tomato">
-                                Ingrese un número de telefono
+                                Ingrese la calle de su domicilio
+                              </Text>
+                            )}
+                          </FormControl>
+
+                          <FormControl>
+                            <FormLabel>Numero (direccion)</FormLabel>
+                            <Input
+                              borderColor="black"
+                              {...register("adress.street_number", { required: true })}
+                            />
+                            {errors.adress?.street_number && (
+                              <Text color="tomato">
+                                Ingrese altura de calle
                               </Text>
                             )}
                           </FormControl>
@@ -109,63 +121,19 @@ let onSubmit = (data: any) => {
                             )}
                           </FormControl>
 
-                          <FormControl>
-                            <FormLabel>Direccion</FormLabel>
-                            <Input
-                              borderColor="black"
-                              {...register("direction", { required: true })}
-                            />
-                            {errors.direction && (
-                              <Text color="tomato">
-                                Ingrese la dirección de su domicilio
-                              </Text>
-                            )}
-                          </FormControl>
-
-                          <HStack>
-                            <FormControl>
-                              <FormLabel>Barrio</FormLabel>
-                              <Input
-                                borderColor="black"
-                                {...register("barrio", { required: true })}
-                              />
-                              {errors.barrio && (
-                                <Text color="tomato">
-                                  Ingrese el nombre del barrio
-                                </Text>
-                              )}
-                            </FormControl>
-
-                            <FormControl>
-                              <FormLabel>N de casa</FormLabel>
-                              <Input
-                                borderColor="black"
-                                {...register("ncasa", { required: true })}
-                              />
-                            </FormControl>
-                          </HStack>
-                          <HStack>
-                            <FormControl>
-                              <FormLabel>Piso</FormLabel>
-                              <Input
-                                borderColor="black"
-                                {...register("piso", { required: true })}
-                              />
-                            </FormControl>
-
                             <FormControl>
                               <FormLabel>C.P.</FormLabel>
                               <Input
                                 borderColor="black"
-                                {...register("cp", { required: true })}
+                                {...register("zip_code", { required: true })}
                               />
-                              {errors.cp && (
+                              {errors.zip_code && (
                                 <Text color="tomato">
                                   Por favor, increse su código postal
                                 </Text>
                               )}
                             </FormControl>
-                          </HStack>
+                       
 
                           <FormControl float="right">
                             <Button
