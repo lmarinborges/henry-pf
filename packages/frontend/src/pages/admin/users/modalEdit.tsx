@@ -5,7 +5,6 @@ import {
   Input,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalOverlay,
@@ -161,7 +160,6 @@ export default function ModalEdit({
     <Modal isOpen={isOpen} onClose={forReset}>
       <ModalOverlay />
       <ModalContent>
-        <ModalCloseButton />
         {valorModal2 && (
           <form onSubmit={handleSubmit(onSubmit)}>
             <ModalBody>

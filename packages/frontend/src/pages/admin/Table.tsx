@@ -10,6 +10,7 @@ import {
   Td,
   Button,
   Flex,
+  TableContainer,
 } from "@chakra-ui/react";
 
 interface Product {
@@ -122,29 +123,31 @@ const Tabla = ({
     tableInstance;
 
   return (
-    <Table variant="simple" {...getTableProps()}>
-      <Thead>
-        {headerGroups.map((headerGroup) => (
-          <Tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map((column) => (
-              <Th {...column.getHeaderProps()}>{column.render("Header")}</Th>
-            ))}
-          </Tr>
-        ))}
-      </Thead>
-      <Tbody {...getTableBodyProps()}>
-        {rows.map((row) => {
-          prepareRow(row);
-          return (
-            <Tr {...row.getRowProps()}>
-              {row.cells.map((cell) => (
-                <Td {...cell.getCellProps()}>{cell.render("Cell")}</Td>
+    <TableContainer>
+      <Table variant="simple" {...getTableProps()}>
+        <Thead>
+          {headerGroups.map((headerGroup) => (
+            <Tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map((column) => (
+                <Th {...column.getHeaderProps()}>{column.render("Header")}</Th>
               ))}
             </Tr>
-          );
-        })}
-      </Tbody>
-    </Table>
+          ))}
+        </Thead>
+        <Tbody {...getTableBodyProps()}>
+          {rows.map((row) => {
+            prepareRow(row);
+            return (
+              <Tr {...row.getRowProps()}>
+                {row.cells.map((cell) => (
+                  <Td {...cell.getCellProps()}>{cell.render("Cell")}</Td>
+                ))}
+              </Tr>
+            );
+          })}
+        </Tbody>
+      </Table>
+    </TableContainer>
   );
 };
 
