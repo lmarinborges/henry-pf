@@ -209,6 +209,8 @@ export const addUserFromGoogle = () => async (dispatch: AppDispatch) => {
     if (event.data.isAuthenticated) {
       console.log(event.data);
       dispatch({ type: ADD_USER, payload: event.data.user });
+      console.log(event.data.user);
+      dispatch(sendEmail(event.data.user));
     }
   };
   window.addEventListener("message", handleAuthResponse);
