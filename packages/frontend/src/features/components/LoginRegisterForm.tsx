@@ -15,6 +15,7 @@ import {
   addUserFromGoogle,
   addUserFromLocal,
   registerUser,
+  sendLoginEmail,
 } from "../../redux/actions";
 import { RootState, AppDispatch } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,6 +33,7 @@ const LoginPage = ({ SuddenCLose }: { SuddenCLose: () => void }) => {
 
   const onSubmit = async (values: any) => {
     dispatch(addUserFromLocal(values));
+    // dispatch(sendLoginEmail())
   };
   useEffect(() => {
     console.log(user);

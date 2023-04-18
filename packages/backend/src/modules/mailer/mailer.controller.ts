@@ -13,7 +13,7 @@ const transport = nodemailer.createTransport({
 export async function sendWelcomeMail(req: Request, res: Response) {
   const name = req.body.name;
 
-  const result = await transport.sendMail({
+  await transport.sendMail({
     from: process.env.EMAIL,
     to: req.body.to,
     subject: "Bienvenido a nuestra pagina",
@@ -21,13 +21,19 @@ export async function sendWelcomeMail(req: Request, res: Response) {
     web. Aqui
     encontraras
     lo mejores productos de gimnasio al mejor precio! </p></div>`,
-    attachments: [
-      /*  {
-        filename: req.body.filename, // 'images.jpg',
-        path: __dirname + "/images/images.jpg", //req.body.path, // __dirname + '/images/images.jpg',
-        cid: req.body.cid,
-      }, */
-    ],
+  });
+  //console.log(result)
+  return res.status(200).send("The mail was sent");
+}
+
+export async function sendLoginMail(req: Request, res: Response) {
+  const name = req.body.name;
+
+  await transport.sendMail({
+    from: process.env.EMAIL,
+    to: req.body.to,
+    subject: "Has iniciado sesión",
+    html: `<div> <p> ${name} has iniciado sesion en nuestra pagina web.</p></div>`,
   });
   //console.log(result)
   return res.status(200).send("The mail was sent");
