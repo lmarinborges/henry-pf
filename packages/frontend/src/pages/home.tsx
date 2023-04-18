@@ -125,11 +125,11 @@ const TestimonialAvatar = ({
 export default function HomePage() {
   return (
     <>
-      <Container maxW={"7xl"}>
+      <Container maxW={"7xl"} >
         <Stack
           align={"center"}
           spacing={{ base: 8, md: 10 }}
-          py={{ base: 2, md: 15 }}
+          py={{ base: 2, md: 1 }}
           direction={{ base: "column", md: "row" }}
         >
           <Stack flex={1} spacing={{ base: 5, md: 10 }}>
@@ -168,12 +168,13 @@ export default function HomePage() {
             >
               <Button
                 rounded={"full"}
+                color={useColorModeValue("gray.50", "gray.050")}
                 size={"lg"}
                 fontWeight={"normal"}
                 px={8}
                 colorScheme={"red.500"}
                 bg={"red.400"}
-                _hover={{ bg: "red" }}
+                _hover={{ bg: "red.600" }}
               >
                 Get started
               </Button>
@@ -216,10 +217,10 @@ export default function HomePage() {
             <HStack spacing={4}>
               <Text
                 textTransform={"uppercase"}
-                color={"gray.200"}
+                color={useColorModeValue("gray.50", "gray.100")}
                 fontWeight={600}
                 fontSize={"sm"}
-                bg={useColorModeValue("red.500", "red.900")}
+                bg={useColorModeValue("red.500", "red.600")}
                 p={2}
                 alignSelf={"flex-start"}
                 rounded={"md"}
@@ -228,10 +229,10 @@ export default function HomePage() {
               </Text>
               <Text
                 textTransform={"uppercase"}
-                color={"gray.200"}
+                color={useColorModeValue("gray.50", "gray.100")}
                 fontWeight={600}
                 fontSize={"sm"}
-                bg={useColorModeValue("red.500", "red.900")}
+                bg={useColorModeValue("red.500", "red.600")}
                 p={2}
                 alignSelf={"flex-start"}
                 rounded={"md"}
@@ -240,10 +241,10 @@ export default function HomePage() {
               </Text>
               <Text
                 textTransform={"uppercase"}
-                color={"gray.200"}
+                color={useColorModeValue("gray.50", "gray.100")}
                 fontWeight={600}
                 fontSize={"sm"}
-                bg={useColorModeValue("red.500", "red.900")}
+                bg={useColorModeValue("red.500", "red.600")}
                 p={2}
                 alignSelf={"flex-start"}
                 rounded={"md"}
@@ -252,10 +253,10 @@ export default function HomePage() {
               </Text>
               <Text
                 textTransform={"uppercase"}
-                color={"gray.200"}
+                color={useColorModeValue("gray.50", "gray.100")}
                 fontWeight={600}
                 fontSize={"sm"}
-                bg={useColorModeValue("red.500", "red.900")}
+                bg={useColorModeValue("red.500", "red.600")}
                 p={2}
                 alignSelf={"flex-start"}
                 rounded={"md"}
@@ -264,10 +265,10 @@ export default function HomePage() {
               </Text>
               <Text
                 textTransform={"uppercase"}
-                color={"gray.200"}
+                color={useColorModeValue("gray.50", "gray.100")}
                 fontWeight={600}
                 fontSize={"sm"}
-                bg={useColorModeValue("red.500", "red.900")}
+                bg={useColorModeValue("red.500", "red.600")}
                 p={2}
                 alignSelf={"flex-start"}
                 rounded={"md"}

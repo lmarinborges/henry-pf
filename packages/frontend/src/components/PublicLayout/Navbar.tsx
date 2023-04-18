@@ -46,7 +46,7 @@ export default function Navbar(props: NavbarProps) {
         as="header"
         alignItems="center"
         height={props.height}
-        position="fixed"
+        // position="fixed"
         width="full"
         justifyContent="space-between"
         px="2"
