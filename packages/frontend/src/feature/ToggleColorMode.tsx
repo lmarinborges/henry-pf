@@ -10,7 +10,6 @@ const ToggleColorMode = () => {
       backgroundColor="transparent"
       variant="unstyled"
       marginRight="auto"
-      mt="-2"
     >
       {colorMode === "dark" ? (
         <SunIcon color="grey.050" backgroundColor="transparent" />

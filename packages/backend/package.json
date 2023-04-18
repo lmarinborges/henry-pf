@@ -1,17 +1,19 @@
 {
   "name": "@henry-pf/backend",
-  "private": true,
   "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "dev": "nodemon -r dotenv/config src/index.ts",
     "build": "tsc",
-    "start": "NODE_ENV=production node dist/index.js",
-    "lint": "eslint"
+    "dev": "nodemon -r dotenv/config src/index.ts",
+    "lint": "eslint",
+    "start": "NODE_ENV=production node dist/index.js"
+  },
+  "lint-staged": {
+    "*.{ts,js}": "eslint --cache --fix"
   },
   "dependencies": {
     "@prisma/client": "^4.12.0",
     "@types/mercadopago": "^1.5.8",
-    "@types/nodemailer": "^6.4.7",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "express-async-errors": "^3.1.1",
@@ -35,6 +37,7 @@
     "@types/express-session": "^1.17.7",
     "@types/morgan": "^1.9.4",
     "@types/node": "^18.15.10",
+    "@types/nodemailer": "^6.4.7",
     "@types/passport": "^1.0.12",
     "@types/passport-facebook": "^2.1.11",
     "@types/passport-google-oauth20": "^2.0.11",
@@ -43,8 +46,5 @@
     "nodemon": "^2.0.22",
     "prisma": "^4.12.0",
     "ts-node": "^10.9.1"
-  },
-  "lint-staged": {
-    "*.{ts,js}": "eslint --cache --fix"
   }
 }

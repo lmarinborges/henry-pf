@@ -24,6 +24,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { CreateBrands } from "../../pages/admin/createBrands/CreateBrands";
+import { CreateCategories } from "../../pages/admin/createCategories/CreateCategories";
 
 interface CreateProductFormData {
   name: string;
@@ -265,7 +266,7 @@ export default function CreateProductForm() {
                     cree
                   </FormHelperText>
                 )}
-                <CreateBrands/>
+                <CreateBrands />
               </FormControl>
 
               <FormControl id="categoryId">
@@ -292,6 +293,7 @@ export default function CreateProductForm() {
                     cree
                   </FormHelperText>
                 )}
+                <CreateCategories />
               </FormControl>
 
               <Stack spacing={10}>

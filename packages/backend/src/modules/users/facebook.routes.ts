@@ -7,7 +7,7 @@ import prisma from "../../db";
 import crypto from "crypto";
 import { z } from "zod";
 import { encryptPassword } from "./encrypt";
-import { appOrigin, facebookConfig } from "../../config";
+import { appOrigin, clientOrigin, facebookConfig } from "../../config";
 
 const facebookRouter = Router();
 
@@ -20,7 +20,7 @@ const facebookSchema = z.object({
 
 // Estrategia de passport-facebook
 passport.use(
-  new FacebookStrategy(facebookConfig(), async function (
+  new FacebookStrategy(facebookConfig, async function (
     accessToken,
     refreshToken,
     profile,
@@ -88,12 +88,11 @@ facebookRouter.get(
   "/auth/facebook/callback",
   passport.authenticate("facebook", { failureRedirect: "/failed" }),
   function (req, res) {
+    const respuesta = `<script>window.opener.postMessage({ isAuthenticated: true, user: ${JSON.stringify(
+      req.user
+    )} }, "${clientOrigin}"); window.close();</script>`;
     // Emitimos un mensaje al cliente indicando que se ha autenticado correctamente
-    res.send(
-      `<script>window.opener.postMessage({ isAuthenticated: true, user: "${JSON.stringify(
-        req.user
-      )}" }, "${appOrigin()}"); window.close();</script>`
-    );
+    res.send(respuesta);
   }
 );
 

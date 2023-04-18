@@ -16,14 +16,18 @@ export const SearchBar = () => {
 
   let handleSubmit = (e: any) => {
     e.preventDefault();
-    dispatch(actions.getSearch(searchProduct))
+    dispatch(actions.getSearch(searchProduct));
 
     setSearchProduct("");
   };
 
   return (
     <>
-      <Flex justifyContent="center" mb={50} bg={useColorModeValue("gray.50", "gray.800")}>
+      <Flex
+        justifyContent="center"
+        mb={50}
+        
+      >
         <form onSubmit={handleSubmit}>
           <Flex
             align="center"
@@ -34,7 +38,7 @@ export const SearchBar = () => {
             pl={4}
             pr={2}
             bg="white"
-            >
+          >
             <Input
               type="text"
               value={searchProduct}
@@ -44,7 +48,7 @@ export const SearchBar = () => {
               bgColor="transparent"
               p="0px"
               placeholder="¿Que deseas buscar?"
-              _placeholder={{ opacity: 1, color: 'gray.500' }}
+              _placeholder={{ opacity: 1, color: "gray.500" }}
               _hover={{ borderColor: "none" }}
               size={{ base: "lg" }}
               width={{ lg: "333px" }}

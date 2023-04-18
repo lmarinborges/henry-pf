@@ -13,7 +13,7 @@ import {
   Image,
   StackDivider,
   Divider,
-  HStack
+  HStack,
 } from "@chakra-ui/react";
 
 //NUESTRA HISTORIA
@@ -125,11 +125,11 @@ const TestimonialAvatar = ({
 export default function HomePage() {
   return (
     <>
-      <Container maxW={"7xl"}>
+      <Container maxW={"7xl"} >
         <Stack
           align={"center"}
           spacing={{ base: 8, md: 10 }}
-          py={{ base: 2, md: 15 }}
+          py={{ base: 2, md: 1 }}
           direction={{ base: "column", md: "row" }}
         >
           <Stack flex={1} spacing={{ base: 5, md: 10 }}>
@@ -168,12 +168,13 @@ export default function HomePage() {
             >
               <Button
                 rounded={"full"}
+                color={useColorModeValue("gray.50", "gray.050")}
                 size={"lg"}
                 fontWeight={"normal"}
                 px={8}
                 colorScheme={"red.500"}
                 bg={"red.400"}
-                _hover={{ bg: "red" }}
+                _hover={{ bg: "red.600" }}
               >
                 Get started
               </Button>
@@ -200,8 +201,6 @@ export default function HomePage() {
 
       <Divider mt={20} />
 
-      
-
       <Container maxW={"5xl"} py={12}>
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10}>
           <Flex>
@@ -215,69 +214,68 @@ export default function HomePage() {
             />
           </Flex>
           <Stack spacing={4}>
-          <HStack spacing={4}>
-            <Text
-              textTransform={"uppercase"}
-              color={"gray.200"}
-              fontWeight={600}
-              fontSize={"sm"}
-              bg={useColorModeValue("red.500", "red.900")}
-              p={2}
-              alignSelf={"flex-start"}
-              rounded={"md"}
-            >
-              Salud
-            </Text>
-            <Text
-              textTransform={"uppercase"}
-              color={"gray.200"}
-              fontWeight={600}
-              fontSize={"sm"}
-              bg={useColorModeValue("red.500", "red.900")}
-              p={2}
-              alignSelf={"flex-start"}
-              rounded={"md"}
-            >
-            Bienestar
-            </Text>
-            <Text
-              textTransform={"uppercase"}
-              color={"gray.200"}
-              fontWeight={600}
-              fontSize={"sm"}
-              bg={useColorModeValue("red.500", "red.900")}
-              p={2}
-              alignSelf={"flex-start"}
-              rounded={"md"}
-            >
-            Fitness
-            </Text>
-            <Text
-              textTransform={"uppercase"}
-              color={"gray.200"}
-              fontWeight={600}
-              fontSize={"sm"}
-              bg={useColorModeValue("red.500", "red.900")}
-              p={2}
-              alignSelf={"flex-start"}
-              rounded={"md"}
-            >
-            Nutrición
-            </Text>
-            <Text
-              textTransform={"uppercase"}
-              color={"gray.200"}
-              fontWeight={600}
-              fontSize={"sm"}
-              bg={useColorModeValue("red.500", "red.900")}
-              p={2}
-              alignSelf={"flex-start"}
-              rounded={"md"}
-            >
-            Ejercicio
-            </Text>
-          </HStack>
-
+            <HStack spacing={4}>
+              <Text
+                textTransform={"uppercase"}
+                color={useColorModeValue("gray.50", "gray.100")}
+                fontWeight={600}
+                fontSize={"sm"}
+                bg={useColorModeValue("red.500", "red.600")}
+                p={2}
+                alignSelf={"flex-start"}
+                rounded={"md"}
+              >
+                Salud
+              </Text>
+              <Text
+                textTransform={"uppercase"}
+                color={useColorModeValue("gray.50", "gray.100")}
+                fontWeight={600}
+                fontSize={"sm"}
+                bg={useColorModeValue("red.500", "red.600")}
+                p={2}
+                alignSelf={"flex-start"}
+                rounded={"md"}
+              >
+                Bienestar
+              </Text>
+              <Text
+                textTransform={"uppercase"}
+                color={useColorModeValue("gray.50", "gray.100")}
+                fontWeight={600}
+                fontSize={"sm"}
+                bg={useColorModeValue("red.500", "red.600")}
+                p={2}
+                alignSelf={"flex-start"}
+                rounded={"md"}
+              >
+                Fitness
+              </Text>
+              <Text
+                textTransform={"uppercase"}
+                color={useColorModeValue("gray.50", "gray.100")}
+                fontWeight={600}
+                fontSize={"sm"}
+                bg={useColorModeValue("red.500", "red.600")}
+                p={2}
+                alignSelf={"flex-start"}
+                rounded={"md"}
+              >
+                Nutrición
+              </Text>
+              <Text
+                textTransform={"uppercase"}
+                color={useColorModeValue("gray.50", "gray.100")}
+                fontWeight={600}
+                fontSize={"sm"}
+                bg={useColorModeValue("red.500", "red.600")}
+                p={2}
+                alignSelf={"flex-start"}
+                rounded={"md"}
+              >
+                Ejercicio
+              </Text>
+            </HStack>
 
             <Heading>
               Consigue el cuerpo que siempre has querido con nuestro gimnasio.
@@ -303,7 +301,9 @@ export default function HomePage() {
       <Box bg={useColorModeValue("gray.100", "gray.700")}>
         <Container maxW={"7xl"} py={16} as={Stack} spacing={12}>
           <Stack spacing={0} align={"center"}>
-            <Heading>"Esto es lo que dicen algunos de nuestros clientes satisfechos."</Heading>
+            <Heading>
+              "Esto es lo que dicen algunos de nuestros clientes satisfechos."
+            </Heading>
             <Text>
               Nuestros clientes han experimentado una transformación en su vida
               gracias a nuestro gimnasio. Aquí algunos testimonios:
@@ -315,14 +315,18 @@ export default function HomePage() {
           >
             <Testimonial>
               <TestimonialContent>
-                <TestimonialHeading>Predispuestos a ayudarte</TestimonialHeading>
+                <TestimonialHeading>
+                  Predispuestos a ayudarte
+                </TestimonialHeading>
                 <TestimonialText>
-                  "El equipo del gimnasio es excepcional, siempre estan predispuestos a ayudarte. Encuentro el gym siempre limpio y funcionando correctamente"
+                  "El equipo del gimnasio es excepcional, siempre estan
+                  predispuestos a ayudarte. Encuentro el gym siempre limpio y
+                  funcionando correctamente"
                 </TestimonialText>
               </TestimonialContent>
               <TestimonialAvatar
                 src={
-                  'https://images.unsplash.com/photo-1520810627419-35e362c5dc07?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&ixid=eyJhcHBfaWQiOjE3Nzg0fQ'
+                  "https://images.unsplash.com/photo-1520810627419-35e362c5dc07?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&ixid=eyJhcHBfaWQiOjE3Nzg0fQ"
                 }
                 name={"Moni Drexler"}
                 title={"Cliente de hace 2 años"}
@@ -330,7 +334,9 @@ export default function HomePage() {
             </Testimonial>
             <Testimonial>
               <TestimonialContent>
-                <TestimonialHeading>Amplia variedad de equipos</TestimonialHeading>
+                <TestimonialHeading>
+                  Amplia variedad de equipos
+                </TestimonialHeading>
                 <TestimonialText>
                   "El gimnasio ofrece una amplia variedad de equipos y servicios
                   que me permiten personalizar mi entrenamiento según mis
@@ -347,7 +353,9 @@ export default function HomePage() {
             </Testimonial>
             <Testimonial>
               <TestimonialContent>
-                <TestimonialHeading>Siempre me siento bienvenido</TestimonialHeading>
+                <TestimonialHeading>
+                  Siempre me siento bienvenido
+                </TestimonialHeading>
                 <TestimonialText>
                   "El ambiente del gimnasio es increíble. Todos son amables y
                   serviciales, y siempre me siento bienvenido. No puedo imaginar

@@ -1,18 +1,24 @@
+import { CorsOptions } from "cors";
 import { SessionOptions } from "express-session";
 import parseDuration from "parse-duration";
 import { StrategyOption as FacebookStrategyOptions } from "passport-facebook";
 import { StrategyOptions as GoogleStrategyOptions } from "passport-google-oauth20";
 
-export const appOrigin = () =>
-  process.env.APP_ORIGIN || "http://localhost:8080";
+export const appOrigin = process.env.APP_ORIGIN || "http://localhost:8080";
+export const clientOrigin = process.env.CLIENT_ORIGIN || "http://127.0.0.1:5173";
 
-export const expressPort = () => {
+export const expressPort = (() => {
   const value = parseInt(process.env.EXPRESS_PORT || "8080");
   if (isNaN(value)) throw new Error("EXPRESS_PORT is not a valid number");
   return value;
+})();
+
+export const corsConfig: CorsOptions = {
+  credentials: true,
+  origin: process.env.CLIENT_ORIGIN
 };
 
-export const sessionConfig = (): SessionOptions => {
+export const sessionConfig: SessionOptions = (() => {
   const sessionSecret = process.env.SESSION_SECRET;
   if (!sessionSecret) throw new Error("SESSION_SECRET is not set");
 
@@ -23,6 +29,7 @@ export const sessionConfig = (): SessionOptions => {
     secret: sessionSecret,
     resave: false,
     saveUninitialized: false,
+    name: "session.id",
     cookie: {
       maxAge: sessionMaxAge,
       httpOnly: true,
@@ -30,9 +37,9 @@ export const sessionConfig = (): SessionOptions => {
       secure: process.env.NODE_ENV === "production",
     },
   };
-};
+})();
 
-export const facebookConfig = (): FacebookStrategyOptions => {
+export const facebookConfig: FacebookStrategyOptions = (() => {
   const clientID = process.env.FACEBOOK_ID;
   if (!clientID) throw new Error("FACEBOOK_ID is unset");
 
@@ -40,13 +47,13 @@ export const facebookConfig = (): FacebookStrategyOptions => {
   if (!clientSecret) throw new Error("FACEBOOK_SECRET is unset");
 
   return {
-    callbackURL: new URL("/api/auth/facebook/callback", appOrigin()).toString(),
+    callbackURL: new URL("/api/auth/facebook/callback", appOrigin).toString(),
     clientID,
     clientSecret,
   };
-};
+})();
 
-export const googleConfig = (): GoogleStrategyOptions => {
+export const googleConfig: GoogleStrategyOptions = (() => {
   const clientID = process.env.GOOGLE_ID;
   if (!clientID) throw new Error("GOOGLE_ID is unset");
 
@@ -54,8 +61,8 @@ export const googleConfig = (): GoogleStrategyOptions => {
   if (!clientSecret) throw new Error("GOOGLE_SECRET is unset");
 
   return {
-    callbackURL: new URL("/api/auth/google/callback", appOrigin()).toString(),
+    callbackURL: new URL("/api/auth/google/callback", appOrigin).toString(),
     clientID,
     clientSecret,
   };
-};
+})();

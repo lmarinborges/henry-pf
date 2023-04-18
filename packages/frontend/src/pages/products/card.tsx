@@ -50,86 +50,89 @@ function Rating({ rating, numReviews }: RatingProps) {
 
 function Card({ product }: any) {
   const onClickCart = () => {
-    localStorage.setItem(product.name+"CartProduc", JSON.stringify(product));
+    localStorage.setItem(product.name + "CartProduc", JSON.stringify(product));
   };
 
   return (
-    <Box margin={5} minW="320px" maxW="320px">
-      <Box
-        bg={useColorModeValue("white", "gray.800")}
-        maxW="sm"
-        borderWidth="1px"
-        rounded="lg"
-        shadow="lg"
-        position="relative"
-      >
-        {product.isNew && (
-          <Circle
-            size="10px"
-            position="absolute"
-            top={2}
-            right={2}
-            bg="red.200"
-          />
-        )}
+    <Link as={RouterLink} to={`${product.id}`}>
+      <Box margin={5} minW="320px" maxW="320px">
+        <Box
+          bg={useColorModeValue("white", "gray.800")}
+          maxW="sm"
+          borderWidth="1px"
+          rounded="lg"
+          shadow="lg"
+          position="relative"
+        >
+          {product.isNew && (
+            <Circle
+              size="10px"
+              position="absolute"
+              top={2}
+              right={2}
+              bg="red.200"
+            />
+          )}
 
-        <Container boxSize="300px" centerContent>
-          <Image
-            src={product.imageUrl}
-            alt={`Picture of ${product.name}`}
-            roundedTop="lg"
-            boxSize="10 0%"
-            alignContent="center"
-            justifyContent="center"
-            objectFit="cover"
-          />
-        </Container>
+          <Container boxSize="300px" centerContent>
+            <Image
+              src={product.imageUrl}
+              alt={`Picture of ${product.name}`}
+              roundedTop="lg"
+              boxSize="10 0%"
+              alignContent="center"
+              justifyContent="center"
+              objectFit="cover"
+            />
+          </Container>
 
-        <Box p="6">
-          <Box display="flex" alignItems="baseline">
-            {product.isNew && (
-              <Badge rounded="full" px="2" fontSize="0.8em" colorScheme="red">
-                New
-              </Badge>
-            )}
-          </Box>
-          <Flex mt="1" justifyContent="space-between" alignContent="center">
-            <Box
-              fontSize="2xl"
-              fontWeight="semibold"
-              as="h4"
-              lineHeight="tight"
-              isTruncated
-            >
-              <Link as={RouterLink} to={`${product.id}`}>
+          <Box p="6">
+            <Box display="flex" alignItems="baseline">
+              {product.isNew && (
+                <Badge rounded="full" px="2" fontSize="0.8em" colorScheme="red">
+                  New
+                </Badge>
+              )}
+            </Box>
+            <Flex mt="1" justifyContent="space-between" alignContent="center">
+              <Box
+                fontSize="2xl"
+                fontWeight="semibold"
+                as="h4"
+                lineHeight="tight"
+                isTruncated
+              >
                 {product.name}
-              </Link>
-            </Box>
-            <Tooltip
-              label="Add to cart"
-              bg="white"
-              placement={"top"}
-              color={"gray.800"}
-              fontSize={"1.2em"}
-            >
-              <chakra.button display={"flex"} onClick={onClickCart}>
-                <Icon as={FiShoppingCart} h={7} w={7} alignSelf={"center"} />
-              </chakra.button>
-            </Tooltip>
-          </Flex>
-
-          <Flex justifyContent="space-between" alignContent="center">
-            <Rating rating={product.rating} numReviews={product.numReviews} />
-            <Box fontSize="2xl" color={useColorModeValue("gray.800", "white")}>
-              <Box as="span" color={"gray.600"} fontSize="lg">
-                £
               </Box>
-              {Number(product.price).toFixed(2)}
-            </Box>
-          </Flex>
+              <Tooltip
+                label="Add to cart"
+                bg="white"
+                placement={"top"}
+                color={"gray.800"}
+                fontSize={"1.2em"}
+              >
+                <chakra.button display={"flex"} onClick={onClickCart}>
+                  <Icon as={FiShoppingCart} h={7} w={7} alignSelf={"center"} />
+                </chakra.button>
+              </Tooltip>
+            </Flex>
+
+            <Flex justifyContent="space-between" alignContent="center">
+              <Rating rating={product.rating} numReviews={product.numReviews} />
+              <Box
+                fontSize="2xl"
+                color={useColorModeValue("gray.800", "white")}
+              >
+                <Box as="span" color={"gray.600"} fontSize="lg">
+                  £
+                </Box>
+                {Number(product.price).toFixed(2)}
+              </Box>
+            </Flex>
+          </Box>
         </Box>
       </Box>
-    </Box>
+    </Link>
   );
 }
 

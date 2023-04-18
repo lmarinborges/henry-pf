@@ -5,6 +5,7 @@ import { Strategy as LocalStrategy } from "passport-local";
 import prisma from "../../db";
 import { z } from "zod";
 import { comparePassword } from "./encrypt";
+import { Request, Response } from "express";
 
 const localRouter = Router();
 const userSchema = z.object({
@@ -15,6 +16,22 @@ const userSchema = z.object({
   role: z.enum(["USER", "ADMIN"]),
   state: z.string(),
 });
+const passwordSchema = z
+  .string()
+  .min(8)
+  .regex(/[a-z]/, {
+    message: "La contraseña debe contener al menos una letra minúscula.",
+  })
+  .regex(/[A-Z]/, {
+    message: "La contraseña debe contener al menos una letra mayúscula.",
+  })
+  .regex(/\d/, { message: "La contraseña debe contener al menos un número." })
+  .regex(/[@#$%^&+=!_]/, {
+    message: "La contraseña debe contener al menos un carácter especial.",
+  });
+
+const validEmail = z.string().email().min(5);
+
 passport.use(
   new LocalStrategy(
     {
@@ -58,9 +75,17 @@ passport.deserializeUser(async (id: number, done) => {
     done(error);
   }
 });
-/*localRouter.get("/privateUsers", isAuthenticated, UserAuthenticated);*/
+
+function validateUserData(req: Request, res: Response, next: any) {
+  const { email, password } = req.body;
+    validEmail.parse(email);
+    passwordSchema.parse(password);
+    next();
+}
+
 localRouter.post(
   "/localLogin",
+  validateUserData, // Llamar a la función de validación antes de passport.authenticate
   passport.authenticate("local", { failureRedirect: "/failed" }),
   UserAuthenticated
 );

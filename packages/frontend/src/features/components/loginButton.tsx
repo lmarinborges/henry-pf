@@ -11,6 +11,7 @@ import {
   MenuList,
   MenuItem,
   Box,
+  useColorModeValue,
   Flex,
 } from "@chakra-ui/react";
 import { logoutUser } from "../../redux/actions";
@@ -54,11 +55,13 @@ const LoginButton = () => {
         onClick={onRegOpen}
         fontWeight={"bold"}
         colorScheme="red"
+        bg="red.400"
+        color={useColorModeValue("gray.50", "gray.050")}
         fontSize={"0.8em"}
         m={3}
         my="4"
         _hover={{
-          bg: "#8B0000",
+          bg: "red.600",
         }}
       >
         Registrate
@@ -103,7 +106,7 @@ function LoggedButton(user: user) {
         py="1"
         my="4"
       >
-        <Avatar name={user.name} size="sm" mr="2" />
+        <Avatar name={user.name} size="sm"/>
       </MenuButton>
       <MenuList>
         <MenuItem>

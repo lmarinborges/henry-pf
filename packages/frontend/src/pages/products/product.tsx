@@ -29,7 +29,7 @@ export default function ProductPage() {
 
   const reviews = useSelector((state: RootState) => state.productReviews);
   const prod = useSelector((state: RootState) => state.productDetail);
-  const usersReviews = useSelector((state:RootState) => state.reviewUsers);
+  const usersReviews = useSelector((state: RootState) => state.reviewUsers);
 
   const [comments, setComments] = useState<any[]>([]);
   const [text, setText] = useState("");
@@ -40,7 +40,7 @@ export default function ProductPage() {
       dispatch(actions.getProductDetail(productId));
       dispatch(actions.getProductReviews(productId));
     }
-  },[dispatch,productId]);
+  }, [dispatch, productId]);
 
   const handleTextChange = (e: any) => {
     let inputValue = e.target.value;
@@ -53,19 +53,18 @@ export default function ProductPage() {
   };
 
   const onClickCart = () => {
-    localStorage.setItem(prod.name+"CartProduc", JSON.stringify(prod));
+    localStorage.setItem(prod.name + "CartProduc", JSON.stringify(prod));
   };
 
   const onClickComent = () => {
     let rev = { comment: text, score: num, productId: productId };
-    setComments([rev])
+    setComments([rev]);
     dispatch(actions.createReview(rev));
-
   };
 
   const comentarios = reviews ? (
     reviews.map((element: any, i: number) => {
-      console.log(i)
+      console.log(i);
       return (
         <Text
           key={i}
@@ -76,17 +75,15 @@ export default function ProductPage() {
           borderRadius="10px"
           marginInlineStart="20px"
         >
-        {element.comments}
+          {element.comments}
         </Text>
       );
     })
-    ) : (
+  ) : (
     <Text key={1} color="white">
       No hay comentarios que mostrar
     </Text>
   );
-
-
 
   const reviewCount = reviews ? reviews.length + comments?.length : 0;
 
@@ -95,8 +92,8 @@ export default function ProductPage() {
   for (var i = 0; i < reviews?.length; i++) {
     votation += Number(reviews[i]?.score);
   }
-  if(comments?.length){
-    votation+=comments[0]?.score;
+  if (comments?.length) {
+    votation += comments[0]?.score;
   }
 
   var rating = votation / reviewCount;
@@ -137,24 +134,31 @@ export default function ProductPage() {
   }
 
   return (
-    <Box boxSize="100%" padding="10%" bg="black">
-      <Card marginBottom="20px">
-        <CardBody>
-          <Container boxSize="70%" centerContent>
-            <Image src={prod.imageUrl} borderRadius="lg" />
-          </Container>
-
-          <Stack mt="6" spacing="3">
-            <Heading size="md">{prod.name}</Heading>
+    <Flex
+      minH="100vh"
+      padding="5px"
+      wrap="wrap"
+      justifyContent={"space-evenly"}
+    >
+      <Card m="20px" maxH="500px">
+        <Container boxSize="70%" centerContent>
+          <Image src={prod.imageUrl} borderRadius="lg" />
+        </Container>
+      </Card>
+      <Flex
+        direction={"column"}
+        minW={{ base: "320px", md: "500px", lg: "50%" }}
+      >
+        <Box mb="20px">
+          <Stack my="6" spacing="3">
+            <Heading size="lg">{prod.name}</Heading>
             <Text>{prod.description}</Text>
             <Text>Stock: {prod.stock}</Text>
             <Text color="red" fontSize="2xl">
               ${prod.price}
             </Text>
           </Stack>
-        </CardBody>
-        <Divider />
-        <CardFooter>
+          <Divider mb="30px" />
           <ButtonGroup spacing="1">
             <Button variant="solid" colorScheme="red">
               Comprar
@@ -163,71 +167,72 @@ export default function ProductPage() {
               Añadir al carrito
             </Button>
           </ButtonGroup>
-        </CardFooter>
-      </Card>
-      <Box display="flex" mt="2" alignItems="center">
-        <Flex justifyContent="space-between" alignContent="center">
-          <Rating ratinge={rating} />
-        </Flex>
-        <Box as="span" ml="10%" color="white" fontSize="sm">
-          <Text fontSize="15px">{reviewCount} reviews</Text>
         </Box>
-      </Box>
-      <Box>
-        <Text color="white" mt="20px" mb="20px" fontStyle="bold">
-          Comentarios:
-        </Text>
-        { comentarios}
-        {comments && comments.map((element: any, i: number) => {
-          return (
-            <Text
-              key={i}
-              color="white"
-              bg={"gray"}
-              m="2"
-              p="2"
-              borderRadius="10px"
-              marginInlineStart="20px"
-            >
-              {element.comment}
+        <Box>
+          <Box display="flex" mt="2" alignItems="center">
+            <Flex justifyContent="space-between" alignContent="center">
+              <Rating ratinge={rating} />
+            </Flex>
+            <Box as="span" ml="10%" fontSize="sm">
+              <Text fontSize="15px">{reviewCount} reviews</Text>
+            </Box>
+          </Box>
+          <Box>
+            <Text mt="20px" mb="20px" fontStyle="bold">
+              Comentarios:
             </Text>
-          );
-        })}
-      </Box>
-      <Box mt="10">
-        <Textarea
-          value={text}
-          onChange={handleTextChange}
-          color="white"
-          placeholder="Escriba su reseña aquí."
-          mb="2"
-        />
-        <Select
-          placeholder="Seleccione Puntuacion"
-          onChange={handleNumChange}
-          variant="filled"
-          color="black"
-          bg="white"
-          colorScheme="blackAlpha"
-          borderColor="red"
-          mb="2"
-        >
-          <option value={0}>0</option>
-          <option value={1}>1</option>
-          <option value={2}>2</option>
-          <option value={3}>3</option>
-          <option value={4}>4</option>
-          <option value={5}>5</option>
-        </Select>
-        <Button
-          variant="solid"
-          colorScheme="red"
-          width="100%"
-          onClick={onClickComent}
-        >
-          Comentar
-        </Button>
-      </Box>
-    </Box>
+            {comentarios}
+            {comments &&
+              comments.map((element: any, i: number) => {
+                return (
+                  <Text
+                    key={i}
+                    bg={"gray"}
+                    m="2"
+                    p="2"
+                    borderRadius="10px"
+                    marginInlineStart="20px"
+                  >
+                    {element.comment}
+                  </Text>
+                );
+              })}
+          </Box>
+          <Box mt="10">
+            <Textarea
+              value={text}
+              onChange={handleTextChange}
+              placeholder="Escriba su reseña aquí."
+              mb="2"
+            />
+            <Select
+              placeholder="Seleccione Puntuacion"
+              onChange={handleNumChange}
+              variant="filled"
+              color="black"
+              bg="white"
+              colorScheme="blackAlpha"
+              borderColor="red"
+              mb="2"
+            >
+              <option value={0}>0</option>
+              <option value={1}>1</option>
+              <option value={2}>2</option>
+              <option value={3}>3</option>
+              <option value={4}>4</option>
+              <option value={5}>5</option>
+            </Select>
+            <Button
+              variant="solid"
+              colorScheme="red"
+              width="100%"
+              onClick={onClickComent}
+            >
+              Comentar
+            </Button>
+          </Box>
+        </Box>
+      </Flex>
+    </Flex>
   );
 }

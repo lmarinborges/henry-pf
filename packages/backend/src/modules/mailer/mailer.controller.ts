@@ -10,12 +10,17 @@ const transport = nodemailer.createTransport({
   },
 });
 
-export async function sendMail(req: Request, res: Response) {
+export async function sendWelcomeMail(req: Request, res: Response) {
+  const name = req.body.name;
+
   const result = await transport.sendMail({
-    from: req.body.from,
+    from: process.env.EMAIL,
     to: req.body.to,
-    subject: req.body.subject,
-    html: req.body.html,
+    subject: "Bienvenido a nuestra pagina",
+    html: `<div> <p> Gracias ${name} haberte registrado en nuestra pagina
+    web. Aqui
+    encontraras
+    lo mejores productos de gimnasio al mejor precio! </p></div>`,
     attachments: [
       /*  {
         filename: req.body.filename, // 'images.jpg',
@@ -25,5 +30,24 @@ export async function sendMail(req: Request, res: Response) {
     ],
   });
   //console.log(result)
+  return res.status(200).send("The mail was sent");
+}
+
+export async function sendEmailUpdate(req: Request, res: Response) {
+  const subjectValue = "Tus datos de usuario fueron actualizados";
+  const bodyValue = `<div> <h1> Xsportsclub </h1>
+                       <h2> Tus datos de usuario fueron actualizados con éxito </h2>
+                       Nombre: ${req.body.name} <br>
+                       Estado: ${req.body.state} <br>
+                       Rol: ${req.body.role} <br>
+                       </div>`;
+
+  const result = await transport.sendMail({
+    from: process.env.EMAIL,
+    to: req.body.to,
+    subject: subjectValue,
+    html: bodyValue,
+    attachments: [],
+  });
   return res.status(200).send("The mail was sent");
 }

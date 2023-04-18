@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { sendMail } from "./mailer.controller";
+import { sendEmailUpdate, sendWelcomeMail } from "./mailer.controller";
 
 const mailerRouter = Router();
 
-mailerRouter.post("/mail", sendMail);
+mailerRouter.post("/mail", sendWelcomeMail);
+mailerRouter.post("/sendEmailUpdate", sendEmailUpdate);
 
 export default mailerRouter;

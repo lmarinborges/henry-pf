@@ -1,27 +1,27 @@
-import { Box, Heading, Text,Button } from "@chakra-ui/react";
+import { Box, Heading, Text, Button } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { RootState, AppDispatch } from "../../redux/store/index";
 import { useDispatch, useSelector } from "react-redux";
 import ShoppingCard from "./shoppingCard";
-import * as actions from "../../redux/actions/index"
-import { initMercadoPago, Wallet } from '@mercadopago/sdk-react'
-initMercadoPago('TEST-dba7b71f-83c4-4d78-aeac-dea0417525b0');
+import * as actions from "../../redux/actions/index";
+import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
+initMercadoPago("TEST-dba7b71f-83c4-4d78-aeac-dea0417525b0");
 
 export default function ShoppingCart() {
   const [totalPrice, setTotalPrice] = useState(0);
-  const [totalProducts,setTotalProducts]=useState<any[]>([]);
-  const [buyProducts,setBuyProducts]=useState<any>();
+  const [totalProducts, setTotalProducts] = useState<any[]>([]);
+  const [buyProducts, setBuyProducts] = useState<any>();
 
-  const mercadoRes = useSelector((state:RootState) => state.mercadoRes);
-  const user = useSelector((state:RootState) => state.user);
+  const mercadoRes = useSelector((state: RootState) => state.mercadoRes);
+  const user = useSelector((state: RootState) => state.user);
 
-  const dispatch=useDispatch<AppDispatch>();
+  const dispatch = useDispatch<AppDispatch>();
 
   var storage: Array<any> = [];
 
-  const onClose = (name: string, price:number) => {
+  const onClose = (name: string, price: number) => {
     localStorage.removeItem(name);
-    setTotalPrice(totalPrice-price)
+    setTotalPrice(totalPrice - price);
   };
 
   for (var i = 0; i < localStorage.length; i++) {
@@ -37,10 +37,10 @@ export default function ShoppingCart() {
     } else return null;
   });
 
-  const onBuy=()=>{
-    console.log(buyProducts)
-    dispatch(actions.buyCart(buyProducts))
-  }
+  const onBuy = () => {
+    console.log(buyProducts);
+    dispatch(actions.buyCart(buyProducts));
+  };
 
   const totalValue = (val: number, rest: boolean) => {
     let result = 0;
@@ -53,23 +53,35 @@ export default function ShoppingCart() {
     }
   };
 
- const setQuantity=(i:number, rest:boolean)=>
- {let provitional
-    console.log(i)
-    if (rest===true){
-     provitional=buyProducts.buyedProducts[i].quantity--;
-      setBuyProducts({...buyProducts, buyedProducts:[...buyProducts.buyedProducts, buyProducts.buyedProducts[i].quantity=provitional]});
+  const setQuantity = (i: number, rest: boolean) => {
+    let provitional;
+    console.log(i);
+    if (rest === true) {
+      provitional = buyProducts.buyedProducts[i].quantity--;
+      setBuyProducts({
+        ...buyProducts,
+        buyedProducts: [
+          ...buyProducts.buyedProducts,
+          (buyProducts.buyedProducts[i].quantity = provitional),
+        ],
+      });
+    } else {
+      if (buyProducts?.buyedProducts[i]) {
+        provitional = buyProducts.buyedProducts[i].quantity++;
+        console.log(provitional);
+        setBuyProducts({
+          ...buyProducts,
+          buyedProducts: [
+            ...buyProducts.buyedProducts,
+            (buyProducts.buyedProducts[i].quantity = provitional),
+          ],
+        });
+      }
     }
-    else{
-      if(buyProducts?.buyedProducts[i]){
-      provitional=buyProducts.buyedProducts[i].quantity++;
-      console.log(provitional)
-      setBuyProducts({...buyProducts, buyedProducts:[...buyProducts.buyedProducts, buyProducts.buyedProducts[i].quantity=provitional]});
-    }}
-  }
+  };
 
   var totalCards = products.map((e, i) => {
-    console.log(i)
+    console.log(i);
     return (
       <ShoppingCard
         key={i}
@@ -85,38 +97,54 @@ export default function ShoppingCart() {
   useEffect(() => {
     var init: number = 0;
     if (totalPrice === 0) {
-      setTotalProducts(totalCards)
+      setTotalProducts(totalCards);
       products.forEach((e) => {
         init += Number(e.price);
       });
 
-      if(user.id){
-        const buyedProducts= products.map((e)=>{
-          return{
-            name:e.name,
-            price:e.price,
-            productId:e.id,
-            quantity:1
-          }
-        })
-        const initBuy = {userId:user?.id, total:Number(init), buyedProducts};
+      if (user.id) {
+        const buyedProducts = products.map((e) => {
+          return {
+            name: e.name,
+            price: e.price,
+            productId: e.id,
+            quantity: 1,
+          };
+        });
+        const initBuy = {
+          userId: user?.id,
+          total: Number(init),
+          buyedProducts,
+        };
         setBuyProducts(initBuy);
       }
       setTotalPrice(init);
     }
   }, [totalPrice, products, totalCards, user.id]);
-  
+
   return (
-    <Box bg="white" p="10px"mt="-10px" >
+    <Box bg="white" p="10px" mt="-10px">
       <Heading color="black">Carrito:</Heading>
-      { totalProducts.length!==0? totalProducts : <Text display={"flex"} alignItems="center" justifyContent={"center"} fontStyle="bold"> El Carrito está vacío</Text>}
+      {totalProducts.length !== 0 ? (
+        totalProducts
+      ) : (
+        <Text
+          display={"flex"}
+          alignItems="center"
+          justifyContent={"center"}
+          fontStyle="bold"
+        >
+          {" "}
+          El Carrito está vacío
+        </Text>
+      )}
       <Text color="black">Total: ${totalPrice.toFixed(2)}</Text>
       <Button size={"md"} variant="solid" onClick={onBuy} colorScheme="red">
-          Comprar
-        </Button>
-        { mercadoRes.global!=="" &&
-          <Wallet initialization={{ preferenceId: mercadoRes.global}} />
-        }
+        Comprar
+      </Button>
+      {mercadoRes.global !== "" && (
+        <Wallet initialization={{ preferenceId: mercadoRes.global }} />
+      )}
     </Box>
   );
 }

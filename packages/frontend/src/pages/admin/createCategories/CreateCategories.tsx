@@ -17,12 +17,12 @@ import { useForm } from "react-hook-form";
 import * as actions from "../../../redux/actions";
 import { Text } from "@chakra-ui/layout";
 
-type Brand = {
+type Categories = {
   name: string;
   description: string;
 };
 
-export const CreateBrands = () => {
+export const CreateCategories = () => {
   const { onOpen, onClose, isOpen } = useDisclosure();
 
   const dispatch: AppDispatch = useDispatch();
@@ -37,10 +37,10 @@ export const CreateBrands = () => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<Brand>();
+  } = useForm<Categories>();
 
   let onSubmit = (data: any) => {
-    dispatch(actions.createBrands(data));
+    dispatch(actions.createCategories(data));
     forReset_Close();
   };
 
@@ -52,39 +52,39 @@ export const CreateBrands = () => {
         bg="gray.200"
         color="blue.800"
         _hover={{ bg: "gray.300" }}
-        h={35}
-        w={117}
+        h={38}
+        w={137}
       >
-        Crear Marca
+        Crear Categoria
       </Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <form>
-            <ModalHeader>Crea tu propia Marca</ModalHeader>
+            <ModalHeader>Crea tu propia Categoria</ModalHeader>
             <ModalCloseButton onClick={forReset_Close} />
 
             <ModalBody pb={6}>
               <FormControl>
-                <FormLabel>Nombre de la marca</FormLabel>
+                <FormLabel>Nombre de la categoria</FormLabel>
                 <Input
                   {...register("name", { required: true })}
                   placeholder="nombre..."
                 />
                 {errors.name && (
-                  <Text color="tomato">Nombre de la marca requerido</Text>
+                  <Text color="tomato">Nombre de la categoria requerido</Text>
                 )}
               </FormControl>
 
               <FormControl mt={4}>
-                <FormLabel>Descripción de la marca</FormLabel>
+                <FormLabel>Descripción de la categoria</FormLabel>
                 <Input
                   {...register("description", { required: true })}
                   placeholder="descripción..."
                 />
                 {errors.description && (
-                  <Text color="tomato">Nombre de la marca requerido</Text>
+                  <Text color="tomato">Nombre de la categoria requerido</Text>
                 )}
               </FormControl>
             </ModalBody>

@@ -1,12 +1,15 @@
 {
   "name": "@henry-pf/frontend",
-  "private": true,
   "version": "0.1.0",
+  "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
     "build": "tsc && vite build",
+    "dev": "vite",
     "lint": "eslint"
+  },
+  "lint-staged": {
+    "*.{ts,js,tsx,jsx}": "eslint --cache --fix"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.17",
@@ -32,8 +35,5 @@
     "@vitejs/plugin-react-swc": "^3.0.0",
     "eslint-config-react-app": "^7.0.1",
     "vite": "^4.2.0"
-  },
-  "lint-staged": {
-    "*.{ts,js,tsx,jsx}": "eslint --cache --fix"
   }
 }

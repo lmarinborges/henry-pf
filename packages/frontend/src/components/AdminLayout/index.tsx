@@ -18,11 +18,10 @@ export default function AdminLayout() {
     <>
       <Navbar height={NAVBAR_HEIGHT} />
       <Container
-      maxW={"100%"}
+        maxW={"100%"}
         px="3"
         pb="3"
         pt={`calc(${NAVBAR_HEIGHT} + var(--chakra-sizes-3))`}
-      
       >
         <Outlet />
       </Container>

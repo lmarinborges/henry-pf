@@ -17,6 +17,7 @@ export const ADD_USER = "ADD_USER";
 export const EDITED_PRODUCT = "EDITED_PRODUCT";
 export const GET_USERS_REVIEWS = "GET_USERS_REVIEWS";
 export const CREATE_BRAND = "CREATE_BRAND";
+export const CREATE_CATEGORIES = "CREATE_CATEGORIES";
 export const GET_ALL_USERS = "GET_ALL_USERS";
 export const EDITED_USER = "EDITED_USER";
 export const BUY_CART = "BUY_CART";
@@ -112,7 +113,7 @@ export const createProduct = (data: any) => async (dispatch: AppDispatch) => {
 export const getAllBrands = () => async (dispatch: AppDispatch) => {
   const res = await axios.get("brands");
   console.log(res.data);
-  
+
   dispatch({ type: GET_ALL_BRANDS, payload: res.data });
 };
 
@@ -138,6 +139,8 @@ export const deleteProduct = (data: any) => async (dispatch: AppDispatch) => {
 export const patchProduct =
   (data: any, idProduct: number, newAndOthers: any) =>
   async (dispatch: AppDispatch) => {
+    console.log("cddddddddd", data);
+
     let result = await axios.patch(`products/${idProduct}`, data);
     dispatch({ type: EDITED_PRODUCT, payload: newAndOthers });
     // console.log("NEW DATA",result.data);
@@ -177,7 +180,6 @@ export const addUserFromFb = () => async (dispatch: AppDispatch) => {
   const handleAuthResponse = (event: any) => {
     if (event.origin !== appUrl) return;
     if (event.data.isAuthenticated) {
-      console.log(event.data);
       dispatch({ type: ADD_USER, payload: event.data.user });
     }
   };
@@ -240,13 +242,41 @@ export const addUserFromLocal =
         dispatch({ type: ADD_USER, payload: user });
       } else {
         // La autenticación falló, hacer algo en consecuencia
-        alert("la autenticacion falló");
+        alert("la autenticacion falló , datos incorrectos");
         console.log("La autenticación falló");
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      let problema = error.response?.data;
+      if (error.response?.data?.errors) {
+        let mensaje = "";
+        problema.errors.forEach((el: any) => {
+          mensaje = mensaje + "*" + el.message + "\n";
+        });
+        alert(mensaje);
+      } else {
+        console.log(error);
+        alert(" Ocurrió un error al procesar la solicitud");
+      }
     }
   };
+
+export const sendEmail = (data: any) => async (dispatch: AppDispatch) => {
+  await axios.post("/mail", {
+    to: data.email,
+    name: data.name,
+  });
+  return console.log("enviado");
+};
+
+export const sendEmailUpdate = (data: any) => async (dispatch: AppDispatch) => {
+  await axios.post("/sendEmailUpdate", {
+    to: data.email,
+    name: data.name,
+    state: data.state,
+    role: data.role,
+  });
+  return console.log("Se envió el MAIL al usuario");
+};
 
 export const registerUser = (data: any) => async (dispatch: AppDispatch) => {
   const userData = {
@@ -259,14 +289,26 @@ export const registerUser = (data: any) => async (dispatch: AppDispatch) => {
   try {
     const response = await axios.post("users", userData);
     if (response.data.state === "success") {
-      alert("Bienvenido, revisa tu correo e inicia session");
+      // alert("Bienvenido, nuevo usuario");
       dispatch(addUserFromLocal(data));
+      dispatch(sendEmail(data));
     }
   } catch (error: any) {
-    alert(
-      error.response?.data?.message ??
-        "Ocurrió un error al procesar la solicitud"
-    );
+    let problema = error.response?.data;
+    if (problema.message === "Unique constraint was provided") {
+      alert(" Este email ya está registrado");
+    } else {
+      if (error.response?.data?.errors) {
+        let lista = error.response?.data?.errors;
+        let mensaje = "";
+        lista.forEach((el: any) => {
+          mensaje = mensaje + "*" + el.message + "\n";
+        });
+        alert(mensaje);
+      } else {
+        alert(" Ocurrió un error al procesar la solicitud");
+      }
+    }
   }
 };
 
@@ -286,7 +328,7 @@ export const verifyUser = () => async (dispatch: AppDispatch) => {
     //consulta si esta logueado para obtener el usuario
     dispatch({ type: ADD_USER, payload: res.data.user });
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     dispatch({ type: ADD_USER, payload: {} });
   }
 };
@@ -302,57 +344,63 @@ export const getUsersReviews =
   };
 
 export const createBrands = (data: any) => async (dispatch: AppDispatch) => {
-  console.log(data);
   let res = await axios.post("brands", data);
   dispatch({ type: CREATE_BRAND, payload: res.data });
   console.log(res.data);
-  
 };
 
-  export const getAllUsers = (data: any) => async (dispatch: AppDispatch) => {
-    
-    try {
-      const name = data?.name ?? "";
-      const email = data?.email ?? "";
-      const role = data?.role ?? "";
-      const search = data?.search ?? "";
-      const state = data?.state ?? "";
-      const page = data?.page ?? "";
-      const order = data?.order ?? "asc";
-      const column = data?.column ?? "";
-      const size = data?.size ?? "";
-  
-      const res = await axios.get(
-        `users?name=${name}&email=${email}&role=${role}&search=${search}&state=${state}&page=${page}&order=${order}&column=${column}&size=${size}`
-      );
-      console.log(res.data);
-      dispatch({ type: GET_ALL_USERS, payload: res.data.users });
-    } catch (error) {
-      console.log(error);
-    }
+export const createCategories =
+  (data: any) => async (dispatch: AppDispatch) => {
+    let res = await axios.post("categories", data);
+    dispatch({ type: CREATE_CATEGORIES, payload: res.data });
+    console.log(res.data);
   };
 
-  export const patchUser = (data: any) =>
-  async (dispatch: AppDispatch) => {
-    let result = await axios.patch(`users/${data.id}`, data);
-    dispatch({ type: EDITED_USER, payload: result.data});
-     console.log("NEW DATA",result.data);
-  };
+export const getAllUsers = (data: any) => async (dispatch: AppDispatch) => {
+  const name = data?.name ?? "";
+  const email = data?.email ?? "";
+  const role = data?.role ?? "";
+  const search = data?.search ?? "";
+  const state = data?.state ?? "";
+  const page = data?.page ?? "";
+  const order = data?.order ?? "asc";
+  const column = data?.column ?? "";
+  const size = data?.size ?? "";
 
-  export const buyCart=(data:any)=> async (dispatch:AppDispatch)=>{
-    const res = await axios.post(`orders`, {
+  const res = await axios.get(
+    `users?name=${name}&email=${email}&role=${role}&search=${search}&state=${state}&page=${page}&order=${order}&column=${column}&size=${size}`
+  );
+  //console.log(res.data);
+  dispatch({ type: GET_ALL_USERS, payload: res.data.users });
+};
+
+export const patchUser = (data: any) => async (dispatch: AppDispatch) => {
+  let result = await axios.patch(`users/${data.id}`, data);
+  dispatch({ type: EDITED_USER, payload: result.data });
+  console.log("NEW DATA", result.data);
+};
+
+//solo uso a edited_user como una forma de verificar que se borró el usuario
+export const deleteUser = (data: any) => async (dispatch: AppDispatch) => {
+  const res = await axios.delete(`users/${data.id}`);
+  dispatch({ type: EDITED_USER, payload: res.data });
+};
+
+export const buyCart = (data: any) => async (dispatch: AppDispatch) => {
+  const res = await axios
+    .post(`orders`, {
       userId: data?.userId,
       total: data?.total,
-      products: data?.buyedProducts?.map((e: any)=>{
+      products: data?.buyedProducts?.map((e: any) => {
         return {
-          productId:e?.productId,
-          quantity:e?.quantity,
-          name:e?.name,
-          price:e?.price
-        }
-      })
+          productId: e?.productId,
+          quantity: e?.quantity,
+          name: e?.name,
+          price: e?.price,
+        };
+      }),
     })
     .then((res) => res.data);
-    console.dir(res)
-    dispatch({ type: BUY_CART, payload: res });
-  }
+  console.dir(res);
+  dispatch({ type: BUY_CART, payload: res });
+};

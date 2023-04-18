@@ -22,7 +22,7 @@ import ordersRouter from "./modules/orders/orders.router";
 const apiRouter = Router()
   // Middleware
   .use(express.json())
-  .use(session(sessionConfig()))
+  .use(session(sessionConfig))
   .use(passport.initialize())
   .use(passport.session())
 
