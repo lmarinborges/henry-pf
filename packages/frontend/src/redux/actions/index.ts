@@ -267,6 +267,16 @@ export const sendEmail = (data: any) => async (dispatch: AppDispatch) => {
   return console.log("enviado");
 };
 
+export const sendEmailUpdate = (data: any) => async (dispatch: AppDispatch) => {
+  await axios.post("/sendEmailUpdate", {
+    to: data.email,
+    name: data.name,
+    state: data.state,
+    role: data.role,
+  });
+  return console.log("Se envió el MAIL al usuario");
+};
+
 export const registerUser = (data: any) => async (dispatch: AppDispatch) => {
   const userData = {
     name: data.name,
