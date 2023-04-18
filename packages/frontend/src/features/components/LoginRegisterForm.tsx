@@ -33,7 +33,7 @@ const LoginPage = ({ SuddenCLose }: { SuddenCLose: () => void }) => {
 
   const onSubmit = async (values: any) => {
     dispatch(addUserFromLocal(values));
-    // dispatch(sendLoginEmail())
+    dispatch(sendLoginEmail(values));
   };
   useEffect(() => {
     console.log(user);

@@ -28,7 +28,16 @@ export async function sendWelcomeMail(req: Request, res: Response) {
 
 export async function sendLoginMail(req: Request, res: Response) {
   const name = req.body.name;
-
+  if (!name) {
+    await transport.sendMail({
+      from: process.env.EMAIL,
+      to: req.body.to,
+      subject: "Has iniciado sesión",
+      html: `<div> <p> Has iniciado sesion en nuestra pagina web.</p></div>`,
+    });
+    //console.log(result)
+    return res.status(200).send("The mail was sent");
+  }
   await transport.sendMail({
     from: process.env.EMAIL,
     to: req.body.to,
