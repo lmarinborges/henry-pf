@@ -48,6 +48,22 @@ export async function sendLoginMail(req: Request, res: Response) {
   return res.status(200).send("The mail was sent");
 }
 
+export async function sendSuscriptionMail(req: Request, res: Response) {
+  const name = req.body.name;
+
+  await transport.sendMail({
+    from: process.env.EMAIL,
+    to: req.body.to,
+    subject: "Bienvenido a nuestra pagina",
+    html: `<div> <p> Gracias ${name} haberte registrado en nuestra pagina
+    web. Aqui
+    encontraras
+    lo mejores productos de gimnasio al mejor precio! </p></div>`,
+  });
+  //console.log(result)
+  return res.status(200).send("The mail was sent");
+}
+
 export async function sendEmailUpdate(req: Request, res: Response) {
   const subjectValue = "Tus datos de usuario fueron actualizados";
   const bodyValue = `<div> <h1> Xsportsclub </h1>
