@@ -1,4 +1,4 @@
-import { Box, Heading, Text, Button, useColorModeValue, Flex } from "@chakra-ui/react";
+import { Box, Heading, Text, Button, Flex } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { RootState, AppDispatch } from "../../redux/store/index";
 import { useDispatch, useSelector } from "react-redux";
@@ -43,7 +43,7 @@ export default function ShoppingCart() {
   const onBuy = (data:any) => {
     const aux= {...buyProducts, payer:data}
     dispatch(actions.buyCart(aux));
-
+    localStorage.clear()
   };
 
   const onReady= () =>{
@@ -130,6 +130,7 @@ export default function ShoppingCart() {
     return (
         <Box p="10px" mt="-10px" minH="100vh" m="auto" maxW={'800px'} >
             <Flex direction={'column'}  >
+            { showForm===false?<>
                 <Heading>Carrito:</Heading>
                 {totalProducts.length !== 0 ? (
                     totalProducts
@@ -148,7 +149,7 @@ export default function ShoppingCart() {
                 <Button
                     size={"md"}
                     variant="solid"
-                    onClick={onBuy}
+                    onClick={onReady}
                     colorScheme="red"
                     minW='10rem'
                     width={'40%'}
@@ -156,6 +157,7 @@ export default function ShoppingCart() {
                 >
                     Comprar
                 </Button>
+                </>:<BuyForm onBuy={onBuy} />}
                 {mercadoRes.global !== "" && (
                     <Wallet
                         initialization={{ preferenceId: mercadoRes.global }}

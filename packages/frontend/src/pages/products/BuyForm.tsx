@@ -37,6 +37,7 @@ let BuyForm = (props: any) => {
   } = useForm<Form>();
 
   let onSubmit = (data: any) => {
+    console.log(data)
     props.onBuy(data);
     reset();
   };
