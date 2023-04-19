@@ -1,4 +1,4 @@
-import { Box, Heading, Text, Button, Flex } from "@chakra-ui/react";
+import { Box, Heading, Text, Button, useColorModeValue, Flex } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { RootState, AppDispatch } from "../../redux/store/index";
 import { useDispatch, useSelector } from "react-redux";
