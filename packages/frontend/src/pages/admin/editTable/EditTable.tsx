@@ -142,21 +142,6 @@ export const EditTable = ({
             </Button>
             <ModalBody pb={6}>
               <VStack spacing={3}>
-                <FormControl>
-                  <FormLabel>id:</FormLabel>
-                  <Input
-                    {...register("id")}
-                    value={idProduct}
-                    cursor="initial"
-                    readOnly
-                    bg="#dfdfdf"
-                    size="md"
-                    borderRadius="none"
-                    _focusVisible={{ borderRadius: "none" }}
-                    _hover={{ borderColor: "none" }}
-                    color="black"
-                  />
-                </FormControl>
 
                 <FormControl>
                   <FormLabel>Nombre:</FormLabel>

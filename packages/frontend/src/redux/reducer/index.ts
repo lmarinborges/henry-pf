@@ -16,6 +16,7 @@ import {
   CREATE_CATEGORIES,
   GET_ALL_USERS,
   EDITED_USER,
+  BUY_CART,
 } from "../actions/index";
 
 interface sliceState {
@@ -33,6 +34,7 @@ interface sliceState {
   reviewUsers: Array<any>;
   users: Array<any>;
   userEdited: any;
+  mercadoRes: { global: string };
 }
 
 const initialState: sliceState = {
@@ -50,6 +52,7 @@ const initialState: sliceState = {
   reviewUsers: [],
   users: [],
   userEdited: {},
+  mercadoRes: { global: "" },
 };
 
 const rootReducer = (state = initialState, action: any) => {
@@ -119,6 +122,9 @@ const rootReducer = (state = initialState, action: any) => {
 
     case EDITED_USER:
       return { ...state, userEdited: action.payload };
+
+    case BUY_CART:
+      return { ...state, mercadoRes: action.payload };
   }
 };
 

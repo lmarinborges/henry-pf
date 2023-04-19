@@ -50,7 +50,7 @@ function Rating({ rating, numReviews }: RatingProps) {
 
 function Card({ product }: any) {
   const onClickCart = () => {
-    localStorage.setItem(product.name, JSON.stringify(product));
+    localStorage.setItem(product.name + "CartProduc", JSON.stringify(product));
   };
 
   return (
@@ -72,19 +72,19 @@ function Card({ product }: any) {
             bg="red.200"
           />
         )}
-
-        <Container boxSize="300px" centerContent>
-          <Image
-            src={product.imageUrl}
-            alt={`Picture of ${product.name}`}
-            roundedTop="lg"
-            boxSize="10 0%"
-            alignContent="center"
-            justifyContent="center"
-            objectFit="cover"
-          />
-        </Container>
-
+        <Link as={RouterLink} to={`${product.id}`}>
+          <Container boxSize="300px" centerContent>
+            <Image
+              src={product.imageUrl}
+              alt={`Picture of ${product.name}`}
+              roundedTop="lg"
+              boxSize="10 0%"
+              alignContent="center"
+              justifyContent="center"
+              objectFit="cover"
+            />
+          </Container>
+        </Link>
         <Box p="6">
           <Box display="flex" alignItems="baseline">
             {product.isNew && (
@@ -94,17 +94,17 @@ function Card({ product }: any) {
             )}
           </Box>
           <Flex mt="1" justifyContent="space-between" alignContent="center">
-            <Box
-              fontSize="2xl"
-              fontWeight="semibold"
-              as="h4"
-              lineHeight="tight"
-              isTruncated
-            >
-              <Link as={RouterLink} to={`${product.id}`}>
+            <Link as={RouterLink} to={`${product.id}`}>
+              <Box
+                fontSize="2xl"
+                fontWeight="semibold"
+                as="h4"
+                lineHeight="tight"
+                isTruncated
+              >
                 {product.name}
-              </Link>
-            </Box>
+              </Box>
+            </Link>
             <Tooltip
               label="Add to cart"
               bg="white"
@@ -117,7 +117,6 @@ function Card({ product }: any) {
               </chakra.button>
             </Tooltip>
           </Flex>
-
           <Flex justifyContent="space-between" alignContent="center">
             <Rating rating={product.rating} numReviews={product.numReviews} />
             <Box fontSize="2xl" color={useColorModeValue("gray.800", "white")}>

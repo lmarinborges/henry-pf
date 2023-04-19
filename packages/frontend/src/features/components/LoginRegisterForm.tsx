@@ -28,6 +28,7 @@ const LoginPage = ({ SuddenCLose }: { SuddenCLose: () => void }) => {
     formState: { errors },
   } = useForm();
   const user = useSelector((state: RootState) => state.user);
+  const toast = useToast();
 
   const onSubmit = async (values: any) => {
     dispatch(addUserFromLocal(values));
@@ -36,6 +37,13 @@ const LoginPage = ({ SuddenCLose }: { SuddenCLose: () => void }) => {
     console.log(user);
     if (user.name) {
       SuddenCLose();
+      toast({
+        title: "Felicidades",
+        description: "Ha iniciado sesión.",
+        status: "success",
+        duration: 4000,
+        isClosable: true,
+      });
     }
   }, [user]);
   function loginWithFacebook() {
@@ -134,19 +142,31 @@ const RegisterPage = ({ SuddenCLose }: { SuddenCLose: () => void }) => {
   const toast = useToast();
 
   const onSubmit = async (values: any) => {
-    await dispatch(registerUser(values));
-    toast({
-      title: "Felicidades",
-      description: "Su usuario ha sido creado. Revise su email.",
-      status: "success",
-      duration: 4000,
-      isClosable: true,
-    });
+    const res = await dispatch(registerUser(values));
+    const msg = res.toString();
+    console.log(msg);
+
+    if (res.length > 0) {
+      toast({
+        title: "Error",
+        description: msg,
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
+    }
   };
   useEffect(() => {
     console.log(user);
     if (user.name) {
       SuddenCLose();
+      toast({
+        title: "Felicidades",
+        description: "Su usuario ha sido creado. Revise su email.",
+        status: "success",
+        duration: 4000,
+        isClosable: true,
+      });
     }
   }, [user]);
   function loginWithFacebook() {
@@ -197,10 +217,10 @@ const RegisterPage = ({ SuddenCLose }: { SuddenCLose: () => void }) => {
               type="password"
               {...register("password", {
                 required: true,
-                minLength: {
-                  value: 8,
-                  message: "min length is 8",
-                },
+                // minLength: {
+                //   value: 8,
+                //   message: "min length is 8",
+                // },
               })}
               placeholder="contraseña"
             />

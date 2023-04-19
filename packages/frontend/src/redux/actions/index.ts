@@ -20,6 +20,7 @@ export const CREATE_BRAND = "CREATE_BRAND";
 export const CREATE_CATEGORIES = "CREATE_CATEGORIES";
 export const GET_ALL_USERS = "GET_ALL_USERS";
 export const EDITED_USER = "EDITED_USER";
+export const BUY_CART = "BUY_CART";
 
 export const getAllProducts =
   (
@@ -209,6 +210,8 @@ export const addUserFromGoogle = () => async (dispatch: AppDispatch) => {
     if (event.data.isAuthenticated) {
       console.log(event.data);
       dispatch({ type: ADD_USER, payload: event.data.user });
+      console.log(event.data.user);
+      dispatch(sendEmail(event.data.user));
     }
   };
   window.addEventListener("message", handleAuthResponse);
@@ -267,6 +270,16 @@ export const sendEmail = (data: any) => async (dispatch: AppDispatch) => {
   return console.log("enviado");
 };
 
+export const sendEmailUpdate = (data: any) => async (dispatch: AppDispatch) => {
+  await axios.post("/sendEmailUpdate", {
+    to: data.email,
+    name: data.name,
+    state: data.state,
+    role: data.role,
+  });
+  return console.log("Se envió el MAIL al usuario");
+};
+
 export const registerUser = (data: any) => async (dispatch: AppDispatch) => {
   const userData = {
     name: data.name,
@@ -284,18 +297,20 @@ export const registerUser = (data: any) => async (dispatch: AppDispatch) => {
     }
   } catch (error: any) {
     let problema = error.response?.data;
+    let msg = null;
+
     if (problema.message === "Unique constraint was provided") {
-      alert(" Este email ya está registrado");
+      return (msg = " Este email ya está registrado");
     } else {
       if (error.response?.data?.errors) {
         let lista = error.response?.data?.errors;
-        let mensaje = "";
+        let mensaje = "La contraseña debe ";
         lista.forEach((el: any) => {
-          mensaje = mensaje + "*" + el.message + "\n";
+          mensaje = mensaje + el.message + "\n";
         });
-        alert(mensaje);
+        return (msg = mensaje);
       } else {
-        alert(" Ocurrió un error al procesar la solicitud");
+        return (msg = " Ocurrió un error al procesar la solicitud");
       }
     }
   }
@@ -373,4 +388,34 @@ export const patchUser = (data: any) => async (dispatch: AppDispatch) => {
 export const deleteUser = (data: any) => async (dispatch: AppDispatch) => {
   const res = await axios.delete(`users/${data.id}`);
   dispatch({ type: EDITED_USER, payload: res.data });
+};
+
+export const buyCart = (data: any) => async (dispatch: AppDispatch) => {
+  console.log(data)
+  const res = await axios
+    .post(`orders`, {
+      userId: data?.userId,
+      total: data?.total,
+      products: data?.buyedProducts?.map((e: any) => {
+        return {
+          productId: e?.productId,
+          quantity: e?.quantity,
+          name: e?.name,
+          price: e?.price,
+        };
+      }),
+      payer:{
+        name: data.payer.name,
+        surname: data.payer.surname,
+        adress:{
+          street_name: data.payer.adress.street_name,
+          street_number: Number(data.payer.adress.street_number)  
+        },
+        email: data.payer.email,
+        zip_code: Number(data.payer.zip_code),
+      }
+    })
+    .then((res) => res.data);
+  console.dir(res);
+  dispatch({ type: BUY_CART, payload: res });
 };
