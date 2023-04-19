@@ -5,12 +5,15 @@ import { useDispatch, useSelector } from "react-redux";
 import ShoppingCard from "./shoppingCard";
 import * as actions from "../../redux/actions/index";
 import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
-initMercadoPago("TEST-dba7b71f-83c4-4d78-aeac-dea0417525b0");
+import BuyForm from "./BuyForm";
+
+initMercadoPago("TEST-ac56c88a-ddfd-4f33-97b0-5119db05e459");
 
 export default function ShoppingCart() {
-    const [totalPrice, setTotalPrice] = useState(0);
-    const [totalProducts, setTotalProducts] = useState<any[]>([]);
-    const [buyProducts, setBuyProducts] = useState<any>();
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [totalProducts, setTotalProducts] = useState<any[]>([]);
+  const [buyProducts, setBuyProducts] = useState<any>({});
+  const [showForm,setShowForm]=useState(false)
 
     const mercadoRes = useSelector((state: RootState) => state.mercadoRes);
     const user = useSelector((state: RootState) => state.user);
@@ -37,48 +40,50 @@ export default function ShoppingCart() {
         } else return null;
     });
 
-    const onBuy = () => {
-        console.log(buyProducts);
-        dispatch(actions.buyCart(buyProducts));
-    };
+  const onBuy = (data:any) => {
+    const aux= {...buyProducts, payer:data}
+    dispatch(actions.buyCart(aux));
 
-    const totalValue = (val: number, rest: boolean) => {
-        let result = 0;
-        if (rest === true) {
-            result = totalPrice - val;
-            setTotalPrice(result);
-        } else {
-            result = Number(totalPrice) + val;
-            setTotalPrice(result);
-        }
-    };
+  };
 
-    const setQuantity = (i: number, rest: boolean) => {
-        let provitional;
-        console.log(i);
-        if (rest === true) {
-            provitional = buyProducts.buyedProducts[i].quantity--;
-            setBuyProducts({
-                ...buyProducts,
-                buyedProducts: [
-                    ...buyProducts.buyedProducts,
-                    (buyProducts.buyedProducts[i].quantity = provitional),
-                ],
-            });
-        } else {
-            if (buyProducts?.buyedProducts[i]) {
-                provitional = buyProducts.buyedProducts[i].quantity++;
-                console.log(provitional);
-                setBuyProducts({
-                    ...buyProducts,
-                    buyedProducts: [
-                        ...buyProducts.buyedProducts,
-                        (buyProducts.buyedProducts[i].quantity = provitional),
-                    ],
-                });
-            }
-        }
-    };
+  const onReady= () =>{
+    setShowForm(true);
+  };
+  const totalValue = (val: number, rest: boolean) => {
+    let result = 0;
+    if (rest === true) {
+      result = totalPrice - val;
+      setTotalPrice(result);
+    } else {
+      result = Number(totalPrice) + val;
+      setTotalPrice(result);
+    }
+  };
+
+  const setQuantity = (i: number, rest: boolean) => {
+    let provitional;
+    if (rest === true) {
+      provitional = buyProducts.buyedProducts[i].quantity--;
+      setBuyProducts({
+        ...buyProducts,
+        buyedProducts: [
+          ...buyProducts.buyedProducts,
+          (buyProducts.buyedProducts[i].quantity = provitional),
+        ],
+      });
+    } else {
+      if (buyProducts?.buyedProducts[i]) {
+        provitional = buyProducts.buyedProducts[i].quantity++;
+        setBuyProducts({
+          ...buyProducts,
+          buyedProducts: [
+            ...buyProducts.buyedProducts,
+            (buyProducts.buyedProducts[i].quantity = provitional),
+          ],
+        });
+      }
+    }
+  };
 
     var totalCards = products.map((e, i) => {
         console.log(i);
@@ -160,3 +165,4 @@ export default function ShoppingCart() {
         </Box>
     );
 }
+

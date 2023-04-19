@@ -54,26 +54,25 @@ function Card({ product }: any) {
   };
 
   return (
-    <Link as={RouterLink} to={`${product.id}`}>
-      <Box margin={5} minW="320px" maxW="320px">
-        <Box
-          bg={useColorModeValue("white", "gray.800")}
-          maxW="sm"
-          borderWidth="1px"
-          rounded="lg"
-          shadow="lg"
-          position="relative"
-        >
-          {product.isNew && (
-            <Circle
-              size="10px"
-              position="absolute"
-              top={2}
-              right={2}
-              bg="red.200"
-            />
-          )}
-
+    <Box margin={5} minW="320px" maxW="320px">
+      <Box
+        bg={useColorModeValue("white", "gray.800")}
+        maxW="sm"
+        borderWidth="1px"
+        rounded="lg"
+        shadow="lg"
+        position="relative"
+      >
+        {product.isNew && (
+          <Circle
+            size="10px"
+            position="absolute"
+            top={2}
+            right={2}
+            bg="red.200"
+          />
+        )}
+        <Link as={RouterLink} to={`${product.id}`}>
           <Container boxSize="300px" centerContent>
             <Image
               src={product.imageUrl}
@@ -85,16 +84,17 @@ function Card({ product }: any) {
               objectFit="cover"
             />
           </Container>
-
-          <Box p="6">
-            <Box display="flex" alignItems="baseline">
-              {product.isNew && (
-                <Badge rounded="full" px="2" fontSize="0.8em" colorScheme="red">
-                  New
-                </Badge>
-              )}
-            </Box>
-            <Flex mt="1" justifyContent="space-between" alignContent="center">
+        </Link>
+        <Box p="6">
+          <Box display="flex" alignItems="baseline">
+            {product.isNew && (
+              <Badge rounded="full" px="2" fontSize="0.8em" colorScheme="red">
+                New
+              </Badge>
+            )}
+          </Box>
+          <Flex mt="1" justifyContent="space-between" alignContent="center">
+            <Link as={RouterLink} to={`${product.id}`}>
               <Box
                 fontSize="2xl"
                 fontWeight="semibold"
@@ -104,35 +104,31 @@ function Card({ product }: any) {
               >
                 {product.name}
               </Box>
-              <Tooltip
-                label="Add to cart"
-                bg="white"
-                placement={"top"}
-                color={"gray.800"}
-                fontSize={"1.2em"}
-              >
-                <chakra.button display={"flex"} onClick={onClickCart}>
-                  <Icon as={FiShoppingCart} h={7} w={7} alignSelf={"center"} />
-                </chakra.button>
-              </Tooltip>
-            </Flex>
-
-            <Flex justifyContent="space-between" alignContent="center">
-              <Rating rating={product.rating} numReviews={product.numReviews} />
-              <Box
-                fontSize="2xl"
-                color={useColorModeValue("gray.800", "white")}
-              >
-                <Box as="span" color={"gray.600"} fontSize="lg">
-                  £
-                </Box>
-                {Number(product.price).toFixed(2)}
+            </Link>
+            <Tooltip
+              label="Add to cart"
+              bg="white"
+              placement={"top"}
+              color={"gray.800"}
+              fontSize={"1.2em"}
+            >
+              <chakra.button display={"flex"} onClick={onClickCart}>
+                <Icon as={FiShoppingCart} h={7} w={7} alignSelf={"center"} />
+              </chakra.button>
+            </Tooltip>
+          </Flex>
+          <Flex justifyContent="space-between" alignContent="center">
+            <Rating rating={product.rating} numReviews={product.numReviews} />
+            <Box fontSize="2xl" color={useColorModeValue("gray.800", "white")}>
+              <Box as="span" color={"gray.600"} fontSize="lg">
+                £
               </Box>
-            </Flex>
-          </Box>
+              {Number(product.price).toFixed(2)}
+            </Box>
+          </Flex>
         </Box>
       </Box>
-    </Link>
+    </Box>
   );
 }
 

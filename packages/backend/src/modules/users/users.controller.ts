@@ -11,16 +11,18 @@ const paramsSchema = z.object({
 
 const passwordSchema = z
   .string()
-  .min(8)
+  .min(8, {
+    message: "contener al menos 8 caracteres.",
+  })
   .regex(/[a-z]/, {
-    message: "La contraseña debe contener al menos una letra minúscula.",
+    message: "contener al menos una letra minúscula.",
   })
   .regex(/[A-Z]/, {
-    message: "La contraseña debe contener al menos una letra mayúscula.",
+    message: "contener al menos una letra mayúscula.",
   })
-  .regex(/\d/, { message: "La contraseña debe contener al menos un número." })
+  .regex(/\d/, { message: "contener al menos un número." })
   .regex(/[@#$%^&+=!_]/, {
-    message: "La contraseña debe contener al menos un carácter especial.",
+    message: "contener al menos un carácter especial.",
   });
 
 const bodySchema = z.object({
@@ -111,12 +113,12 @@ export async function getUser(req: Request, res: Response) {
 }
 
 export async function createUser(req: Request, res: Response) {
-    const { body: data } = await createSchema.parseAsync(req);
-    const hashedPassword: string = await encryptPassword(data.password);
-    const user = await prisma.user.create({
-      data: { ...data, password: hashedPassword },
-    });
-    return res.status(200).json({ state: "success", user: user });
+  const { body: data } = await createSchema.parseAsync(req);
+  const hashedPassword: string = await encryptPassword(data.password);
+  const user = await prisma.user.create({
+    data: { ...data, password: hashedPassword },
+  });
+  return res.status(200).json({ state: "success", user: user });
 }
 export async function updateUser(req: Request, res: Response) {
   // TODO check password and catch

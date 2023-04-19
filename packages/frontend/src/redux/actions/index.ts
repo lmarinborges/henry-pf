@@ -210,6 +210,8 @@ export const addUserFromGoogle = () => async (dispatch: AppDispatch) => {
     if (event.data.isAuthenticated) {
       console.log(event.data);
       dispatch({ type: ADD_USER, payload: event.data.user });
+      console.log(event.data.user);
+      dispatch(sendEmail(event.data.user));
     }
   };
   window.addEventListener("message", handleAuthResponse);
@@ -295,18 +297,20 @@ export const registerUser = (data: any) => async (dispatch: AppDispatch) => {
     }
   } catch (error: any) {
     let problema = error.response?.data;
+    let msg = null;
+
     if (problema.message === "Unique constraint was provided") {
-      alert(" Este email ya está registrado");
+      return (msg = " Este email ya está registrado");
     } else {
       if (error.response?.data?.errors) {
         let lista = error.response?.data?.errors;
-        let mensaje = "";
+        let mensaje = "La contraseña debe ";
         lista.forEach((el: any) => {
-          mensaje = mensaje + "*" + el.message + "\n";
+          mensaje = mensaje + el.message + "\n";
         });
-        alert(mensaje);
+        return (msg = mensaje);
       } else {
-        alert(" Ocurrió un error al procesar la solicitud");
+        return (msg = " Ocurrió un error al procesar la solicitud");
       }
     }
   }
@@ -387,6 +391,7 @@ export const deleteUser = (data: any) => async (dispatch: AppDispatch) => {
 };
 
 export const buyCart = (data: any) => async (dispatch: AppDispatch) => {
+  console.log(data)
   const res = await axios
     .post(`orders`, {
       userId: data?.userId,
@@ -399,6 +404,16 @@ export const buyCart = (data: any) => async (dispatch: AppDispatch) => {
           price: e?.price,
         };
       }),
+      payer:{
+        name: data.payer.name,
+        surname: data.payer.surname,
+        adress:{
+          street_name: data.payer.adress.street_name,
+          street_number: Number(data.payer.adress.street_number)  
+        },
+        email: data.payer.email,
+        zip_code: Number(data.payer.zip_code),
+      }
     })
     .then((res) => res.data);
   console.dir(res);

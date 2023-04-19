@@ -26,48 +26,24 @@ const bodySchema = z.object({
       name: z.string().min(1),
     })
   ),
-});
-
-const bodySchema1 = z.object({
-  userId: z.coerce.number().int(),
-  total: z.number().min(1),
-});
-
-const bodySchema2 = z.object({
-  products: z.array(
-    z.object({
-      productId: z.coerce.number().int(),
-      price: z.string().transform(transformDecimal),
-      quantity: z.number().int(),
-      name: z.string().min(1),
+  payer: z.object({
+    name:z.string().min(1),
+    surname: z.string().min(1),
+    email: z.string().email(),
+    adress: z.object({
+      street_name: z.string().min(1),
+      street_number: z.number().int(),
+    }),
+    zip_code: z.number().int().min(1),
     })
-  ),
-});
-
-const bodySchemaProd = z.object({
-  productId: z.coerce.number().int(),
-  orderId: z.coerce.number().int(),
-  quantity: z.coerce.number().int(),
 });
 
 const getSchema = z.object({
   params: paramsSchema,
 });
 
-const createSchema2 = z.object({
-  body: bodySchema2,
-});
-
-const createSchema1 = z.object({
-  body: bodySchema1,
-});
-
 const createSchema = z.object({
   body: bodySchema,
-});
-
-const createSchemaProd = z.object({
-  body: bodySchemaProd,
 });
 
 const getAllSchema = z.object({
@@ -120,7 +96,7 @@ export async function getOrder(req: Request, res: Response) {
 // Delete order and its related products
 export async function deleteOrder(req: Request, res: Response) {
   const { params } = await getSchema.parseAsync(req);
-  const ordersOnProducts = await prisma.ordersOnProducts.deleteMany({
+   await prisma.ordersOnProducts.deleteMany({
     where: { orderId: params.orderId },
   });
   const order = await prisma.order.delete({
@@ -147,7 +123,7 @@ export async function createOrder(req: Request, res: Response) {
       name: e.name,
     };
 
-    const orderProduct = await prisma.ordersOnProducts.create({
+    await prisma.ordersOnProducts.create({
       data: { ...orderProd },
     });
 
@@ -160,12 +136,13 @@ export async function createOrder(req: Request, res: Response) {
           title: e.name,
         };
       }),
+      payer:data.payer,
       back_urls:{
-        succes:"http://localhost:5173/home",
-        pending:"http://localhost:5173/home",
-        failure:"http://localhost:5173/admin"
-      }
-    }
+        succes:"http://localhost:5173/products/shoppingcart/successful",
+        pending:"http://localhost:5173/products/shoppingcart/pending",
+        failure:"http://localhost:5173/products/shoppingcart/failed"
+      },
+    };
     
     mercadopago.preferences
       .create(preference)
