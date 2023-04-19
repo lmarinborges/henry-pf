@@ -176,8 +176,7 @@ export default function HomePage() {
                 px={8}
                 colorScheme={"red.500"}
                 bg={"red.400"}
-                _hover={{ bg: "red.600" }}
-                onClick={onOpen}
+                _hover={{ bg: "red.600" }}                
               >
                 Get started
               </Button>
