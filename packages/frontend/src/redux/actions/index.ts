@@ -211,7 +211,7 @@ export const addUserFromGoogle = () => async (dispatch: AppDispatch) => {
       console.log(event.data);
       dispatch({ type: ADD_USER, payload: event.data.user });
       console.log(event.data.user);
-      dispatch(sendEmail(event.data.user));
+      dispatch(sendLoginEmail(event.data.user));
     }
   };
   window.addEventListener("message", handleAuthResponse);
@@ -225,6 +225,7 @@ export const addUserFromGoogle = () => async (dispatch: AppDispatch) => {
 
 export const addUserFromLocal =
   (data: any) => async (dispatch: AppDispatch) => {
+    let msg = null;
     try {
       const response = await axios.post(
         "localLogin",
@@ -244,26 +245,35 @@ export const addUserFromLocal =
         dispatch({ type: ADD_USER, payload: user });
       } else {
         // La autenticación falló, hacer algo en consecuencia
-        alert("la autenticacion falló , datos incorrectos");
         console.log("La autenticación falló");
+        return (msg = "la autenticacion falló , datos incorrectos");
       }
     } catch (error: any) {
       let problema = error.response?.data;
+
       if (error.response?.data?.errors) {
         let mensaje = "";
         problema.errors.forEach((el: any) => {
           mensaje = mensaje + "*" + el.message + "\n";
         });
-        alert(mensaje);
+        return (msg = mensaje);
       } else {
         console.log(error);
-        alert(" Ocurrió un error al procesar la solicitud");
+        return (msg = " Ocurrió un error al procesar la solicitud");
       }
     }
   };
 
 export const sendEmail = (data: any) => async (dispatch: AppDispatch) => {
   await axios.post("/mail", {
+    to: data.email,
+    name: data.name,
+  });
+  return console.log("enviado");
+};
+
+export const sendLoginEmail = (data: any) => async (dispatch: AppDispatch) => {
+  await axios.post("/loginMail", {
     to: data.email,
     name: data.name,
   });
@@ -391,7 +401,7 @@ export const deleteUser = (data: any) => async (dispatch: AppDispatch) => {
 };
 
 export const buyCart = (data: any) => async (dispatch: AppDispatch) => {
-  console.log(data)
+  console.log(data);
   const res = await axios
     .post(`orders`, {
       userId: data?.userId,
@@ -404,16 +414,16 @@ export const buyCart = (data: any) => async (dispatch: AppDispatch) => {
           price: e?.price,
         };
       }),
-      payer:{
+      payer: {
         name: data.payer.name,
         surname: data.payer.surname,
-        adress:{
+        adress: {
           street_name: data.payer.adress.street_name,
-          street_number: Number(data.payer.adress.street_number)  
+          street_number: Number(data.payer.adress.street_number),
         },
         email: data.payer.email,
         zip_code: Number(data.payer.zip_code),
-      }
+      },
     })
     .then((res) => res.data);
   console.dir(res);
