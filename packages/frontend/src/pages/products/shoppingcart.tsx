@@ -1,4 +1,4 @@
-import { Box, Heading, Text, Button } from "@chakra-ui/react";
+import { Box, Heading, Text, Button, useColorModeValue } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { RootState, AppDispatch } from "../../redux/store/index";
 import { useDispatch, useSelector } from "react-redux";
@@ -128,9 +128,9 @@ export default function ShoppingCart() {
   }, [totalPrice, products, totalCards, user.id]);
 
   return (
-    <Box bg="white" p="10px" mt="-10px">
+    <Box color={useColorModeValue("gray.800", "gray.50")} p="10px" mt="-10px">
       { showForm===false?<>
-        <Heading color="black">Carrito:</Heading>
+        <Heading >Carrito:</Heading>
           {totalProducts.length !== 0 ? (
             totalProducts
           ) : (
@@ -144,7 +144,7 @@ export default function ShoppingCart() {
               El Carrito está vacío
             </Text>
           )}
-          <Text color="black">Total: ${totalPrice.toFixed(2)}</Text>
+          <Text>Total: ${totalPrice.toFixed(2)}</Text>
           <Button size={"md"} variant="solid" onClick={onReady} colorScheme="red">
             Comprar
           </Button>
