@@ -119,6 +119,11 @@ export default function CreateProductForm() {
   // const isCategoryInvalid = errors.categoryId ? true : false;
 
   const toast = useToast();
+  const [file, setFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState<string | ArrayBuffer | null>(
+    null
+  );
+
   const onSubmit: SubmitHandler<Inputs> =async (data) => {
     console.log(data);
     const productImage = await handleUpload();
@@ -132,6 +137,7 @@ export default function CreateProductForm() {
       duration: 4000,
       isClosable: true,
     });
+    setPreviewUrl(null)
     setProduct({
       name: "",
       description: "",
@@ -144,10 +150,6 @@ export default function CreateProductForm() {
   };
 
   // cloudinary post action
-  const [file, setFile] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState<string | ArrayBuffer | null>(
-    null
-  );
 
   const handleFileUpload = (e:any) => {
     const file = e.target.files[0];
