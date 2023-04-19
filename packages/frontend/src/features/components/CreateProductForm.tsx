@@ -13,6 +13,7 @@ import {
   Textarea,
   FormHelperText,
   useToast,
+  Image,
 } from "@chakra-ui/react";
 import {
   getAllBrands,
@@ -25,6 +26,8 @@ import { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { CreateBrands } from "../../pages/admin/createBrands/CreateBrands";
 import { CreateCategories } from "../../pages/admin/createCategories/CreateCategories";
+import configureCloudinary from "./configCloudinary";
+import axios from "axios";
 
 interface CreateProductFormData {
   name: string;
@@ -116,9 +119,12 @@ export default function CreateProductForm() {
   // const isCategoryInvalid = errors.categoryId ? true : false;
 
   const toast = useToast();
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  const onSubmit: SubmitHandler<Inputs> =async (data) => {
     console.log(data);
-    dispatch(createProduct(product));
+    const productImage = await handleUpload();
+    console.log(productImage);
+    
+    dispatch(createProduct(productImage));
     toast({
       title: "Felicidades",
       description: "Ha agregado un nuevo producto en su lista",
@@ -137,6 +143,52 @@ export default function CreateProductForm() {
     });
   };
 
+  // cloudinary post action
+  const [file, setFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState<string | ArrayBuffer | null>(
+    null
+  );
+
+  const handleFileUpload = (e:any) => {
+    const file = e.target.files[0];
+    setFile(file)
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewUrl(reader.result);
+        setProduct({
+          ...product,
+          imageUrl: file.name,
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleUpload = async () => {
+    if (file) {
+      try {
+        const formData = new FormData();
+        const config = await configureCloudinary();
+        formData.append("file", file);
+        formData.append("upload_preset", config.uploadPreset);
+        formData.append("api_key", config.apiKey);
+        const response = await axios.post(
+          "https://api.cloudinary.com/v1_1/image/upload",
+          formData
+        );
+        const updatedProduct = {
+          ...product,
+          imageUrl: response.data.secure_url,
+        };
+        setProduct(updatedProduct);
+        console.log("File uploaded to:", response.data.secure_url);
+        return updatedProduct;
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
   return (
     <Flex
       minH={"100vh"}
@@ -194,12 +246,12 @@ export default function CreateProductForm() {
 
               <FormControl id="imageUrl" isInvalid={isImageInvalid}>
                 <FormLabel>Agregue una imagen de su producto:</FormLabel>
+                {typeof previewUrl === "string" && <Image src={previewUrl} mb={2} />}
                 <Input
                   {...register("imageUrl", { required: true })}
                   placeholder="https://..."
                   name="imageUrl"
-                  value={product.imageUrl}
-                  onChange={handleProductChange}
+                  onChange={handleFileUpload}
                   type="file"
                 />
                 {errors.imageUrl && (
@@ -208,7 +260,6 @@ export default function CreateProductForm() {
                   </FormHelperText>
                 )}
               </FormControl>
-
               <FormControl id="price">
                 <FormLabel>Precio:</FormLabel>
                 <Input

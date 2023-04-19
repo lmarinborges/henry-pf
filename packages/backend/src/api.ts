@@ -18,6 +18,7 @@ import localRouter from "./modules/users/local.routes";
 import usersRouter from "./modules/users/users.router";
 import mailerRouter from "./modules/mailer/mailer.router";
 import ordersRouter from "./modules/orders/orders.router";
+import configRouter from "./modules/config/config.router";
 
 const apiRouter = Router()
   // Middleware
@@ -37,7 +38,7 @@ const apiRouter = Router()
   .use(localRouter)
   .use(mailerRouter)
   .use(ordersRouter)
-
+  .use(configRouter)
   // Error handling
   .use(notFoundHandler)
   .use(clientErrorHandler)
