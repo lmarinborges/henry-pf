@@ -16,9 +16,9 @@ import {
   HStack,
 } from "@chakra-ui/react";
 
-
 //NUESTRA HISTORIA
 import { ReactElement } from "react";
+import { Suscribe } from "./suscribe/Suscribe";
 
 interface FeatureProps {
   text: string;
@@ -124,10 +124,9 @@ const TestimonialAvatar = ({
 //----------------------------------
 
 export default function HomePage() {
-
   return (
     <>
-      <Container maxW={"7xl"} >
+      <Container maxW={"7xl"}>
         <Stack
           align={"center"}
           spacing={{ base: 8, md: 10 }}
@@ -168,18 +167,7 @@ export default function HomePage() {
               spacing={{ base: 4, sm: 6 }}
               direction={{ base: "column", sm: "row" }}
             >
-              <Button
-                rounded={"full"}
-                color={useColorModeValue("gray.50", "gray.050")}
-                size={"lg"}
-                fontWeight={"normal"}
-                px={8}
-                colorScheme={"red.500"}
-                bg={"red.400"}
-                _hover={{ bg: "red.600" }}                
-              >
-                Get started
-              </Button>
+              <Suscribe />
             </Stack>
           </Stack>
           <Flex
