@@ -8,6 +8,9 @@ import {
   NumberIncrementStepper,
   NumberDecrementStepper,
   Stack,
+  Card,
+  Image,
+  Box,
 } from "@chakra-ui/react";
 import { useState } from "react";
 
@@ -32,29 +35,27 @@ export default function ShoppingCard(props: any) {
   };
 
   return (
-    <Stack
-      mr="20px"
+    <Card
       mb="20px"
       mt="20px"
-      spacing="2"
+      mx='auto'
       p="10px"
-      pr="0"
       key={props.product.id}
-      bg="gray.400"
-      width="100%"
-      height="100%"
+      maxW={'1000px'}
       display="flex"
-      flexDirection="column"
-      border="black"
+      direction={'row'}
     >
-      <Container
+      <Box m='auto' >
+        <Image src={props.product.imageUrl} boxSize='100px'mr='30px'></Image>
+      </Box>
+      <Box>
+      <Box
         ml="0"
         pl="0"
         mr="0"
         mb="0"
-        display="flex"
-        flexDirection="row"
-        justifyContent={"right"}
+        position={'absolute'}
+        right={'2'}
       >
         <Button
           colorScheme="red"
@@ -64,7 +65,7 @@ export default function ShoppingCard(props: any) {
         >
           X
         </Button>
-      </Container>
+      </Box>
       <Text>Nombre: {props.product.name}</Text>
       <Text>Stock: {props.product.stock}</Text>
       <Text>Precio por unidad: ${props.product.price}</Text>
@@ -96,6 +97,7 @@ export default function ShoppingCard(props: any) {
       >
         <Text>Total: ${Number(totalProduct).toFixed(2)}</Text>
       </Container>
-    </Stack>
+        </Box>
+    </Card>
   );
 }

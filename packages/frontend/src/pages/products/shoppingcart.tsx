@@ -1,4 +1,4 @@
-import { Box, Heading, Text, Button, useColorModeValue } from "@chakra-ui/react";
+import { Box, Heading, Text, Button, useColorModeValue, Flex } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { RootState, AppDispatch } from "../../redux/store/index";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,30 +15,30 @@ export default function ShoppingCart() {
   const [buyProducts, setBuyProducts] = useState<any>({});
   const [showForm,setShowForm]=useState(false)
 
-  const mercadoRes = useSelector((state: RootState) => state.mercadoRes);
-  const user = useSelector((state: RootState) => state.user);
+    const mercadoRes = useSelector((state: RootState) => state.mercadoRes);
+    const user = useSelector((state: RootState) => state.user);
 
-  const dispatch = useDispatch<AppDispatch>();
+    const dispatch = useDispatch<AppDispatch>();
 
-  var storage: Array<any> = [];
+    var storage: Array<any> = [];
 
-  const onClose = (name: string, price: number) => {
-    localStorage.removeItem(name);
-    setTotalPrice(totalPrice - price);
-  };
+    const onClose = (name: string, price: number) => {
+        localStorage.removeItem(name);
+        setTotalPrice(totalPrice - price);
+    };
 
-  for (var i = 0; i < localStorage.length; i++) {
-    if (localStorage.key(i)?.includes("CartProduc") === true) {
-      storage.push(localStorage.key(i));
+    for (var i = 0; i < localStorage.length; i++) {
+        if (localStorage.key(i)?.includes("CartProduc") === true) {
+            storage.push(localStorage.key(i));
+        }
     }
-  }
 
-  const products = storage.map((e) => {
-    let prod = localStorage.getItem(e);
-    if (prod !== null) {
-      return JSON.parse(prod);
-    } else return null;
-  });
+    const products = storage.map((e) => {
+        let prod = localStorage.getItem(e);
+        if (prod !== null) {
+            return JSON.parse(prod);
+        } else return null;
+    });
 
   const onBuy = (data:any) => {
     const aux= {...buyProducts, payer:data}
@@ -85,76 +85,84 @@ export default function ShoppingCart() {
     }
   };
 
-  var totalCards = products.map((e, i) => {
-    console.log(i);
+    var totalCards = products.map((e, i) => {
+        console.log(i);
+        return (
+            <ShoppingCard
+                key={i}
+                id={i}
+                product={e}
+                totalValue={totalValue}
+                onClose={onClose}
+                setQuantity={setQuantity}
+            />
+        );
+    });
+
+    useEffect(() => {
+        var init: number = 0;
+        if (totalPrice === 0) {
+            setTotalProducts(totalCards);
+            products.forEach((e) => {
+                init += Number(e.price);
+            });
+
+            if (user.id) {
+                const buyedProducts = products.map((e) => {
+                    return {
+                        name: e.name,
+                        price: e.price,
+                        productId: e.id,
+                        quantity: 1,
+                    };
+                });
+                const initBuy = {
+                    userId: user?.id,
+                    total: Number(init),
+                    buyedProducts,
+                };
+                setBuyProducts(initBuy);
+            }
+            setTotalPrice(init);
+        }
+    }, [totalPrice, products, totalCards, user.id]);
+    
     return (
-      <ShoppingCard
-        key={i}
-        id={i}
-        product={e}
-        totalValue={totalValue}
-        onClose={onClose}
-        setQuantity={setQuantity}
-      />
+        <Box p="10px" mt="-10px" minH="100vh" m="auto" maxW={'800px'} >
+            <Flex direction={'column'}  >
+                <Heading>Carrito:</Heading>
+                {totalProducts.length !== 0 ? (
+                    totalProducts
+                ) : (
+                    <Text
+                        display={"flex"}
+                        alignItems="center"
+                        justifyContent={"center"}
+                        fontStyle="bold"
+                    >
+                        {" "}
+                        El Carrito está vacío
+                    </Text>
+                )}
+                <Text fontSize={'xl'} my='20px' fontWeight={600}>Total: ${totalPrice.toFixed(2)}</Text>
+                <Button
+                    size={"md"}
+                    variant="solid"
+                    onClick={onBuy}
+                    colorScheme="red"
+                    minW='10rem'
+                    width={'40%'}
+                    m='auto'
+                >
+                    Comprar
+                </Button>
+                {mercadoRes.global !== "" && (
+                    <Wallet
+                        initialization={{ preferenceId: mercadoRes.global }}
+                    />
+                )}
+            </Flex>
+        </Box>
     );
-  });
-
-  useEffect(() => {
-    var init: number = 0;
-    if (totalPrice === 0) {
-      setTotalProducts(totalCards);
-      products.forEach((e) => {
-        init += Number(e.price);
-      });
-
-      if (user.id) {
-        const buyedProducts = products.map((e) => {
-          return {
-            name: e.name,
-            price: e.price,
-            productId: e.id,
-            quantity: 1,
-          };
-        });
-        const initBuy = {
-          userId: user?.id,
-          total: Number(init),
-          buyedProducts,
-        };
-        setBuyProducts(initBuy);
-      }
-      setTotalPrice(init);
-    }
-  }, [totalPrice, products, totalCards, user.id]);
-
-  return (
-    <Box color={useColorModeValue("gray.800", "gray.50")} p="10px" mt="-10px">
-      { showForm===false?<>
-        <Heading >Carrito:</Heading>
-          {totalProducts.length !== 0 ? (
-            totalProducts
-          ) : (
-            <Text
-              display={"flex"}
-              alignItems="center"
-              justifyContent={"center"}
-              fontStyle="bold"
-            >
-              {" "}
-              El Carrito está vacío
-            </Text>
-          )}
-          <Text>Total: ${totalPrice.toFixed(2)}</Text>
-          <Button size={"md"} variant="solid" onClick={onReady} colorScheme="red">
-            Comprar
-          </Button>
-      </>:<BuyForm onBuy={onBuy} />}
-
-
-
-      {mercadoRes.global !== "" && (
-        <Wallet initialization={{ preferenceId: mercadoRes.global }} />
-      )}
-    </ Box>
-  );
 }
+
