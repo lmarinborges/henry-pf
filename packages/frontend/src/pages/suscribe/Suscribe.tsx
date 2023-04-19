@@ -22,8 +22,8 @@ import {
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../redux/store";
-import { suscribeEmail } from "../../redux/actions";
+import { AppDispatch } from "../../redux/store";
+import * as actions from "../../redux/actions";
 
 type Form = {
   email: string;
@@ -57,7 +57,7 @@ export let Suscribe = () => {
       duration: 9000,
       isClosable: true,
     });
-    dispatch(suscribeEmail(data.email))
+    dispatch(actions.suscribeEmail(data.email))
   };
 
   return (
