@@ -19,7 +19,7 @@ export default function PublicLayout() {
   }, []);
   return (
     <>
-      {/* <Navbar height={NAVBAR_HEIGHT} /> */}
+      <Navbar height={NAVBAR_HEIGHT} />
       <Navbar2/>
       <Container
         size="sm"

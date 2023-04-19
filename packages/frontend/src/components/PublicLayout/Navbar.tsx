@@ -43,6 +43,7 @@ export default function Navbar(props: NavbarProps) {
   return (
     <>
       <Flex
+        display={{ base: "flex", md: "flex", lg: "none" }}
         as="header"
         alignItems="center"
         height={props.height}

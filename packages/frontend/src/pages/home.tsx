@@ -16,6 +16,7 @@ import {
   HStack,
 } from "@chakra-ui/react";
 
+
 //NUESTRA HISTORIA
 import { ReactElement } from "react";
 
@@ -123,6 +124,7 @@ const TestimonialAvatar = ({
 //----------------------------------
 
 export default function HomePage() {
+
   return (
     <>
       <Container maxW={"7xl"} >
@@ -175,6 +177,7 @@ export default function HomePage() {
                 colorScheme={"red.500"}
                 bg={"red.400"}
                 _hover={{ bg: "red.600" }}
+                onClick={onOpen}
               >
                 Get started
               </Button>
@@ -226,18 +229,6 @@ export default function HomePage() {
                 rounded={"md"}
               >
                 Salud
-              </Text>
-              <Text
-                textTransform={"uppercase"}
-                color={useColorModeValue("gray.50", "gray.100")}
-                fontWeight={600}
-                fontSize={"sm"}
-                bg={useColorModeValue("red.500", "red.600")}
-                p={2}
-                alignSelf={"flex-start"}
-                rounded={"md"}
-              >
-                Bienestar
               </Text>
               <Text
                 textTransform={"uppercase"}
