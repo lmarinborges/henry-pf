@@ -87,7 +87,7 @@ export let Suscribe = () => {
             bg={useColorModeValue("gray.50", "gray.800")}
             borderRadius="10px"
           >
-            <ModalCloseButton onClick={reset} />
+            <ModalCloseButton onClick={forReset} />
             <Container
               maxW={"lg"}
               bg={useColorModeValue("white", "whiteAlpha.100")}
