@@ -55,6 +55,7 @@ const LoginPage = ({ SuddenCLose }: { SuddenCLose: () => void }) => {
         title: "Felicidades",
         description: "Ha iniciado sesión.",
         status: "success",
+        position: "top",
         duration: 4000,
         isClosable: true,
       });
@@ -177,6 +178,7 @@ const RegisterPage = ({ SuddenCLose }: { SuddenCLose: () => void }) => {
       toast({
         title: "Felicidades",
         description: "Su usuario ha sido creado. Revise su email.",
+        position: "top",
         status: "success",
         duration: 4000,
         isClosable: true,
