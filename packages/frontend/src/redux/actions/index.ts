@@ -272,6 +272,11 @@ export const sendEmail = (data: any) => async (dispatch: AppDispatch) => {
   return console.log("enviado");
 };
 
+export const contactEmail = (data: any) => async (dispatch: AppDispatch) => {
+  await axios.post("/sendContact", data);
+  return console.log("enviado");
+};
+
 export const suscribeEmail = (data: any) => async (dispatch: AppDispatch) => {
   await axios.post("/sendSuscription", data);
   return console.log("enviado");
