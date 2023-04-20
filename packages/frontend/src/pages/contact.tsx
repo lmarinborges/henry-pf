@@ -144,7 +144,7 @@ export default function ContactPage() {
                               bg="#dfdfdf"
                               type="text"
                               size="md"
-                              placeholder="nombre"
+                              placeholder="Ingrese su nombre..."
                               _placeholder={{
                                 color: useColorModeValue(
                                   "gray.800",
@@ -170,7 +170,7 @@ export default function ContactPage() {
                               bg="#dfdfdf"
                               type="text"
                               size="md"
-                              placeholder="Email"
+                              placeholder="Ingrese su Email..."
                               _placeholder={{
                                 color: useColorModeValue(
                                   "gray.800",
@@ -200,7 +200,7 @@ export default function ContactPage() {
                               bg="#dfdfdf"
                               type="text"
                               size="md"
-                              placeholder="localidad"
+                              placeholder="Ingrese su localidad..."
                               _placeholder={{
                                 color: useColorModeValue(
                                   "gray.800",
@@ -226,7 +226,7 @@ export default function ContactPage() {
                               _active={{
                                 borderRadius: "gray.300",
                               }}
-                              placeholder="mensaje"
+                              placeholder="Ingrese aqui sus consultas... "
                               _placeholder={{
                                 color: useColorModeValue(
                                   "gray.800",
