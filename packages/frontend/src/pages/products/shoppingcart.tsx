@@ -24,10 +24,7 @@ export default function ShoppingCart() {
   var storage: Array<any> = [];
 
 
-  const onClose = (name: string, price: number) => {
-    localStorage.removeItem(name);
-    setTotalPrice(totalPrice - price);
-  };
+
 
   for (var i = 0; i < localStorage.length; i++) {
     if (localStorage.key(i)?.includes("CartProduc") === true) {
@@ -35,7 +32,7 @@ export default function ShoppingCart() {
     }
   }
 
-  const products = storage.map((e) => {
+  var products = storage.map((e) => {
     let prod = localStorage.getItem(e);
     if (prod !== null) {
       return JSON.parse(prod);
@@ -84,6 +81,44 @@ export default function ShoppingCart() {
       buyedProducts:auxArray,
     });
   };
+  
+  const onClose = (name: string, id:number, price: number) => {
+    localStorage.removeItem(name+"CartProduc");
+    products=products?.filter(e=>e.id!==id)
+    totalCards = products.map((e, i) => {
+      return (
+        <ShoppingCard
+          key={i}
+          id={i}
+          product={e}
+          setProductsIdTotal={setProductsIdTotal}
+          onClose={onClose}
+          setQuantity={setQuantity}
+        />
+      )});
+      
+      if (Object.keys(productsIdTotal).length !== 0) {
+        const result = products.reduce((obj, product) => {
+          obj[product.id] = Number(product.price);
+          return obj;
+        }, {});
+        setProductsIdTotal(result);
+        let sum: any = Object.values(result).reduce(
+          (acc: any, val: any) => acc + val,
+          0
+        );
+        setTotalPrice(sum);
+      }
+      setTotalProducts(totalCards)
+      const buyedProducts = products.map((e) => {
+        return {
+          name: e.name,
+          price: e.price,
+          productId: e.id,
+          quantity: 1,
+        }});
+        setBuyProducts({...buyProducts, buyedProducts:buyedProducts})
+  };
 
   var totalCards = products.map((e, i) => {
     return (
@@ -129,7 +164,7 @@ export default function ShoppingCart() {
       setBuyProducts(initBuy);
     }
     
-  }, [totalPrice, products, totalCards, user.id, productsIdTotal, buyProducts]);
+  }, [totalPrice, products, totalCards, user.id, productsIdTotal, buyProducts,handleTotal]);
   return (
     <Box p="10px" mt="-10px" minH="100vh" m="auto" maxW={"800px"}>
       <Flex direction={"column"}>
