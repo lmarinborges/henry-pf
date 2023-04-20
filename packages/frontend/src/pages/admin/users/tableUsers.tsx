@@ -3,7 +3,7 @@ import { RootState, AppDispatch } from "../../../redux/store/";
 import { deleteUser, getAllUsers } from "../../../redux/actions";
 import { useEffect, useState } from "react";
 import TablaDinamica from "./DinamicTable";
-import { Box, Button, Icon, Text, useDisclosure } from "@chakra-ui/react";
+import { Box, Button, Flex, Icon, Spinner, Text, useDisclosure } from "@chakra-ui/react";
 import { FiTrash2 } from "react-icons/fi";
 import { AiFillEdit } from "react-icons/ai";
 import ModalEdit from "./modalEdit";
@@ -87,7 +87,8 @@ export default function TableUsers() {
   }
 
   const renderizado = (data: any) => {
-    if (data && data.length > 1) {
+
+    if (data && data.length > 0) {
       return (
         <Box mx={"auto"} w={"80vw"}>
           <ModalEdit
@@ -128,7 +129,7 @@ export default function TableUsers() {
         </Box>
       );
     } else {
-      return <div></div>;
+      return <Flex > <Spinner mx={"auto"} size="lg" my={6}/> </Flex >;
     }
   };
   return renderizado(data);
