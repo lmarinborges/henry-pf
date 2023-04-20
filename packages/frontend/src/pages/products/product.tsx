@@ -58,7 +58,7 @@ export default function ProductPage() {
   const onClickCart = () => {
     localStorage.setItem(prod.name + "CartProduc", JSON.stringify(prod));
     toast({
-      title: "Felicidades",
+      title: "✔️",
       description: "Item agregado al carrito.",
       status: "success",
       duration: 5000,

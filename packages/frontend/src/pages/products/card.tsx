@@ -9,6 +9,7 @@ import {
   chakra,
   Tooltip,
   Container,
+  useToast,
   Link,
 } from "@chakra-ui/react";
 import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
@@ -49,8 +50,16 @@ function Rating({ rating, numReviews }: RatingProps) {
 }
 
 function Card({ product }: any) {
+  const toast = useToast();
   const onClickCart = () => {
     localStorage.setItem(product.name + "CartProduc", JSON.stringify(product));
+    toast({
+      title: "✔️",
+      description: "Item agregado al carrito.",
+      status: "success",
+      duration: 5000,
+      isClosable: true,
+    });
   };
 
   return (
@@ -121,7 +130,7 @@ function Card({ product }: any) {
             <Rating rating={product.rating} numReviews={product.numReviews} />
             <Box fontSize="2xl" color={useColorModeValue("gray.800", "white")}>
               <Box as="span" color={"gray.600"} fontSize="lg">
-                £
+                $
               </Box>
               {Number(product.price).toFixed(2)}
             </Box>
