@@ -65,8 +65,8 @@ const Tabla = ({
         accessor: "stock",
       },
       {
-        Header: "Borrado",
-        accessor: (row: Product) => (row.isTrashed ? "Borrado" : "Activo"),
+        Header: "Delete",
+        accessor: (row: Product) => (row.isTrashed ? "Deleted" : "Active"),
       },
       {
         Header: "Brand",
@@ -97,7 +97,7 @@ const Tabla = ({
                 bg="green.500"
                 color="white"
               >
-                Restaurar
+                Restore
               </Button>
             ) : (
               <Button
@@ -105,7 +105,7 @@ const Tabla = ({
                 bg="red.500"
                 color="white"
               >
-                Borrar
+                Delete
               </Button>
             )}
           </Flex>
