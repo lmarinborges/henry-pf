@@ -7,7 +7,6 @@ import {
   NumberInputField,
   NumberIncrementStepper,
   NumberDecrementStepper,
-  Stack,
   Card,
   Image,
   Box,
@@ -19,20 +18,16 @@ export default function ShoppingCard(props: any) {
   const price = Number(props.product.price);
 
   const handleNumChange = (e: any) => {
-    
     if (e * price <= totalProduct) {
-      let val = price;
-      props.totalValue(val, true);
-      
       props.setQuantity(props.id, true)
 
     } else {
-      let val = price;
-      props.totalValue(val, false);
       props.setQuantity(props.id, false)
     }
     setTotalProduct(e * props.product.price);
+    props.setProductsIdTotal((prev:any)=>{return {...prev,[props.product.id]:e * props.product.price}})
   };
+
 
   return (
     <Card
@@ -78,7 +73,7 @@ export default function ShoppingCard(props: any) {
           defaultValue={1}
           min={1}
           max={props.product.stock}
-          onChange={(e) => handleNumChange(e)}
+          onChange={(e)=>handleNumChange(e)}
         >
           <NumberInputField />
           <NumberInputStepper>
