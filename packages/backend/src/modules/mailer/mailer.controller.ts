@@ -9,7 +9,6 @@ const Suscriptionhtml = `
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Descripción de la página" />
     <meta name="author" content="Autor de la página" />
-    <title>Bienvenida a nuestra comunidad</title>
     <style>
       * {
         box-sizing: border-box;
@@ -152,13 +151,34 @@ export async function sendLoginMail(req: Request, res: Response) {
 }
 
 export async function sendSuscriptionMail(req: Request, res: Response) {
-  const name = req.body.name;
+  // console.log(to);
 
   await transport.sendMail({
     from: process.env.EMAIL,
     to: req.body.to,
     subject: "Bienvenido a nuestra pagina",
     html: Suscriptionhtml,
+  });
+  //console.log(result)
+  return res.status(200).send("The mail was sent");
+}
+
+export async function sendContactMail(req: Request, res: Response) {
+  // console.log(to);
+  const a = `<p>Nombre:${req.body.name}</p>
+<p>Email:${req.body.email}</p>
+<p>Domicilio:${req.body.location}</p>
+<p>Mensaje:${req.body.message}</p>
+`;
+  await transport.sendMail({
+    from: req.body.email,
+    to: process.env.EMAIL,
+    subject: `${req.body.name} quiere contactarse contigo`,
+    html: `<p>Nombre: ${req.body.name}</p>
+    <p>Email: ${req.body.email}</p>
+    <p>Domicilio: ${req.body.location}</p>
+    <p>Mensaje: ${req.body.message}</p>
+    `,
   });
   //console.log(result)
   return res.status(200).send("The mail was sent");
