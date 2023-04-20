@@ -88,11 +88,11 @@ const ProductsAdminPage = () => {
         />
         <Box display="flex" alignItems="baseline" justifyContent="space-around">
           <Button m="5" onClick={backPage}>
-            Anterior
+            Prev
           </Button>
           <Text m="5">{currentPage}</Text>
           <Button m="5" onClick={nextPage}>
-            siguiente
+            Next
           </Button>
         </Box>
       </Flex>

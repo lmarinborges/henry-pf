@@ -13,6 +13,7 @@ import {
   Box,
   Textarea,
   Select,
+  useToast,
   Flex,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
@@ -35,6 +36,8 @@ export default function ProductPage() {
   const [text, setText] = useState("");
   const [num, setNum] = useState(0);
 
+  const toast = useToast();
+
   useEffect(() => {
     if (productId) {
       dispatch(actions.getProductDetail(productId));
@@ -54,6 +57,13 @@ export default function ProductPage() {
 
   const onClickCart = () => {
     localStorage.setItem(prod.name + "CartProduc", JSON.stringify(prod));
+    toast({
+      title: "✔️",
+      description: "Item agregado al carrito.",
+      status: "success",
+      duration: 5000,
+      isClosable: true,
+    });
   };
 
   const onClickComent = () => {

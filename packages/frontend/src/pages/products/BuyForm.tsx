@@ -37,7 +37,7 @@ let BuyForm = (props: any) => {
   } = useForm<Form>();
 
   let onSubmit = (data: any) => {
-    console.log(data)
+    console.log(data);
     props.onBuy(data);
     reset();
   };
@@ -65,7 +65,7 @@ let BuyForm = (props: any) => {
                   color={useColorModeValue("gray.800", "gray.50")}
                 >
                   <Heading fontSize={"3xl"}>
-                    ¡Llena el formulario para inicializar tu comprar!
+                    ¡Llena el formulario para inicializar tu compra!
                   </Heading>
 
                   <Wrap>
@@ -91,7 +91,7 @@ let BuyForm = (props: any) => {
                               <FormControl>
                                 <FormLabel>Apellido:</FormLabel>
                                 <Input
-                                   borderColor={useColorModeValue(
+                                  borderColor={useColorModeValue(
                                     "gray.800",
                                     "red.400"
                                   )}
@@ -108,7 +108,7 @@ let BuyForm = (props: any) => {
                             <FormControl>
                               <FormLabel>Direccion</FormLabel>
                               <Input
-                                 borderColor={useColorModeValue(
+                                borderColor={useColorModeValue(
                                   "gray.800",
                                   "red.400"
                                 )}
@@ -126,7 +126,7 @@ let BuyForm = (props: any) => {
                             <FormControl>
                               <FormLabel>Numero (direccion)</FormLabel>
                               <Input
-                                 borderColor={useColorModeValue(
+                                borderColor={useColorModeValue(
                                   "gray.800",
                                   "red.400"
                                 )}
@@ -144,7 +144,7 @@ let BuyForm = (props: any) => {
                             <FormControl>
                               <FormLabel>Correo Electronico:</FormLabel>
                               <Input
-                                 borderColor={useColorModeValue(
+                                borderColor={useColorModeValue(
                                   "gray.800",
                                   "red.400"
                                 )}
@@ -160,7 +160,7 @@ let BuyForm = (props: any) => {
                             <FormControl>
                               <FormLabel>C.P.</FormLabel>
                               <Input
-                                 borderColor={useColorModeValue(
+                                borderColor={useColorModeValue(
                                   "gray.800",
                                   "red.400"
                                 )}
