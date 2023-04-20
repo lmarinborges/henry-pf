@@ -23,9 +23,6 @@ export default function ShoppingCart() {
 
   var storage: Array<any> = [];
 
-
-
-
   for (var i = 0; i < localStorage.length; i++) {
     if (localStorage.key(i)?.includes("CartProduc") === true) {
       storage.push(localStorage.key(i));
@@ -68,23 +65,25 @@ export default function ShoppingCart() {
 
   const setQuantity = (i: number, rest: boolean) => {
     if (buyProducts.buyedProducts.length === 0) return;
-    let provitional
-    
-    rest === true ? provitional = --buyProducts.buyedProducts[i].quantity : provitional = ++buyProducts.buyedProducts[i].quantity;
+    let provitional;
 
-    let auxArray=buyProducts.buyedProducts;
+    rest === true
+      ? (provitional = --buyProducts.buyedProducts[i].quantity)
+      : (provitional = ++buyProducts.buyedProducts[i].quantity);
 
-    auxArray[i].quantity=provitional;
-    
+    let auxArray = buyProducts.buyedProducts;
+
+    auxArray[i].quantity = provitional;
+
     setBuyProducts({
       ...buyProducts,
-      buyedProducts:auxArray,
+      buyedProducts: auxArray,
     });
   };
-  
-  const onClose = (name: string, id:number, price: number) => {
-    localStorage.removeItem(name+"CartProduc");
-    products=products?.filter(e=>e.id!==id)
+
+  const onClose = (name: string, id: number, price: number) => {
+    localStorage.removeItem(name + "CartProduc");
+    products = products?.filter((e) => e.id !== id);
     totalCards = products.map((e, i) => {
       return (
         <ShoppingCard
@@ -95,29 +94,31 @@ export default function ShoppingCart() {
           onClose={onClose}
           setQuantity={setQuantity}
         />
-      )});
-      
-      if (Object.keys(productsIdTotal).length !== 0) {
-        const result = products.reduce((obj, product) => {
-          obj[product.id] = Number(product.price);
-          return obj;
-        }, {});
-        setProductsIdTotal(result);
-        let sum: any = Object.values(result).reduce(
-          (acc: any, val: any) => acc + val,
-          0
-        );
-        setTotalPrice(sum);
-      }
-      setTotalProducts(totalCards)
-      const buyedProducts = products.map((e) => {
-        return {
-          name: e.name,
-          price: e.price,
-          productId: e.id,
-          quantity: 1,
-        }});
-        setBuyProducts({...buyProducts, buyedProducts:buyedProducts})
+      );
+    });
+
+    if (Object.keys(productsIdTotal).length !== 0) {
+      const result = products.reduce((obj, product) => {
+        obj[product.id] = Number(product.price);
+        return obj;
+      }, {});
+      setProductsIdTotal(result);
+      let sum: any = Object.values(result).reduce(
+        (acc: any, val: any) => acc + val,
+        0
+      );
+      setTotalPrice(sum);
+    }
+    setTotalProducts(totalCards);
+    const buyedProducts = products.map((e) => {
+      return {
+        name: e.name,
+        price: e.price,
+        productId: e.id,
+        quantity: 1,
+      };
+    });
+    setBuyProducts({ ...buyProducts, buyedProducts: buyedProducts });
   };
 
   var totalCards = products.map((e, i) => {
@@ -163,8 +164,15 @@ export default function ShoppingCart() {
       };
       setBuyProducts(initBuy);
     }
-    
-  }, [totalPrice, products, totalCards, user.id, productsIdTotal, buyProducts,handleTotal]);
+  }, [
+    totalPrice,
+    products,
+    totalCards,
+    user.id,
+    productsIdTotal,
+    buyProducts,
+    handleTotal,
+  ]);
   return (
     <Box p="10px" mt="-10px" minH="100vh" m="auto" maxW={"800px"}>
       <Flex direction={"column"}>

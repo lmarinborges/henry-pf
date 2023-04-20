@@ -12,7 +12,11 @@ import {
 } from "@chakra-ui/react";
 import { RxCross2 } from "react-icons/rx";
 import { useForm } from "react-hook-form";
-import { getProductDetail, patchUser, sendEmailUpdate } from "../../../redux/actions";
+import {
+  getProductDetail,
+  patchUser,
+  sendEmailUpdate,
+} from "../../../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { useEffect, useState } from "react";
@@ -64,7 +68,7 @@ export default function ModalEdit({
     console.log(data);
     onClose();
     dispatch(patchUser(data));
-    dispatch((sendEmailUpdate(data))); 
+    dispatch(sendEmailUpdate(data));
   };
   const forReset = () => {
     reset();

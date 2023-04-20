@@ -124,11 +124,11 @@ export default function CreateProductForm() {
     null
   );
 
-  const onSubmit: SubmitHandler<Inputs> =async (data) => {
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
     console.log(data);
     const productImage = await handleUpload();
     console.log(productImage);
-    
+
     dispatch(createProduct(productImage));
     toast({
       title: "Felicidades",
@@ -137,7 +137,7 @@ export default function CreateProductForm() {
       duration: 4000,
       isClosable: true,
     });
-    setPreviewUrl(null)
+    setPreviewUrl(null);
     setProduct({
       name: "",
       description: "",
@@ -151,9 +151,9 @@ export default function CreateProductForm() {
 
   // cloudinary post action
 
-  const handleFileUpload = (e:any) => {
+  const handleFileUpload = (e: any) => {
     const file = e.target.files[0];
-    setFile(file)
+    setFile(file);
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -192,12 +192,7 @@ export default function CreateProductForm() {
     }
   };
   return (
-    <Flex
-      minH={"100vh"}
-      align={"center"}
-      justify={"center"}
-      
-    >
+    <Flex minH={"100vh"} align={"center"} justify={"center"}>
       <Stack spacing={8} mx={"auto"} maxW={"3xl"} py={12} px={6}>
         <Stack align={"left"} px={2}>
           <Heading fontSize={"4xl"}>Agrega tus productos fácilmente!</Heading>
@@ -248,7 +243,9 @@ export default function CreateProductForm() {
 
               <FormControl id="imageUrl" isInvalid={isImageInvalid}>
                 <FormLabel>Agregue una imagen de su producto:</FormLabel>
-                {typeof previewUrl === "string" && <Image src={previewUrl} mb={2} />}
+                {typeof previewUrl === "string" && (
+                  <Image src={previewUrl} mb={2} />
+                )}
                 <Input
                   {...register("imageUrl", { required: true })}
                   placeholder="https://..."

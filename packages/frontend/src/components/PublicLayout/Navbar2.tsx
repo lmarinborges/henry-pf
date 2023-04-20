@@ -110,12 +110,7 @@ export default function WithSubnavigation() {
             />
           </Link>
         </Stack>
-        <Flex
-          my="-1000"
-          mx="-3"
-          direction={"row"}
-          marginLeft="auto"
-        >
+        <Flex my="-1000" mx="-3" direction={"row"} marginLeft="auto">
           <UserMenu />
         </Flex>
       </Flex>

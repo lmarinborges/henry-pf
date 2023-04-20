@@ -106,7 +106,7 @@ function LoggedButton(user: user) {
         py="1"
         my="4"
       >
-        <Avatar name={user.name} size="sm"/>
+        <Avatar name={user.name} size="sm" />
       </MenuButton>
       <MenuList>
         <MenuItem>

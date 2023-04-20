@@ -74,14 +74,12 @@ googleRouter.get(
 googleRouter.get(
   "/auth/google/callback",
   passport.authenticate("google", { failureRedirect: "/failed" }),
-  
+
   function (req, res) {
     const respuesta = `<script>window.opener.postMessage({ isAuthenticated: true, user: ${JSON.stringify(
       req.user
     )} }, "${clientOrigin}"); window.close();</script>`;
-    res.send(
-      respuesta
-    );
+    res.send(respuesta);
   }
 );
 

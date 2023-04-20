@@ -57,7 +57,7 @@ export let Suscribe = () => {
       duration: 9000,
       isClosable: true,
     });
-    dispatch(actions.suscribeEmail(data.email))
+    dispatch(actions.suscribeEmail(data.email));
   };
 
   return (
@@ -75,10 +75,7 @@ export let Suscribe = () => {
       >
         Suscribirse
       </Button>
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
-      >
+      <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <Flex
@@ -133,7 +130,11 @@ export let Suscribe = () => {
                   )}
                 </FormControl>
                 <FormControl w={{ base: "100%", md: "40%" }}>
-                  <Button type="submit" w="100%" onClick={handleSubmit(onSubmit)}>
+                  <Button
+                    type="submit"
+                    w="100%"
+                    onClick={handleSubmit(onSubmit)}
+                  >
                     Enviar
                   </Button>
                 </FormControl>

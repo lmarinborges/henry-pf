@@ -23,11 +23,7 @@ export const SearchBar = () => {
 
   return (
     <>
-      <Flex
-        justifyContent="center"
-        mb={50}
-        
-      >
+      <Flex justifyContent="center" mb={50}>
         <form onSubmit={handleSubmit}>
           <Flex
             align="center"

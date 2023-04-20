@@ -61,9 +61,9 @@ export const clientErrorHandler: ErrorRequestHandler = (
       }
       case "P2002": {
         console.log("mal consulta");
-        return res.status(400).json({ 
+        return res.status(400).json({
           status: 400,
-          message: "Unique constraint was provided" 
+          message: "Unique constraint was provided",
         });
       }
     }

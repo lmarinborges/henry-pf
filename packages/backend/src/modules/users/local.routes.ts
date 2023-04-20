@@ -78,9 +78,9 @@ passport.deserializeUser(async (id: number, done) => {
 
 function validateUserData(req: Request, res: Response, next: any) {
   const { email, password } = req.body;
-    validEmail.parse(email);
-    passwordSchema.parse(password);
-    next();
+  validEmail.parse(email);
+  passwordSchema.parse(password);
+  next();
 }
 
 localRouter.post(

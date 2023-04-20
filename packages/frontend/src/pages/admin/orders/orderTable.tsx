@@ -31,7 +31,6 @@ interface OrderTableProps {
   orders: Order[];
 }
 
-
 function OrderTable({ orders }: OrderTableProps) {
   const columns: Column<Order>[] = useMemo(
     () => [
@@ -46,7 +45,9 @@ function OrderTable({ orders }: OrderTableProps) {
       {
         Header: "Productos",
         accessor: (order: Order) =>
-        order.products.map((product) => `${product.name} (${product.quantity})`).join(", "),
+          order.products
+            .map((product) => `${product.name} (${product.quantity})`)
+            .join(", "),
       },
       {
         Header: "Total",
@@ -56,7 +57,7 @@ function OrderTable({ orders }: OrderTableProps) {
     []
   );
 
-  const data = useMemo(() => Array.isArray(orders) ? orders : [], [orders]);
+  const data = useMemo(() => (Array.isArray(orders) ? orders : []), [orders]);
 
   const tableInstance = useTable({ columns, data });
 
@@ -91,6 +92,3 @@ function OrderTable({ orders }: OrderTableProps) {
 }
 
 export default OrderTable;
-
-
-

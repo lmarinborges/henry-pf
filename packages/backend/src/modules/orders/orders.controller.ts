@@ -6,8 +6,10 @@ import transformDecimal from "../../utils/transformDecimal";
 import mercadopago from "mercadopago";
 
 mercadopago.configure({
-  access_token: process.env.PRUEBA_ACCESS_TOKEN?process.env.PRUEBA_ACCESS_TOKEN:"NO HAY TOQUEN  "
-})
+  access_token: process.env.PRUEBA_ACCESS_TOKEN
+    ? process.env.PRUEBA_ACCESS_TOKEN
+    : "NO HAY TOQUEN  ",
+});
 
 const PAGE_SIZE = 5;
 
@@ -27,7 +29,7 @@ const bodySchema = z.object({
     })
   ),
   payer: z.object({
-    name:z.string().min(1),
+    name: z.string().min(1),
     surname: z.string().min(1),
     email: z.string().email(),
     adress: z.object({
@@ -35,7 +37,7 @@ const bodySchema = z.object({
       street_number: z.number().int(),
     }),
     zip_code: z.number().int().min(1),
-    })
+  }),
 });
 
 const getSchema = z.object({
@@ -53,7 +55,7 @@ const getAllSchema = z.object({
       userId: z.coerce.number().int(),
       order: z.enum(["asc", "desc"]),
       column: z.enum(["createdAt", "total"]),
-      userName: z.string()
+      userName: z.string(),
     })
     .partial(),
 });
@@ -96,7 +98,7 @@ export async function getOrder(req: Request, res: Response) {
 // Delete order and its related products
 export async function deleteOrder(req: Request, res: Response) {
   const { params } = await getSchema.parseAsync(req);
-   await prisma.ordersOnProducts.deleteMany({
+  await prisma.ordersOnProducts.deleteMany({
     where: { orderId: params.orderId },
   });
   const order = await prisma.order.delete({
@@ -127,33 +129,31 @@ export async function createOrder(req: Request, res: Response) {
       data: { ...orderProd },
     });
 
-    const preference ={
+    const preference = {
       items: data.products.map((e) => {
-        return{
+        return {
           id: e.productId.toString(),
           quantity: e.quantity,
           unit_price: Number(e.price),
           title: e.name,
         };
       }),
-      payer:data.payer,
-      back_urls:{
-        succes:"http://localhost:5173/products/shoppingcart/successful",
-        pending:"http://localhost:5173/products/shoppingcart/pending",
-        failure:"http://localhost:5173/products/shoppingcart/failed"
+      payer: data.payer,
+      back_urls: {
+        succes: "http://localhost:5173/products/shoppingcart/successful",
+        pending: "http://localhost:5173/products/shoppingcart/pending",
+        failure: "http://localhost:5173/products/shoppingcart/failed",
       },
     };
-    
+
     mercadopago.preferences
       .create(preference)
       .then(function (response) {
         // En esta instancia deberás asignar el valor dentro de response.body.id por el ID de preferencia solicitado en el siguiente paso
-        res.json({global:response.body.id})
+        res.json({ global: response.body.id });
       })
       .catch(function (error) {
         console.log(error);
       });
   });
 }
-
-

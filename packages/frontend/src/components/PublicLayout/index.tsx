@@ -2,8 +2,7 @@ import { Container } from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
-import Navbar2 from "./Navbar2"
-
+import Navbar2 from "./Navbar2";
 
 import { verifyUser } from "../../redux/actions";
 import { useDispatch } from "react-redux";
@@ -20,7 +19,7 @@ export default function PublicLayout() {
   return (
     <>
       <Navbar height={NAVBAR_HEIGHT} />
-      <Navbar2/>
+      <Navbar2 />
       <Container
         size="sm"
         px="3"

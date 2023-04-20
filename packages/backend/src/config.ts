@@ -5,7 +5,8 @@ import { StrategyOption as FacebookStrategyOptions } from "passport-facebook";
 import { StrategyOptions as GoogleStrategyOptions } from "passport-google-oauth20";
 
 export const appOrigin = process.env.APP_ORIGIN || "http://localhost:8080";
-export const clientOrigin = process.env.CLIENT_ORIGIN || "http://127.0.0.1:5173";
+export const clientOrigin =
+  process.env.CLIENT_ORIGIN || "http://127.0.0.1:5173";
 
 export const expressPort = (() => {
   const value = parseInt(process.env.EXPRESS_PORT || "8080");
@@ -15,7 +16,7 @@ export const expressPort = (() => {
 
 export const corsConfig: CorsOptions = {
   credentials: true,
-  origin: process.env.CLIENT_ORIGIN
+  origin: process.env.CLIENT_ORIGIN,
 };
 
 export const sessionConfig: SessionOptions = (() => {

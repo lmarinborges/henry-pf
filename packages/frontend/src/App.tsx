@@ -35,7 +35,10 @@ const routes = createBrowserRouter(
         <Route path="products" element={<ProductsPage />} />
         <Route path="products/:productId" element={<ProductPage />} />
         <Route path="products/shoppingcart" element={<ShoppingCart />} />
-        <Route path="products/shoppingcart/successful" element={<Successful />} />
+        <Route
+          path="products/shoppingcart/successful"
+          element={<Successful />}
+        />
         <Route path="products/shoppingcart/pending" element={<Pending />} />
         <Route path="products/shoppingcart/failed" element={<Failed />} />
       </Route>

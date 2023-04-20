@@ -142,7 +142,6 @@ export const EditTable = ({
             </Button>
             <ModalBody pb={6}>
               <VStack spacing={3}>
-
                 <FormControl>
                   <FormLabel>Nombre:</FormLabel>
                   <Input
